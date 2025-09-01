@@ -10,6 +10,10 @@ export type IUserModel = {
   avatar: string;
   rating: number;
   role: IUserRole;
+
+  created_at: Date;
+  updated_at: Date;
+  banned_until: Date | null;
 };
 
 export class UserModel implements IUserModel {
@@ -22,6 +26,9 @@ export class UserModel implements IUserModel {
     public email: string,
     public avatar: string,
     public rating: number,
-    public role: IUserRole
+    public role: IUserRole,
+    public created_at: Date,
+    public updated_at: Date,
+    public banned_until: Date | null
   ) {}
 }
