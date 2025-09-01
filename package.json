@@ -1,0 +1,27 @@
+{
+  "name": "usof-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.green-lms.app:22022/challenge-370/vpavlenko-6106.git"
+  },
+  "keywords": [],
+  "author": "Vladyslav Pavlenko",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.4"
+  }
+}
