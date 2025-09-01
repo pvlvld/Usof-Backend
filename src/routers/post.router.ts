@@ -2,6 +2,8 @@ import express from "express";
 
 const postRouter = express.Router();
 
+//TODO: post locking / unlocking
+
 postRouter.get("/", (req, res) => {
   res.send("List of all posts. Page 1");
 });
