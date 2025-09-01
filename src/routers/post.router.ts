@@ -63,4 +63,14 @@ postRouter.delete("/:post_id/like", (req, res) => {
   res.send(`Deleted like for post ${req.params.post_id}`);
 });
 
+// Act: Creative
+
+postRouter.get("/favorites", (req, res) => {
+  res.send("List of favorite posts");
+});
+
+postRouter.post("/:post_id/subscribe", (req, res) => {
+  res.send(`Subscribed to post ${req.params.post_id}`);
+});
+
 export { postRouter };
