@@ -2,7 +2,15 @@ import express from "express";
 
 const postRouter = express.Router();
 
-//TODO: post locking / unlocking
+//TODO:
+// - post locking / unlocking
+// - post sorting
+// - - Default: by likes count
+// - - by date
+// - post filtering
+// - - by category
+// - - by date interval
+// - - by status (locked?)
 
 postRouter.get("/", (req, res) => {
   res.send("List of all posts. Page 1");
