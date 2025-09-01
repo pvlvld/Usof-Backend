@@ -35,4 +35,17 @@ userRouter.delete("/:user_id", (req, res) => {
   res.send(`User deleted for user ID: ${user_id}`);
 });
 
+// ADMIN ONLY
+userRouter.post("/:user_id/ban", (req, res) => {
+  const { user_id } = req.params;
+  const { banned_until } = req.body;
+  res.send(`User ${user_id} banned until ${banned_until}`);
+});
+
+// ADMIN ONLY
+userRouter.post("/:user_id/unban", (req, res) => {
+  const { user_id } = req.params;
+  res.send(`User ${user_id} unbanned`);
+});
+
 export { userRouter };
