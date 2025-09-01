@@ -6,8 +6,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=rootpassword
       - MYSQL_DATABASE=usof
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=userpassword
+      - MYSQL_USER=usof
+      - MYSQL_PASSWORD=usofpassword
     ports:
       - "127.0.0.1:3306:3306"
     volumes:
