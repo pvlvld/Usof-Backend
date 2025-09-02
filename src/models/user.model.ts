@@ -36,10 +36,10 @@ export class UserModel {
   }
 
   async getUsers(dto: GetUsersDto) {
-    const [rows] = await this.db.query<RowDataPacket[]>(QUERIES.USER.GET_PAGE, [
-      dto.limit,
-      dto.page
-    ]);
+    const [rows] = await this.db.query<RowDataPacket[]>(
+      QUERIES.USER.GET_USERS,
+      [dto.limit, dto.page]
+    );
     return rows;
   }
 
