@@ -42,6 +42,6 @@ export const QUERIES = Object.freeze({
     READ: "SELECT * FROM refresh_token WHERE user_id = $1",
     UPDATE:
       "UPDATE refresh_token SET token = $1, expires_at = $2 WHERE user_id = $3",
-    DELETE: "DELETE FROM refresh_token WHERE user_id = $1"
+    DELETE: "DELETE FROM refresh_token WHERE token = $1"
   }
 });
