@@ -97,6 +97,19 @@ export class UserModel {
     ]);
     return result;
   }
+
+  public async updatePassword(
+    id: number,
+    password_hash: string,
+    password_salt: string
+  ) {
+    const [result] = await this.db.query(QUERIES.USER.RESET_PASSWORD, [
+      id,
+      password_hash,
+      password_salt
+    ]);
+    return result;
+  }
 }
 
 // Do I need it with DTO's?
