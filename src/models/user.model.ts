@@ -56,6 +56,27 @@ export class UserModel {
 
     return null;
   }
+
+  async registerUser({ login, password_hash, password_salt, email }: any) {
+    const [result] = await this.db.query(QUERIES.USER.REGISTER, [
+      login,
+      password_hash,
+      password_salt,
+      email
+    ]);
+    return result;
+  }
+
+  async createUser({ login, password_hash, password_salt, email, role }: any) {
+    const [result] = await this.db.query(QUERIES.USER.CREATE, [
+      login,
+      password_hash,
+      password_salt,
+      email,
+      role
+    ]);
+    return result;
+  }
 }
 
 // Do I need it with DTO's?
