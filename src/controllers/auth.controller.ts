@@ -46,7 +46,7 @@ class AuthController {
     }
   }
 
-  async login(req, res) {
+  public async login(req, res) {
     const dto = plainToInstance(LoginDto, req.body);
     const errors = await validate(dto);
 
@@ -73,7 +73,7 @@ class AuthController {
     }
   }
 
-  async logout(req, res) {
+  public async logout(req, res) {
     const { refreshToken } = req.body;
     try {
       await this.authService.logout({ refreshToken });
@@ -90,7 +90,7 @@ class AuthController {
     }
   }
 
-  async initiatePasswordReset(req, res) {
+  public async initiatePasswordReset(req, res) {
     const dto = plainToInstance(PasswordResetRequestDto, req.body);
     const errors = await validate(dto);
     if (errors.length > 0) {
@@ -104,7 +104,7 @@ class AuthController {
       .json({ message: "Password reset link sent to email!" });
   }
 
-  async resetPassword(req, res) {
+  public async resetPassword(req, res) {
     const dto = plainToInstance(PasswordResetDto, {
       ...req.body,
       confirm_token: req.params.confirm_token

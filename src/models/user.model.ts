@@ -35,7 +35,7 @@ export class UserModel {
     return this.instance;
   }
 
-  async getUsers(dto: GetUsersDto) {
+  public async getUsers(dto: GetUsersDto) {
     const [rows] = await this.db.query<RowDataPacket[]>(
       QUERIES.USER.GET_USERS,
       [dto.limit, dto.page]
@@ -43,7 +43,7 @@ export class UserModel {
     return rows;
   }
 
-  async findUserByLoginOrEmail(
+  public async findUserByLoginOrEmail(
     loginOrEmail: string
   ): Promise<IUserModel | null> {
     let rows: RowDataPacket[] = [];
@@ -66,7 +66,12 @@ export class UserModel {
     return null;
   }
 
-  async registerUser({ login, password_hash, password_salt, email }: any) {
+  public async registerUser({
+    login,
+    password_hash,
+    password_salt,
+    email
+  }: any) {
     const [result] = await this.db.query(QUERIES.USER.REGISTER, [
       login,
       password_hash,
@@ -76,7 +81,13 @@ export class UserModel {
     return result;
   }
 
-  async createUser({ login, password_hash, password_salt, email, role }: any) {
+  public async createUser({
+    login,
+    password_hash,
+    password_salt,
+    email,
+    role
+  }: any) {
     const [result] = await this.db.query(QUERIES.USER.CREATE, [
       login,
       password_hash,

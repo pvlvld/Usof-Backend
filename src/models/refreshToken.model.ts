@@ -15,7 +15,11 @@ export class RefreshTokenModel {
     return this.instance;
   }
 
-  async saveRefreshToken(user_id: number, token: string, expires_at: Date) {
+  public async saveRefreshToken(
+    user_id: number,
+    token: string,
+    expires_at: Date
+  ) {
     await this.db.query(QUERIES.REFRESH_TOKEN.CREATE, [
       user_id,
       token,
@@ -23,11 +27,11 @@ export class RefreshTokenModel {
     ]);
   }
 
-  async removeRefreshToken(refreshToken: string) {
+  public async removeRefreshToken(refreshToken: string) {
     await this.db.query(QUERIES.REFRESH_TOKEN.DELETE, [refreshToken]);
   }
 
-  async findRefreshToken(refreshToken: string) {
+  public async findRefreshToken(refreshToken: string) {
     const [rows] = await this.db.query(
       "SELECT * FROM refresh_token WHERE token = ?",
       [refreshToken]

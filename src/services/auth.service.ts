@@ -24,7 +24,7 @@ class AuthService {
     return this.instance;
   }
 
-  async register(dto: RegisterDto) {
+  public async register(dto: RegisterDto) {
     if (dto.login && !/^[A-Za-z](?:[A-Za-z0-9_]*[A-Za-z])?$/.test(dto.login)) {
       throw { status: 400, message: "Invalid login format" };
     }
@@ -86,7 +86,7 @@ class AuthService {
     };
   }
 
-  async login(dto: LoginDto) {
+  public async login(dto: LoginDto) {
     const loginOrEmail = dto.login ? dto.login : dto.email ? dto.email : "";
     if (!loginOrEmail) {
       throw { status: 400, message: "Login or email is required" };
@@ -136,7 +136,7 @@ class AuthService {
     };
   }
 
-  async logout(dto: LogoutDTO) {
+  public async logout(dto: LogoutDTO) {
     await this.refreshTokenModel.removeRefreshToken(dto.refreshToken);
   }
 }
