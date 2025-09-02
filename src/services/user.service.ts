@@ -1,4 +1,4 @@
-import type { GetUsersDto } from "../dto/user.dto.js";
+import type { GetUsersDto, UpdatePasswordDto } from "../dto/user.dto.js";
 import type { UserModel } from "../models/user.model.js";
 
 class UserService {
