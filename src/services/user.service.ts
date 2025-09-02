@@ -19,6 +19,11 @@ class UserService {
   public getUsers(dto: GetUsersDto) {
     return this.userModel.getUsers(dto);
   }
+
+  public updatePassword(dto: UpdatePasswordDto) {
+    // TODO: huh? separate encryption service?
+    return this.userModel.updatePassword(1, "", "");
+  }
 }
 
 export { UserService };
