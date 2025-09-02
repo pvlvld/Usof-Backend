@@ -10,9 +10,9 @@ export const QUERIES = Object.freeze({
     GET_USERS: "SELECT * FROM user LIMIT $1 OFFSET (($2 - 1) * $1)",
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
     FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
-    RESET_PASSWORD: "UPDATE user SET password = $1 WHERE email = $2",
-    UPDATE:
-      "UPDATE user SET login = $1, email = $2, password = $3 WHERE id = $4",
+    /** password_hash, password_salt, id */
+    RESET_PASSWORD:
+      "UPDATE user SET password_hash = $2, password_salt = $3 WHERE id = $1",
     DELETE: "DELETE FROM user WHERE id = $1"
   },
   CATEGORY: {
