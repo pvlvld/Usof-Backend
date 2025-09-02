@@ -23,14 +23,14 @@ export class RefreshTokenModel {
     ]);
   }
 
-  async removeRefreshToken(token: string) {
-    await this.db.query(QUERIES.REFRESH_TOKEN.DELETE, [token]);
+  async removeRefreshToken(refreshToken: string) {
+    await this.db.query(QUERIES.REFRESH_TOKEN.DELETE, [refreshToken]);
   }
 
-  async findRefreshToken(token: string) {
+  async findRefreshToken(refreshToken: string) {
     const [rows] = await this.db.query(
       "SELECT * FROM refresh_token WHERE token = ?",
-      [token]
+      [refreshToken]
     );
 
     return Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
