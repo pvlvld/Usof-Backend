@@ -21,9 +21,17 @@ export type IUserModel = {
 };
 
 export class UserModel {
+  private static instance: UserModel | null = null;
   private db: ReturnType<typeof Database.getPool>;
-  constructor() {
+  private constructor() {
     this.db = Database.getPool();
+  }
+
+  public static getInstance() {
+    if (!this.instance) {
+      this.instance = new UserModel();
+    }
+    return this.instance;
   }
 
   async findUserByLoginOrEmail(
