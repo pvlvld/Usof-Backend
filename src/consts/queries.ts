@@ -1,0 +1,39 @@
+export const QUERIES = Object.freeze({
+  AUTH: {
+    REGISTER: "INSERT INTO user (login, email, password) VALUES ($1, $2, $3)",
+    LOGIN: "SELECT * FROM user WHERE login = $1 AND password = $2",
+    LOGOUT: "UPDATE user SET last_logout = NOW() WHERE id = $1",
+    RESET_PASSWORD: "UPDATE user SET password = $1 WHERE email = $2"
+  },
+  USER: {
+    CREATE: "INSERT INTO user (login, email, password) VALUES ($1, $2, $3)",
+    READ: "SELECT * FROM user WHERE id = $1",
+    FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
+    FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
+    UPDATE:
+      "UPDATE user SET login = $1, email = $2, password = $3 WHERE id = $4",
+    DELETE: "DELETE FROM user WHERE id = $1"
+  },
+  CATEGORY: {
+    CREATE: "INSERT INTO category (name, description) VALUES ($1, $2)",
+    READ: "SELECT * FROM category WHERE id = $1",
+    UPDATE: "UPDATE category SET name = $1, description = $2 WHERE id = $3",
+    DELETE: "DELETE FROM category WHERE id = $1"
+  },
+  COMMENT: {
+    CREATE:
+      "INSERT INTO comment (post_id, user_id, parent_id, content) VALUES ($1, $2, $3, $4)",
+    READ: "SELECT * FROM comment WHERE post_id = $1",
+    UPDATE: "UPDATE comment SET content = $1 WHERE id = $2",
+    DELETE: "DELETE FROM comment WHERE id = $1"
+  },
+  LIKE: {
+    CREATE:
+      "INSERT INTO like_dislike (user_id, post_id, comment_id, is_like) VALUES ($1, $2, $3, $4)",
+    READ: "SELECT * FROM like_dislike WHERE user_id = $1",
+    UPDATE:
+      "UPDATE like_dislike SET is_like = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4",
+    DELETE:
+      "DELETE FROM like_dislike WHERE user_id = $1 AND post_id = $2 AND comment_id = $3"
+  }
+});
