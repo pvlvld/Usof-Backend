@@ -1,10 +1,4 @@
 export const QUERIES = Object.freeze({
-  AUTH: {
-    REGISTER: "INSERT INTO user (login, email, password) VALUES ($1, $2, $3)",
-    LOGIN: "SELECT * FROM user WHERE login = $1 AND password = $2",
-    LOGOUT: "UPDATE user SET last_logout = NOW() WHERE id = $1",
-    RESET_PASSWORD: "UPDATE user SET password = $1 WHERE email = $2"
-  },
   USER: {
     /**login, password_hash, password_salt, email, role */
     CREATE:
@@ -15,6 +9,7 @@ export const QUERIES = Object.freeze({
     READ: "SELECT * FROM user WHERE id = $1",
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
     FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
+    RESET_PASSWORD: "UPDATE user SET password = $1 WHERE email = $2",
     UPDATE:
       "UPDATE user SET login = $1, email = $2, password = $3 WHERE id = $4",
     DELETE: "DELETE FROM user WHERE id = $1"
