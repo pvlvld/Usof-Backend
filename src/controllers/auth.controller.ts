@@ -9,13 +9,14 @@ import {
 import { AuthService } from "../services/auth.service.js";
 import { RefreshTokenModel } from "../models/refreshToken.model.js";
 import { UserModel } from "../models/user.model.js";
+import { UserService } from "../services/user.service.js";
 
 class AuthController {
   private authService: AuthService;
   private userService: UserService;
   constructor() {
     this.authService = AuthService.getInstance(RefreshTokenModel, UserModel);
-    this.userService = UserService.getInstance();
+    this.userService = UserService.getInstance(UserModel);
   }
 
   async register(req, res) {
