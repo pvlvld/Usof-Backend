@@ -1,6 +1,7 @@
 import Database from "../database/index.js";
 import { QUERIES } from "../consts/queries.js";
 import type { RowDataPacket } from "mysql2/promise";
+import type { GetUsersDto } from "../dto/user.dto.js";
 
 export type IUserRole = "user" | "admin";
 
@@ -32,6 +33,14 @@ export class UserModel {
       this.instance = new UserModel();
     }
     return this.instance;
+  }
+
+  async getUsers(dto: GetUsersDto) {
+    const [rows] = await this.db.query<RowDataPacket[]>(QUERIES.USER.GET_PAGE, [
+      dto.limit,
+      dto.page
+    ]);
+    return rows;
   }
 
   async findUserByLoginOrEmail(
