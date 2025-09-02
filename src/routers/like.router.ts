@@ -13,7 +13,10 @@ likeRouter.post("/:id/like", (req, res) => {
   } else if (req.baseUrl.includes("/comments")) {
     targetType = "comment";
   } else {
-    throw new Error("Like action must be associated with a post or comment");
+    res.status(400).send({
+      message: "Like action must be associated with a post or comment"
+    });
+    return;
   }
 
   if (action === "like") {
