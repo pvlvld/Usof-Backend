@@ -43,9 +43,11 @@ class AuthService {
       };
     }
 
-    const encryptionService = EncryptionService.getInstance();
-    const password_salt = encryptionService.genSalt(10);
-    const password_hash = encryptionService.hash(dto.password, password_salt);
+    const password_salt = this.encryptionService.genSalt(10);
+    const password_hash = this.encryptionService.hash(
+      dto.password,
+      password_salt
+    );
     await this.userModel.registerUser({
       login: dto.login,
       password_hash,
