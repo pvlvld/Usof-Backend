@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express, { type Request, type Response } from "express";
 import { apiRouter } from "./routers/api.router.js";
 import cookieParser from "cookie-parser";
