@@ -120,8 +120,11 @@ class AuthController {
   public async logout(req: Request, res: Response) {
     const refreshToken = req.cookies?.refreshToken;
     try {
-      await this.authService.logout({ refreshToken });
+      if (refreshToken) {
+        await this.authService.logout({ refreshToken });
+      }
 
+      // Try to logout even if refreshToken is not present, i'm not greedy :D
       res.clearCookie("accessToken", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
