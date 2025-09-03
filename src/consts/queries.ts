@@ -6,7 +6,7 @@ export const QUERIES = Object.freeze({
     /**login, password_hash, password_salt, email */
     REGISTER:
       "INSERT INTO user (login, password_hash, password_salt, email) VALUES (?, ?, ?, ?)",
-    READ: "SELECT * FROM user WHERE id = ?",
+    GET_USER_BY_ID: "SELECT * FROM user WHERE id = ?",
     GET_USERS: "SELECT * FROM user LIMIT ? OFFSET ((? - 1) * ?)",
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
     FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
