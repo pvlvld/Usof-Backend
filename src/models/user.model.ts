@@ -60,7 +60,7 @@ export class UserModel {
   }
 
   public async updateUser(dto: Partial<IUserModel>) {
-    const [rows] = await this.db.query(QUERIES.USER.UPDATE_USER, [
+    const [res] = await this.db.query(QUERIES.USER.UPDATE_USER, [
       dto.login,
       dto.email,
       dto.password_hash,
@@ -72,11 +72,7 @@ export class UserModel {
       dto.id
     ]);
 
-    if (Array.isArray(rows) && rows.length) {
-      return rows[0] as IUserModel;
-    }
-
-    return null;
+    return res;
   }
 
   public async deleteUser(dto: DeleteUserDTO) {
