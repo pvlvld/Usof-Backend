@@ -1,7 +1,7 @@
 import Database from "../database/index.js";
 import { QUERIES } from "../consts/queries.js";
 import type { RowDataPacket } from "mysql2/promise";
-import type { GetUsersDto } from "../dto/user.dto.js";
+import type { GetUserByIdDTO, GetUsersDto } from "../dto/user.dto.js";
 
 export type IUserRole = "user" | "admin";
 

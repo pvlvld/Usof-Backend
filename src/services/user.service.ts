@@ -1,5 +1,9 @@
 import { EncryptionService } from "./encryption.service.js";
-import type { GetUsersDto } from "../dto/user.dto.js";
+import type {
+  CreateUserDTO,
+  GetUserByIdDTO,
+  GetUsersDto
+} from "../dto/user.dto.js";
 import type { UserModel } from "../models/user.model.js";
 import type { PasswordResetDto } from "../dto/auth.dto.js";
 
@@ -20,11 +24,19 @@ class UserService {
     return this.instance;
   }
 
-  public getUsers(dto: GetUsersDto) {
-    return this.userModel.getUsers(dto);
+  public async getUserByID(dto: GetUserByIdDTO) {
+    return await this.userModel.getUserByID(dto);
   }
 
-  public updatePassword(dto: PasswordResetDto) {
+  public async getUsers(dto: GetUsersDto) {
+    return await this.userModel.getUsers(dto);
+  }
+
+  public async createUser(dto: CreateUserDTO) {
+    return await this.userModel.createUser(dto);
+  }
+
+  public async updatePassword(dto: PasswordResetDto) {
     if (dto.password !== dto.passwordConfirmation) {
       throw { status: 400, message: "Passwords do not match" };
     }
@@ -35,7 +47,7 @@ class UserService {
       password_salt
     );
 
-    return this.userModel.updatePassword(1, password_hash, password_salt);
+    return await this.userModel.updatePassword(1, password_hash, password_salt);
   }
 }
 
