@@ -23,7 +23,7 @@ CREATE TABLE refresh_token (
     token VARCHAR(255) NOT NULL,
     expires_at DATETIME NOT NULL,
 
-    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (user_id) REFERENCES user(id)  ON DELETE CASCADE
 );
 CREATE INDEX idx_user_id ON refresh_token (user_id);
 
