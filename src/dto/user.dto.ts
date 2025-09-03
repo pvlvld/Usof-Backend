@@ -108,3 +108,23 @@ export class DeleteUserDTO {
   @Min(1)
   user_id!: number;
 }
+
+export class BanUserDTO {
+  @IsNumber()
+  @Min(1)
+  user_id!: number;
+
+  @IsString()
+  @MaxLength(100)
+  banned_until!: string;
+
+  @IsString()
+  @MaxLength(255)
+  ban_reason!: string;
+}
+
+export class UnbanUserDTO {
+  @IsNumber()
+  @Min(1)
+  user_id!: number;
+}
