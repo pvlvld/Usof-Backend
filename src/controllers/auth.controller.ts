@@ -117,7 +117,6 @@ class AuthController {
     }
   }
 
-  @isRequestBody()
   public async logout(req: Request, res: Response) {
     const refreshToken = req.cookies?.refreshToken;
     try {
