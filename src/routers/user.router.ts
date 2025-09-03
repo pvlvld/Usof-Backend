@@ -4,7 +4,7 @@ import { userController } from "../controllers/user.controller.js";
 const userRouter = express.Router();
 
 userRouter.get("/", (req, res) => {
-  res.send("User list");
+  userController.getUsers(req, res);
 });
 
 userRouter.get("/:user_id", (req, res) => {

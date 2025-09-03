@@ -10,14 +10,16 @@ import {
 } from "class-validator";
 
 export class GetUsersDto {
+  @IsOptional()
   @IsNumber()
   @Min(1)
-  page!: number;
+  page: number = 1;
 
+  @IsOptional()
   @IsNumber()
   @Min(1)
   @Max(100)
-  limit!: number;
+  limit: number = 10;
 }
 
 export class GetUserByIdDTO {
