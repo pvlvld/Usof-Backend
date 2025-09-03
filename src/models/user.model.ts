@@ -35,6 +35,17 @@ export class UserModel {
     return this.instance;
   }
 
+  public async getUserByID(dto: GetUserByIdDTO) {
+    const [rows] = await this.db.query<RowDataPacket[]>(
+      QUERIES.USER.GET_USER_BY_ID,
+      [dto.user_id]
+    );
+
+    return Array.isArray(rows) && rows.length > 0 && rows[0]
+      ? (rows[0] as IUserModel)
+      : null;
+  }
+
   public async getUsers(dto: GetUsersDto) {
     const [rows] = await this.db.query<RowDataPacket[]>(
       QUERIES.USER.GET_USERS,
