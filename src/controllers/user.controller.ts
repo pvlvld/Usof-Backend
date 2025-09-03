@@ -32,6 +32,7 @@ class UserController {
       .catch((err) => res.status(500).json({ error: err.message }));
   }
 
+  // TODO: Filter sensitive data
   public async getUserById(req: Request, res: Response) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
