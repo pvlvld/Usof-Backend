@@ -54,7 +54,7 @@ export class UserModel {
     return rows;
   }
 
-  public async updateUser(dto: IUserModel) {
+  public async updateUser(dto: Partial<IUserModel>) {
     const [rows] = await this.db.query(QUERIES.USER.UPDATE_USER, [
       dto.login,
       dto.email,
