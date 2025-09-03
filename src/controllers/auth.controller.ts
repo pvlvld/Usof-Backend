@@ -20,6 +20,10 @@ class AuthController {
   }
 
   async register(req, res) {
+    if (!req.body) {
+      return res.status(400).json({ message: "Request body is missing" });
+    }
+
     const dto = plainToInstance(RegisterDto, req.body);
     const errors = await validate(dto);
 
