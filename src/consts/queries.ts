@@ -6,10 +6,10 @@ export const QUERIES = Object.freeze({
     /**login, password_hash, password_salt, email */
     REGISTER:
       "INSERT INTO user (login, password_hash, password_salt, email) VALUES (?, ?, ?, ?)",
-    GET_USER_BY_ID: "SELECT * FROM user WHERE id = ?",
-    GET_USERS: "SELECT * FROM user LIMIT ? OFFSET ((? - 1) * ?)",
+    GET_BY_ID: "SELECT * FROM user WHERE id = ?",
+    GET_PAGINATED: "SELECT * FROM user LIMIT ? OFFSET ((? - 1) * ?)",
     /**login, email, password_hash, password_salt, full_name, avatar, rating, role, id */
-    UPDATE_USER: `UPDATE user SET login = ?, email = ?, password_hash = ?, password_salt = ?, full_name = ?, avatar = ?, rating = ?, role = ? WHERE id = ?`,
+    UPDATE: `UPDATE user SET login = ?, email = ?, password_hash = ?, password_salt = ?, full_name = ?, avatar = ?, rating = ?, role = ? WHERE id = ?`,
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
     FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
     /** password_hash, password_salt, id */

@@ -42,7 +42,7 @@ export class UserModel {
 
   public async getUserById(dto: GetUserByIdDTO) {
     const [rows] = await this.db.query<RowDataPacket[]>(
-      QUERIES.USER.GET_USER_BY_ID,
+      QUERIES.USER.GET_BY_ID,
       [dto.user_id]
     );
 
@@ -53,14 +53,14 @@ export class UserModel {
 
   public async getUsers(dto: GetUsersDto) {
     const [rows] = await this.db.query<RowDataPacket[]>(
-      QUERIES.USER.GET_USERS,
+      QUERIES.USER.GET_PAGINATED,
       [dto.limit, dto.page, dto.limit]
     );
     return rows;
   }
 
   public async updateUser(dto: Partial<IUserModel>) {
-    const [res] = await this.db.query(QUERIES.USER.UPDATE_USER, [
+    const [res] = await this.db.query(QUERIES.USER.UPDATE, [
       dto.login,
       dto.email,
       dto.password_hash,
