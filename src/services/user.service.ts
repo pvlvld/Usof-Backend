@@ -93,6 +93,14 @@ class UserService {
 
     return await this.userModel.updatePassword(1, password_hash, password_salt);
   }
+
+  public banUser(dto: BanUserDTO) {
+    return this.userModel.banUser(dto);
+  }
+
+  public unbanUser(dto: UnbanUserDTO) {
+    return this.userModel.unbanUser(dto);
+  }
 }
 
 export { UserService };
