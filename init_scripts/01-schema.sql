@@ -3,7 +3,7 @@ CREATE TABLE user (
     login VARCHAR(50) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     password_salt VARCHAR(255) NOT NULL,
-    full_name VARCHAR(100) NOT NULL,
+    full_name VARCHAR(100),
     email VARCHAR(100) NOT NULL UNIQUE,
     avatar VARCHAR(255),
     rating INT DEFAULT 0,
