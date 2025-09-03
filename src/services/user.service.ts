@@ -38,7 +38,7 @@ class UserService {
     return await this.userModel.createUser(dto);
   }
 
-  public async updateUser(dto: UpdateUserDataDTO) {
+  public async updateUser(dto: UpdateUserDataDTO & { user_id: number }) {
     const currentUserData = await this.userModel.getUserById({
       user_id: dto.user_id
     });

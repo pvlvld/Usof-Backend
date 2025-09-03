@@ -62,9 +62,10 @@ export class UploadUserAvatarDTO {
 }
 
 export class UpdateUserDataDTO {
+  @IsOptional()
   @IsNumber()
   @Min(1)
-  user_id!: number;
+  user_id?: number;
 
   @IsOptional()
   @IsString()
