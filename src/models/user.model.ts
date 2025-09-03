@@ -54,6 +54,26 @@ export class UserModel {
     return rows;
   }
 
+  public async updateUser(dto: IUserModel) {
+    const [rows] = await this.db.query(QUERIES.USER.UPDATE_USER, [
+      dto.login,
+      dto.email,
+      dto.password_hash,
+      dto.password_salt,
+      dto.full_name,
+      dto.avatar,
+      dto.rating,
+      dto.role,
+      dto.id
+    ]);
+
+    if (Array.isArray(rows) && rows.length) {
+      return rows[0] as IUserModel;
+    }
+
+    return null;
+  }
+
   public async findUserByLoginOrEmail(
     loginOrEmail: string
   ): Promise<IUserModel | null> {
