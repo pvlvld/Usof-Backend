@@ -13,39 +13,30 @@ userRouter.get("/:user_id", (req, res) => {
 
 // ADMINS ONLY
 userRouter.post("/", (req, res) => {
-  if (1) {
-    throw new Error("Only admins can create users");
-  }
-  const { login, password, passwordConfirmation, email, role } = req.body;
-  res.status(201).send("User created");
+  userController.createUser(req, res);
 });
 
 userRouter.patch("/avatar", (req, res) => {
-  res.send(`Profile picture updated`);
+  userController.updateAvatar(req, res);
 });
 
 userRouter.patch("/:user_id", (req, res) => {
-  const { user_id } = req.params;
-  // Partial<UserModel>
-  res.send(`User details updated for user ID: ${user_id}`);
+  userController.updateUser(req, res);
 });
 
 userRouter.delete("/:user_id", (req, res) => {
-  const { user_id } = req.params;
-  res.send(`User deleted for user ID: ${user_id}`);
+  userController.deleteUser(req, res);
 });
 
 // ADMIN ONLY
 userRouter.post("/:user_id/ban", (req, res) => {
-  const { user_id } = req.params;
-  const { banned_until } = req.body;
-  res.send(`User ${user_id} banned until ${banned_until}`);
+  userController.banUser(req, res);
 });
 
 // ADMIN ONLY
 userRouter.post("/:user_id/unban", (req, res) => {
   const { user_id } = req.params;
-  res.send(`User ${user_id} unbanned`);
+  userController.unbanUser(req, res);
 });
 
 export { userRouter };
