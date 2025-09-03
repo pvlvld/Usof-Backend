@@ -27,7 +27,11 @@ class UserService {
   }
 
   public async getUserById(dto: GetUserByIdDTO) {
-    return await this.userModel.getUserById(dto);
+    const user = await this.userModel.getUserById(dto);
+    if (!user) {
+      throw { status: 404, message: "User not found" };
+    }
+    return user;
   }
 
   public async getUsers(dto: GetUsersDto) {
