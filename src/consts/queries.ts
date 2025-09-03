@@ -2,47 +2,47 @@ export const QUERIES = Object.freeze({
   USER: {
     /**login, password_hash, password_salt, email, role */
     CREATE:
-      "INSERT INTO user (login, password_hash, password_salt, email, role) VALUES ($1, $2, $3, $4, $5)",
+      "INSERT INTO user (login, password_hash, password_salt, email, role) VALUES (?, ?, ?, ?, ?)",
     /**login, password_hash, password_salt, email */
     REGISTER:
-      "INSERT INTO user (login, password_hash, password_salt, email) VALUES ($1, $2, $3, $4)",
-    READ: "SELECT * FROM user WHERE id = $1",
-    GET_USERS: "SELECT * FROM user LIMIT $1 OFFSET (($2 - 1) * $1)",
+      "INSERT INTO user (login, password_hash, password_salt, email) VALUES (?, ?, ?, ?)",
+    READ: "SELECT * FROM user WHERE id = ?",
+    GET_USERS: "SELECT * FROM user LIMIT ? OFFSET ((? - 1) * ?)",
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
     FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
     /** password_hash, password_salt, id */
     RESET_PASSWORD:
-      "UPDATE user SET password_hash = $2, password_salt = $3 WHERE id = $1",
-    DELETE: "DELETE FROM user WHERE id = $1"
+      "UPDATE user SET password_hash = ?, password_salt = ? WHERE id = ?",
+    DELETE: "DELETE FROM user WHERE id = ?"
   },
   CATEGORY: {
-    CREATE: "INSERT INTO category (name, description) VALUES ($1, $2)",
-    READ: "SELECT * FROM category WHERE id = $1",
-    UPDATE: "UPDATE category SET name = $1, description = $2 WHERE id = $3",
-    DELETE: "DELETE FROM category WHERE id = $1"
+    CREATE: "INSERT INTO category (name, description) VALUES (?, ?)",
+    READ: "SELECT * FROM category WHERE id = ?",
+    UPDATE: "UPDATE category SET name = ?, description = ? WHERE id = ?",
+    DELETE: "DELETE FROM category WHERE id = ?"
   },
   COMMENT: {
     CREATE:
-      "INSERT INTO comment (post_id, user_id, parent_id, content) VALUES ($1, $2, $3, $4)",
-    READ: "SELECT * FROM comment WHERE post_id = $1",
-    UPDATE: "UPDATE comment SET content = $1 WHERE id = $2",
-    DELETE: "DELETE FROM comment WHERE id = $1"
+      "INSERT INTO comment (post_id, user_id, parent_id, content) VALUES (?, ?, ?, ?)",
+    READ: "SELECT * FROM comment WHERE post_id = ?",
+    UPDATE: "UPDATE comment SET content = ? WHERE id = ?",
+    DELETE: "DELETE FROM comment WHERE id = ?"
   },
   LIKE: {
     CREATE:
-      "INSERT INTO like_dislike (user_id, post_id, comment_id, is_like) VALUES ($1, $2, $3, $4)",
-    READ: "SELECT * FROM like_dislike WHERE user_id = $1",
+      "INSERT INTO like_dislike (user_id, post_id, comment_id, is_like) VALUES (?, ?, ?, ?)",
+    READ: "SELECT * FROM like_dislike WHERE user_id = ?",
     UPDATE:
-      "UPDATE like_dislike SET is_like = $1 WHERE user_id = $2 AND post_id = $3 AND comment_id = $4",
+      "UPDATE like_dislike SET is_like = ? WHERE user_id = ? AND post_id = ? AND comment_id = ?",
     DELETE:
-      "DELETE FROM like_dislike WHERE user_id = $1 AND post_id = $2 AND comment_id = $3"
+      "DELETE FROM like_dislike WHERE user_id = ? AND post_id = ? AND comment_id = ?"
   },
   REFRESH_TOKEN: {
     CREATE:
-      "INSERT INTO refresh_token (user_id, token, expires_at) VALUES ($1, $2, $3)",
-    READ: "SELECT * FROM refresh_token WHERE user_id = $1",
+      "INSERT INTO refresh_token (user_id, token, expires_at) VALUES (?, ?, ?)",
+    READ: "SELECT * FROM refresh_token WHERE user_id = ?",
     UPDATE:
-      "UPDATE refresh_token SET token = $1, expires_at = $2 WHERE user_id = $3",
-    DELETE: "DELETE FROM refresh_token WHERE token = $1"
+      "UPDATE refresh_token SET token = ?, expires_at = ? WHERE user_id = ?",
+    DELETE: "DELETE FROM refresh_token WHERE token = ?"
   }
 });
