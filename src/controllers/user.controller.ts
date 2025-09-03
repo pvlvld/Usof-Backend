@@ -72,10 +72,14 @@ class UserController {
       return res.status(400).json({ errors });
     }
 
-    userData.user_id = +user_id;
+    // Oh God how mutch I hate spreads... but ok
+    const updateData = {
+      ...userData,
+      user_id: +user_id
+    };
 
     this.userService
-      .updateUser(userData)
+      .updateUser(updateData)
       .then((user) => res.status(200).json(user))
       .catch((err) => res.status(500).json({ error: err.message }));
   }
