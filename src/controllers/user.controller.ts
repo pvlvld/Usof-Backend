@@ -85,7 +85,7 @@ class UserController {
       .catch((err) => res.status(500).json({ error: err.message }));
   }
 
-  public updateAvatar() {
+  public updateAvatar(req: Request, res: Response) {
     throw new Error("Method not implemented.");
   }
 
