@@ -1,4 +1,5 @@
 import express from "express";
+import { userController } from "../controllers/user.controller.js";
 
 const userRouter = express.Router();
 
@@ -7,8 +8,7 @@ userRouter.get("/", (req, res) => {
 });
 
 userRouter.get("/:user_id", (req, res) => {
-  const { user_id } = req.params;
-  res.send(`User details for user ID: ${user_id}`);
+  userController.getUserById(req, res);
 });
 
 // ADMINS ONLY
