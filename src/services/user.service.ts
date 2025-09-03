@@ -1,12 +1,15 @@
+import { EncryptionService } from "./encryption.service.js";
 import type { GetUsersDto, UpdatePasswordDto } from "../dto/user.dto.js";
 import type { UserModel } from "../models/user.model.js";
 
 class UserService {
   private static instance: UserService | null = null;
   private userModel: UserModel;
+  private encryptionService: EncryptionService;
 
   private constructor(user: typeof UserModel) {
     this.userModel = user.getInstance();
+    this.encryptionService = EncryptionService.getInstance();
   }
 
   public static getInstance(user: typeof UserModel) {
@@ -21,8 +24,17 @@ class UserService {
   }
 
   public updatePassword(dto: UpdatePasswordDto) {
-    // TODO: huh? separate encryption service?
-    return this.userModel.updatePassword(1, "", "");
+    if (dto.password !== dto.confirmPassword) {
+      throw { status: 400, message: "Passwords do not match" };
+    }
+
+    const password_salt = this.encryptionService.genSalt(10);
+    const password_hash = this.encryptionService.hash(
+      dto.password,
+      password_salt
+    );
+
+    return this.userModel.updatePassword(1, password_hash, password_salt);
   }
 }
 
