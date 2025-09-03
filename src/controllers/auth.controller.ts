@@ -155,7 +155,9 @@ class AuthController {
       return res.status(400).json({ errors });
     }
 
-    // TODO: Generate reset token, save to DB, send email
+    // TODO:
+    // - Generate reset token, save to DB, send email
+    // - Token probably shoul'd be time limited
 
     return res
       .status(200)
