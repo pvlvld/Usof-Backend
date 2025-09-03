@@ -1,17 +1,21 @@
 import type { LoginDto, LogoutDTO, RegisterDto } from "../dto/auth.dto.js";
 import type { RefreshTokenModel } from "../models/refreshToken.model.js";
 import type { UserModel } from "../models/user.model.js";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import { EncryptionService } from "./encryption.service.js";
+import { JwtService } from "./jwt.service.js";
 
 class AuthService {
   private static instance: AuthService | null = null;
   private refreshTokenModel: RefreshTokenModel;
   private userModel: UserModel;
+  private jwtService: JwtService;
+  private encryptionService: EncryptionService;
 
   private constructor(auth: typeof RefreshTokenModel, user: typeof UserModel) {
     this.refreshTokenModel = auth.getInstance();
     this.userModel = user.getInstance();
+    this.jwtService = JwtService.getInstance();
+    this.encryptionService = EncryptionService.getInstance();
   }
 
   public static getInstance(
@@ -39,8 +43,9 @@ class AuthService {
       };
     }
 
-    const password_salt = bcrypt.genSaltSync(10);
-    const password_hash = bcrypt.hashSync(dto.password, password_salt);
+    const encryptionService = EncryptionService.getInstance();
+    const password_salt = encryptionService.genSalt(10);
+    const password_hash = encryptionService.hash(dto.password, password_salt);
     await this.userModel.registerUser({
       login: dto.login,
       password_hash,
@@ -53,20 +58,12 @@ class AuthService {
       throw { status: 500, message: "Failed to create user" };
     }
 
-    // TODO: Config module
-    const JWT_SECRET = process.env.JWT_SECRET || "json_secret";
-    const JWT_REFRESH_SECRET =
-      process.env.JWT_REFRESH_SECRET || "json_refresh_secret";
-    const JWT_EXPIRES_IN = "15m";
-    const JWT_REFRESH_EXPIRES_IN = "7d";
-
-    const accessToken = jwt.sign(
-      { sub: user.id, role: user.role },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-    const refreshToken = jwt.sign({ sub: user.id }, JWT_REFRESH_SECRET, {
-      expiresIn: JWT_REFRESH_EXPIRES_IN
+    const accessToken = this.jwtService.signAccessToken({
+      sub: String(user.id),
+      role: user.role
+    });
+    const refreshToken = this.jwtService.signRefreshToken({
+      sub: String(user.id)
     });
 
     await this.refreshTokenModel.saveRefreshToken(
@@ -74,6 +71,7 @@ class AuthService {
       refreshToken,
       new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
     );
+
     return {
       user: {
         id: user.id,
@@ -97,25 +95,20 @@ class AuthService {
       throw { status: 401, message: "Invalid credentials" };
     }
 
-    const passwordValid = bcrypt.compareSync(dto.password, user.password_hash);
+    const passwordValid = this.encryptionService.compare(
+      dto.password,
+      user.password_hash
+    );
     if (!passwordValid) {
       throw { status: 401, message: "Invalid credentials" };
     }
 
-    // TODO: Config module
-    const JWT_SECRET = process.env.JWT_SECRET || "json_secret";
-    const JWT_REFRESH_SECRET =
-      process.env.JWT_REFRESH_SECRET || "json_refresh_secret";
-    const JWT_EXPIRES_IN = "15m";
-    const JWT_REFRESH_EXPIRES_IN = "7d";
-
-    const accessToken = jwt.sign(
-      { sub: user.id, role: user.role },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-    const refreshToken = jwt.sign({ sub: user.id }, JWT_REFRESH_SECRET, {
-      expiresIn: JWT_REFRESH_EXPIRES_IN
+    const accessToken = this.jwtService.signAccessToken({
+      sub: String(user.id),
+      role: user.role
+    });
+    const refreshToken = this.jwtService.signRefreshToken({
+      sub: String(user.id)
     });
 
     await this.refreshTokenModel.saveRefreshToken(
