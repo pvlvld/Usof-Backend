@@ -52,9 +52,9 @@ export class CreateUserDTO {
 }
 
 export class UploadUserAvatarDTO {
-  @IsString()
-  @MaxLength(100)
-  user_id!: string;
+  @IsNumber()
+  @Min(1)
+  user_id!: number;
 
   @IsString()
   @MaxLength(100)
@@ -62,9 +62,9 @@ export class UploadUserAvatarDTO {
 }
 
 export class UpdateUserDataDTO {
-  @IsString()
-  @MaxLength(100)
-  user_id!: string;
+  @IsNumber()
+  @Min(1)
+  user_id!: number;
 
   @IsOptional()
   @IsString()
