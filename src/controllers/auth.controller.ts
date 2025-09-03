@@ -41,10 +41,25 @@ class AuthController {
 
     try {
       const result = await this.authService.register(dto);
+      if (result.accessToken) {
+        res.cookie("accessToken", result.accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 15 // 15 minutes
+        });
+      }
+      if (result.refreshToken) {
+        res.cookie("refreshToken", result.refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+        });
+      }
 
       return res.status(201).json({
-        message: "User registered successfully!",
-        ...result
+        message: "User registered successfully!"
       });
     } catch (err) {
       let status = 500;
@@ -69,10 +84,25 @@ class AuthController {
 
     try {
       const result = await this.authService.login(dto);
+      if (result.accessToken) {
+        res.cookie("accessToken", result.accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 15 // 15 minutes
+        });
+      }
+      if (result.refreshToken) {
+        res.cookie("refreshToken", result.refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+        });
+      }
 
       return res.status(200).json({
-        message: "User logged in successfully!",
-        ...result
+        message: "User logged in successfully!"
       });
     } catch (err) {
       let status = 500;
@@ -88,9 +118,20 @@ class AuthController {
 
   @isRequestBody()
   public async logout(req, res) {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies?.refreshToken;
     try {
       await this.authService.logout({ refreshToken });
+
+      res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict"
+      });
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict"
+      });
       return res.status(200).json({ message: "User logged out successfully!" });
     } catch (err) {
       let status = 500;
@@ -99,7 +140,6 @@ class AuthController {
         status = (err as any).status || 500;
         message = (err as any).message || message;
       }
-
       return res.status(status).json({ message });
     }
   }
