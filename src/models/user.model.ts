@@ -38,7 +38,7 @@ export class UserModel {
   public async getUsers(dto: GetUsersDto) {
     const [rows] = await this.db.query<RowDataPacket[]>(
       QUERIES.USER.GET_USERS,
-      [dto.limit, dto.page]
+      [dto.limit, dto.page, dto.limit]
     );
     return rows;
   }
@@ -104,9 +104,9 @@ export class UserModel {
     password_salt: string
   ) {
     const [result] = await this.db.query(QUERIES.USER.RESET_PASSWORD, [
-      id,
       password_hash,
-      password_salt
+      password_salt,
+      id
     ]);
     return result;
   }
