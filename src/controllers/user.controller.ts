@@ -20,8 +20,8 @@ class UserController {
   }
 
   public async getUsers(req: Request, res: Response) {
-    req.body ??= {};
-    const dto: GetUsersDto = plainToInstance(GetUsersDto, req.body);
+    req.query ??= {};
+    const dto: GetUsersDto = plainToInstance(GetUsersDto, req.query);
     const errors = await validate(dto);
     if (errors.length > 0) {
       return res.status(400).json({ errors });
