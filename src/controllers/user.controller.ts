@@ -102,10 +102,26 @@ class UserController {
         ]
       });
     }
+    req.body ??= {};
+    let isPermanent = false;
+    let { banned_until, ban_reason } = req.body;
+
+    if (Date.parse(banned_until)) {
+      banned_until = new Date(banned_until);
+    } else {
+      isPermanent = true;
+      banned_until = new Date(0);
+    }
 
     this.userService
-      .banUser({ user_id: +user_id })
-      .then(() => res.status(204).send())
+      .banUser({ user_id: +user_id, banned_until, ban_reason })
+      .then(() =>
+        res.status(204).send({
+          message: isPermanent
+            ? `User banned permanently`
+            : `User banned successfully until ${banned_until.toDateString()}`
+        })
+      )
       .catch((err) => res.status(500).json({ error: err.message }));
   }
 
