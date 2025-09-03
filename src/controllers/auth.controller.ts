@@ -10,6 +10,7 @@ import { AuthService } from "../services/auth.service.js";
 import { RefreshTokenModel } from "../models/refreshToken.model.js";
 import { UserModel } from "../models/user.model.js";
 import { UserService } from "../services/user.service.js";
+import { isRequestBody } from "../decorators/isRequestBody.js";
 
 class AuthController {
   private authService: AuthService;
@@ -19,11 +20,8 @@ class AuthController {
     this.userService = UserService.getInstance(UserModel);
   }
 
+  @isRequestBody()
   async register(req, res) {
-    if (!req.body) {
-      return res.status(400).json({ message: "Request body is missing" });
-    }
-
     const dto = plainToInstance(RegisterDto, req.body);
     const errors = await validate(dto);
 
@@ -60,6 +58,7 @@ class AuthController {
     }
   }
 
+  @isRequestBody()
   public async login(req, res) {
     const dto = plainToInstance(LoginDto, req.body);
     const errors = await validate(dto);
@@ -87,6 +86,7 @@ class AuthController {
     }
   }
 
+  @isRequestBody()
   public async logout(req, res) {
     const { refreshToken } = req.body;
     try {
@@ -104,6 +104,7 @@ class AuthController {
     }
   }
 
+  @isRequestBody()
   public async initiatePasswordReset(req, res) {
     const dto = plainToInstance(PasswordResetRequestDto, req.body);
     const errors = await validate(dto);
@@ -118,6 +119,7 @@ class AuthController {
       .json({ message: "Password reset link sent to email!" });
   }
 
+  @isRequestBody()
   public async resetPassword(req, res) {
     const dto = plainToInstance(PasswordResetDto, {
       ...req.body,
