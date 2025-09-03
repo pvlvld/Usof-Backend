@@ -2,9 +2,11 @@ import Database from "../database/index.js";
 import { QUERIES } from "../consts/queries.js";
 import type { RowDataPacket } from "mysql2/promise";
 import type {
+  BanUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
   GetUsersDto,
+  UnbanUserDTO,
   UpdateUserDataDTO
 } from "../dto/user.dto.js";
 
@@ -146,6 +148,18 @@ export class UserModel {
       id
     ]);
     return result;
+  }
+
+  public banUser(dto: BanUserDTO) {
+    return this.db.query(QUERIES.USER.BAN, [
+      dto.banned_until,
+      dto.ban_reason,
+      dto.user_id
+    ]);
+  }
+
+  public unbanUser(dto: UnbanUserDTO) {
+    return this.db.query(QUERIES.USER.UNBAN, [dto.user_id]);
   }
 }
 
