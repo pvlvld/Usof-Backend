@@ -1,6 +1,7 @@
 import { EncryptionService } from "./encryption.service.js";
-import type { GetUsersDto, UpdatePasswordDto } from "../dto/user.dto.js";
+import type { GetUsersDto } from "../dto/user.dto.js";
 import type { UserModel } from "../models/user.model.js";
+import type { PasswordResetDto } from "../dto/auth.dto.js";
 
 class UserService {
   private static instance: UserService | null = null;
@@ -23,8 +24,8 @@ class UserService {
     return this.userModel.getUsers(dto);
   }
 
-  public updatePassword(dto: UpdatePasswordDto) {
-    if (dto.password !== dto.confirmPassword) {
+  public updatePassword(dto: PasswordResetDto) {
+    if (dto.password !== dto.passwordConfirmation) {
       throw { status: 400, message: "Passwords do not match" };
     }
 

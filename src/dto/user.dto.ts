@@ -17,18 +17,3 @@ export class GetUsersDto {
   @Max(100)
   limit!: number;
 }
-
-export class UpdatePasswordDto {
-  @IsNumber()
-  id!: number;
-
-  @IsString()
-  @MinLength(6)
-  @MaxLength(100)
-  password!: string;
-
-  @IsString()
-  @MinLength(6)
-  @MaxLength(100)
-  confirmPassword!: string;
-}
