@@ -24,8 +24,8 @@ class UserService {
     return this.instance;
   }
 
-  public async getUserByID(dto: GetUserByIdDTO) {
-    return await this.userModel.getUserByID(dto);
+  public async getUserById(dto: GetUserByIdDTO) {
+    return await this.userModel.getUserById(dto);
   }
 
   public async getUsers(dto: GetUsersDto) {

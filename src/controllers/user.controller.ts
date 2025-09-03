@@ -36,6 +36,15 @@ class UserController {
   public async getUserById(req: Request, res: Response) {
     const userData: GetUserByIdDTO = req.body;
     const errors = await validate(userData);
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    this.userService
+      .getUserById(userData)
+      .then((user) => res.status(200).json(user))
+      .catch((err) => res.status(500).json({ error: err.message }));
   }
 
   @isRequestBody()
