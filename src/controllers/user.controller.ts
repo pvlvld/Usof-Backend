@@ -106,7 +106,21 @@ class UserController {
     let isPermanent = false;
     let { banned_until, ban_reason } = req.body;
 
-    if (Date.parse(banned_until)) {
+    if (banned_until && !Date.parse(banned_until)) {
+      return res.status(400).json({
+        errors: [
+          {
+            property: "banned_until",
+            constraints: {
+              isDate:
+                "banned_until must be a valid date or empty for permanent ban"
+            }
+          }
+        ]
+      });
+    }
+
+    if (banned_until) {
       banned_until = new Date(banned_until);
     } else {
       isPermanent = true;
