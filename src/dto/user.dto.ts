@@ -76,6 +76,16 @@ export class UpdateUserDataDTO {
   @MaxLength(100)
   email?: string;
 
+  @IsString()
+  @MinLength(6)
+  @MaxLength(100)
+  password!: string;
+
+  @IsString()
+  @MinLength(6)
+  @MaxLength(100)
+  passwordConfirmation!: string;
+
   @IsOptional()
   @IsString()
   @MaxLength(50)
