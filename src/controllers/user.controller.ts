@@ -1,15 +1,16 @@
 import { validate } from "class-validator";
-import type {
-  CreateUserDTO,
-  DeleteUserDTO,
-  GetUserByIdDTO,
+import {
   GetUsersDto,
-  UpdateUserDataDTO
+  type CreateUserDTO,
+  type DeleteUserDTO,
+  type GetUserByIdDTO,
+  type UpdateUserDataDTO
 } from "../dto/user.dto.js";
 import type { Request, Response } from "express";
 import { isRequestBody } from "../decorators/isRequestBody.js";
 import { UserService } from "../services/user.service.js";
 import { UserModel } from "../models/user.model.js";
+import { plainToInstance } from "class-transformer";
 
 class UserController {
   private userService: UserService;
@@ -20,7 +21,7 @@ class UserController {
 
   public async getUsers(req: Request, res: Response) {
     req.body ??= {};
-    const dto: GetUsersDto = req.body;
+    const dto: GetUsersDto = plainToInstance(GetUsersDto, req.body);
     const errors = await validate(dto);
     if (errors.length > 0) {
       return res.status(400).json({ errors });
