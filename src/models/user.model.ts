@@ -53,10 +53,10 @@ export class UserModel {
       : null;
   }
 
-  public async getUsers(dto: GetUsersDto) {
+  public async getUsers(limit: number, offset: number) {
     const [rows] = await this.db.query<RowDataPacket[]>(
       QUERIES.USER.GET_PAGINATED,
-      [dto.limit, dto.page, dto.limit]
+      [limit, offset]
     );
     return rows;
   }
