@@ -27,6 +27,16 @@ class AuthController {
     const dto = plainToInstance(RegisterDto, req.body);
     const errors = await validate(dto);
 
+    if (dto.password !== dto.passwordConfirmation) {
+      errors.push({
+        property: "passwordConfirmation",
+        constraints: {
+          isNotEmpty: "Password confirmation should not be empty",
+          isEqual: "Password confirmation does not match password"
+        }
+      });
+    }
+
     if (errors.length > 0) {
       return res.status(400).json({ errors });
     }
