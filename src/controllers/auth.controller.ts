@@ -11,6 +11,7 @@ import { RefreshTokenModel } from "../models/refreshToken.model.js";
 import { UserModel } from "../models/user.model.js";
 import { UserService } from "../services/user.service.js";
 import { isRequestBody } from "../decorators/isRequestBody.js";
+import type { Request, Response } from "express";
 
 class AuthController {
   private authService: AuthService;
@@ -21,7 +22,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  async register(req, res) {
+  async register(req: Request, res: Response) {
     const dto = plainToInstance(RegisterDto, req.body);
     const errors = await validate(dto);
 
@@ -74,7 +75,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  public async login(req, res) {
+  public async login(req: Request, res: Response) {
     const dto = plainToInstance(LoginDto, req.body);
     const errors = await validate(dto);
 
@@ -117,7 +118,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  public async logout(req, res) {
+  public async logout(req: Request, res: Response) {
     const refreshToken = req.cookies?.refreshToken;
     try {
       await this.authService.logout({ refreshToken });
@@ -145,7 +146,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  public async initiatePasswordReset(req, res) {
+  public async initiatePasswordReset(req: Request, res: Response) {
     const dto = plainToInstance(PasswordResetRequestDto, req.body);
     const errors = await validate(dto);
     if (errors.length > 0) {
@@ -160,7 +161,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  public async resetPassword(req, res) {
+  public async resetPassword(req: Request, res: Response) {
     const dto = plainToInstance(PasswordResetDto, {
       ...req.body,
       confirm_token: req.params.confirm_token
