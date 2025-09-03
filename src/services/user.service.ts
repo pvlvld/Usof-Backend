@@ -1,10 +1,12 @@
 import { EncryptionService } from "./encryption.service.js";
 import type {
   CreateUserDTO,
+  DeleteUserDTO,
   GetUserByIdDTO,
-  GetUsersDto
+  GetUsersDto,
+  UpdateUserDataDTO
 } from "../dto/user.dto.js";
-import type { UserModel } from "../models/user.model.js";
+import type { IUserModel, UserModel } from "../models/user.model.js";
 import type { PasswordResetDto } from "../dto/auth.dto.js";
 
 class UserService {
@@ -56,6 +58,22 @@ class UserService {
     }
 
     return newUser;
+  }
+
+  public async deleteUser(dto: DeleteUserDTO) {
+    const user = await this.userModel.getUserById({ user_id: dto.user_id });
+
+    if (!user) {
+      throw { status: 404, message: "User not found" };
+    }
+
+    const result = await this.userModel.deleteUser({ user_id: dto.user_id });
+
+    if (!result) {
+      throw { status: 500, message: "Failed to delete user" };
+    }
+
+    return result;
   }
 
   public async updatePassword(dto: PasswordResetDto) {
