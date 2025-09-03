@@ -85,6 +85,50 @@ class UserController {
       .catch((err) => res.status(500).json({ error: err.message }));
   }
 
+  public updateAvatar() {
+    throw new Error("Method not implemented.");
+  }
+
+  @isRequestBody()
+  public banUser(req: Request, res: Response) {
+    const { user_id } = req.params;
+    if (!user_id || isNaN(Number(user_id))) {
+      return res.status(400).json({
+        errors: [
+          {
+            property: "user_id",
+            constraints: { isNumber: "user_id must be a number" }
+          }
+        ]
+      });
+    }
+
+    this.userService
+      .banUser({ user_id: +user_id })
+      .then(() => res.status(204).send())
+      .catch((err) => res.status(500).json({ error: err.message }));
+  }
+
+  @isRequestBody()
+  public unbanUser(req: Request, res: Response) {
+    const { user_id } = req.params;
+    if (!user_id || isNaN(Number(user_id))) {
+      return res.status(400).json({
+        errors: [
+          {
+            property: "user_id",
+            constraints: { isNumber: "user_id must be a number" }
+          }
+        ]
+      });
+    }
+
+    this.userService
+      .unbanUser({ user_id: +user_id })
+      .then(() => res.status(204).send())
+      .catch((err) => res.status(500).json({ error: err.message }));
+  }
+
   public async deleteUser(req: Request, res: Response) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
