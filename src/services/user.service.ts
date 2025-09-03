@@ -1,9 +1,11 @@
 import { EncryptionService } from "./encryption.service.js";
 import type {
+  BanUserDTO,
   CreateUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
   GetUsersDto,
+  UnbanUserDTO,
   UpdateUserDataDTO
 } from "../dto/user.dto.js";
 import type { IUserModel, UserModel } from "../models/user.model.js";
