@@ -36,6 +36,28 @@ class UserService {
     return await this.userModel.createUser(dto);
   }
 
+  public async updateUser(dto: UpdateUserDataDTO) {
+    const currentUserData = await this.userModel.getUserById({
+      user_id: dto.user_id
+    });
+
+    if (!currentUserData) {
+      throw { status: 404, message: "User not found" };
+    }
+
+    const newUserData = { ...currentUserData, ...dto };
+
+    const newUser = await this.userModel.updateUser(
+      newUserData as Partial<IUserModel>
+    );
+
+    if (!newUser) {
+      throw { status: 500, message: "Failed to update user" };
+    }
+
+    return newUser;
+  }
+
   public async updatePassword(dto: PasswordResetDto) {
     if (dto.password !== dto.passwordConfirmation) {
       throw { status: 400, message: "Passwords do not match" };
