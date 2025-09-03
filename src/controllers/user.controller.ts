@@ -3,6 +3,7 @@ import type {
   CreateUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
+  GetUsersDto,
   UpdateUserDataDTO
 } from "../dto/user.dto.js";
 import type { Request, Response } from "express";
@@ -15,6 +16,20 @@ class UserController {
 
   constructor() {
     this.userService = UserService.getInstance(UserModel);
+  }
+
+  public async getUsers(req: Request, res: Response) {
+    req.body ??= {};
+    const dto: GetUsersDto = req.body;
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    this.userService
+      .getUsers(dto)
+      .then((users) => res.status(200).json(users))
+      .catch((err) => res.status(500).json({ error: err.message }));
   }
 
   @isRequestBody()
