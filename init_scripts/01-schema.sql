@@ -100,6 +100,14 @@ CREATE INDEX idx_like_dislike_user_id ON like_dislike (user_id);
 CREATE INDEX idx_like_dislike_post_id ON like_dislike (post_id);
 CREATE INDEX idx_like_dislike_comment_id ON like_dislike (comment_id);
 
+CREATE TABLE password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(64) NOT NULL UNIQUE,
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
 DELIMITER $$
 
 
