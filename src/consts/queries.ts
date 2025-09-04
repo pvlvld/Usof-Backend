@@ -48,5 +48,16 @@ export const QUERIES = Object.freeze({
     UPDATE:
       "UPDATE refresh_token SET token = ?, expires_at = ? WHERE user_id = ?",
     DELETE: "DELETE FROM refresh_token WHERE token = ?"
+  },
+  PASSWORD_RESETS: {
+    /** user_id, token (64), expires_at */
+    CREATE:
+      "INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)",
+    READ: "SELECT * FROM password_resets WHERE user_id = ?",
+    UPDATE:
+      "UPDATE password_resets SET token = ?, expires_at = ? WHERE user_id = ?",
+    DELETE: "DELETE FROM password_resets WHERE token = ?",
+    /** expires_at <*/
+    DELETE_EXPIRED: "DELETE FROM password_resets WHERE expires_at < ?"
   }
 });
