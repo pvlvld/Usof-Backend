@@ -1,28 +1,46 @@
 import { PasswordResetsModel } from "../models/passwordResets.model.js";
 import crypto from "node:crypto";
+import type { UserModel } from "../models/user.model.js";
 
 class PasswordResetsService {
   private static instance: PasswordResetsService | null = null;
   private passwordResetsModel: PasswordResetsModel;
+  private userModel: UserModel;
 
-  private constructor(passwordReset: typeof PasswordResetsModel) {
+  private constructor(
+    passwordReset: typeof PasswordResetsModel,
+    userModel: typeof UserModel
+  ) {
     this.passwordResetsModel = passwordReset.getInstance();
+    this.userModel = userModel.getInstance();
   }
 
-  public static getInstance(passwordResetsModel: typeof PasswordResetsModel) {
+  public static getInstance(
+    passwordResetsModel: typeof PasswordResetsModel,
+    userModel: typeof UserModel
+  ) {
     if (!this.instance) {
-      this.instance = new PasswordResetsService(passwordResetsModel);
+      this.instance = new PasswordResetsService(passwordResetsModel, userModel);
     }
     return this.instance;
   }
 
-  public async getPasswordResetToken(userId: number) {
+  public async getPasswordResetToken(email: string) {
+    const user = await this.userModel.findUserByLoginOrEmail(email);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     // 1 hour
     const expiresAt = new Date(Date.now() + 3600000);
     const token = crypto.randomBytes(32).toString("hex");
 
     try {
-      await this.passwordResetsModel.createResetEntry(userId, token, expiresAt);
+      await this.passwordResetsModel.createResetEntry(
+        user.id,
+        token,
+        expiresAt
+      );
     } catch (error) {
       console.error("Error creating password reset entry:", error);
       throw new Error("Failed to create password reset token");
