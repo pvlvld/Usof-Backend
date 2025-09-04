@@ -64,3 +64,5 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 tsconfig.tsbuildinfo
 
 /mysql_data
+
+.adminjs
