@@ -1,6 +1,12 @@
 import { QUERIES } from "../consts/queries.js";
 import Database from "../database/index.js";
 
+type IResetToken = {
+  userId: number;
+  token: string;
+  expiresAt: Date;
+};
+
 export class PasswordResetsModel {
   private static instance: PasswordResetsModel | null = null;
   private db: ReturnType<typeof Database.getPool>;
@@ -38,9 +44,9 @@ export class PasswordResetsModel {
   }
 
   public async getResetEntry(token: string) {
-    const [res] = await this.db.query(QUERIES.PASSWORD_RESETS.GET_BY_TOKEN, [
+    const [rows] = await this.db.query(QUERIES.PASSWORD_RESETS.GET_BY_TOKEN, [
       token
     ]);
-    return res;
+    return (rows[0] as IResetToken) ?? null;
   }
 }
