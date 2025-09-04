@@ -21,7 +21,10 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@adminjs/express": "^6.1.1",
+    "@adminjs/sql": "^2.2.6",
     "@types/cookie-parser": "^1.4.9",
+    "adminjs": "^7.8.17",
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
