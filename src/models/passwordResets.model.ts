@@ -21,6 +21,14 @@ export class PasswordResetsModel {
     token: string,
     expiresAt: Date
   ) {
+    if (typeof token !== "string") {
+      throw new Error("Invalid token");
+    }
+
+    if (token.length !== 64) {
+      throw new Error("Invalid token length");
+    }
+
     const [res] = await this.db.query(QUERIES.PASSWORD_RESETS.CREATE, [
       userId,
       token,
