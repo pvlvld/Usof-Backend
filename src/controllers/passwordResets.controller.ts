@@ -36,9 +36,7 @@ class PasswordResetsController {
       });
     }
 
-    const token = await this.passwordResetsService.getPasswordResetToken(
-      dto.email
-    );
+    const token = await this.passwordResetsService.createResetEntry(dto.email);
     // TODO: Send email with token
     return res.status(200).json({ message: "Password reset email sent" });
   }
