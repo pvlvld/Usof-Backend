@@ -5,6 +5,7 @@ CREATE TABLE user (
     password_salt VARCHAR(255) NOT NULL,
     full_name VARCHAR(100),
     email VARCHAR(100) NOT NULL UNIQUE,
+    email_verified BOOLEAN DEFAULT FALSE,
     avatar VARCHAR(255),
     rating INT DEFAULT 0,
     role ENUM('user', 'donator', 'moderator', 'admin') DEFAULT 'user',
@@ -100,11 +101,19 @@ CREATE INDEX idx_like_dislike_user_id ON like_dislike (user_id);
 CREATE INDEX idx_like_dislike_post_id ON like_dislike (post_id);
 CREATE INDEX idx_like_dislike_comment_id ON like_dislike (comment_id);
 
+-- Maybe just use same table with type enum "password_reset" | "email_verification"?
 CREATE TABLE password_resets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     token VARCHAR(64) NOT NULL UNIQUE,
     expires_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
+CREATE TABLE email_verifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(64) NOT NULL UNIQUE,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
 

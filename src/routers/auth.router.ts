@@ -12,5 +12,7 @@ authRouter.post("/password-reset", (req, res) =>
 authRouter.post("/password-reset/:confirm_token", (req, res) =>
   authController.resetPassword(req, res)
 );
-
+authRouter.post("/verify-email", (req, res) =>
+  authController.verifyEmail(req, res)
+);
 export { authRouter };

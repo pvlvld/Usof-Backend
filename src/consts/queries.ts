@@ -17,7 +17,9 @@ export const QUERIES = Object.freeze({
       "UPDATE user SET password_hash = ?, password_salt = ? WHERE id = ?",
     DELETE: "DELETE FROM user WHERE id = ?",
     BAN: "UPDATE user SET banned_until = ?, ban_reason = ? WHERE id = ?",
-    UNBAN: "UPDATE user SET banned_until = NULL, ban_reason = NULL WHERE id = ?"
+    UNBAN:
+      "UPDATE user SET banned_until = NULL, ban_reason = NULL WHERE id = ?",
+    VERIFY_EMAIL: "UPDATE user SET is_email_verified = TRUE WHERE id = ?"
   },
   CATEGORY: {
     CREATE: "INSERT INTO category (name, description) VALUES (?, ?)",
@@ -60,5 +62,11 @@ export const QUERIES = Object.freeze({
     DELETE: "DELETE FROM password_resets WHERE token = ?",
     /** expires_at <*/
     DELETE_EXPIRED: "DELETE FROM password_resets WHERE expires_at < ?"
+  },
+  EMAIL_VERIFICATIONS: {
+    CREATE: "INSERT INTO email_verifications (user_id, token) VALUES (?, ?)",
+    GET_BY_TOKEN: "SELECT * FROM email_verifications WHERE token = ?",
+    GET_BY_USER_ID: "SELECT * FROM email_verifications WHERE user_id = ?",
+    DELETE: "DELETE FROM email_verifications WHERE token = ?"
   }
 });

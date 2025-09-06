@@ -1,13 +1,11 @@
 import Database from "../database/index.js";
 import { QUERIES } from "../consts/queries.js";
-import type { RowDataPacket } from "mysql2/promise";
+import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import type {
   BanUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
-  GetUsersDto,
-  UnbanUserDTO,
-  UpdateUserDataDTO
+  UnbanUserDTO
 } from "../dto/user.dto.js";
 
 export type IUserRole = "user" | "admin";
@@ -19,6 +17,7 @@ export type IUserModel = {
   password_salt: string;
   full_name: string;
   email: string;
+  is_email_verified: boolean;
   avatar: string;
   rating: number;
   role: IUserRole;
@@ -161,6 +160,14 @@ export class UserModel {
   public unbanUser(dto: UnbanUserDTO) {
     return this.db.query(QUERIES.USER.UNBAN, [dto.user_id]);
   }
+
+  public async verifyEmail(userId: number) {
+    const [res] = await this.db.query<ResultSetHeader>(
+      QUERIES.USER.VERIFY_EMAIL,
+      [userId]
+    );
+    return res;
+  }
 }
 
 // Do I need it with DTO's?
@@ -172,6 +179,7 @@ export class User implements IUserModel {
     public password_salt: string,
     public full_name: string,
     public email: string,
+    public is_email_verified: boolean,
     public avatar: string,
     public rating: number,
     public role: IUserRole,

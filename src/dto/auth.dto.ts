@@ -3,7 +3,8 @@ import {
   IsString,
   MinLength,
   MaxLength,
-  IsOptional
+  IsOptional,
+  Length
 } from "class-validator";
 
 export class RegisterDto {
@@ -63,4 +64,10 @@ export class LogoutDTO {
   @MinLength(6)
   @MaxLength(100)
   refreshToken!: string;
+}
+
+export class EmailVerificationDto {
+  @IsString()
+  @Length(36, 36)
+  confirm_token!: string;
 }

@@ -25,7 +25,7 @@ class PasswordResetsService {
     return this.instance;
   }
 
-  public async getPasswordResetToken(email: string) {
+  public async createResetEntry(email: string) {
     const user = await this.userModel.findUserByLoginOrEmail(email);
     if (!user) {
       throw new Error("User not found");
@@ -66,11 +66,9 @@ class PasswordResetsService {
   public async invalidateToken(token: string) {
     try {
       const entry = await this.passwordResetsModel.getResetEntry(token);
-      if (!entry) {
-        throw new Error("Invalid or expired token");
+      if (entry) {
+        await this.passwordResetsModel.invalidateToken(token);
       }
-
-      await this.passwordResetsModel.invalidateToken(token);
     } catch (error) {
       console.error("Error invalidating password reset token:", error);
       throw new Error("Failed to invalidate password reset token");

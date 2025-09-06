@@ -104,6 +104,10 @@ class UserService {
   public unbanUser(dto: UnbanUserDTO) {
     return this.userModel.unbanUser(dto);
   }
+
+  public findUserByLoginOrEmail(loginOrEmail: string) {
+    return this.userModel.findUserByLoginOrEmail(loginOrEmail);
+  }
 }
 
 export { UserService };

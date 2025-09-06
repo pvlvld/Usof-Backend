@@ -1,4 +1,10 @@
-import type { LoginDto, LogoutDTO, RegisterDto } from "../dto/auth.dto.js";
+import type {
+  EmailVerificationDto,
+  LoginDto,
+  LogoutDTO,
+  RegisterDto
+} from "../dto/auth.dto.js";
+import { EmailVerificationModel } from "../models/emailVerifications.model.js";
 import type { RefreshTokenModel } from "../models/refreshToken.model.js";
 import type { UserModel } from "../models/user.model.js";
 import { EncryptionService } from "./encryption.service.js";
@@ -10,20 +16,27 @@ class AuthService {
   private userModel: UserModel;
   private jwtService: JwtService;
   private encryptionService: EncryptionService;
+  private emailVerificationModel: EmailVerificationModel;
 
-  private constructor(auth: typeof RefreshTokenModel, user: typeof UserModel) {
+  private constructor(
+    auth: typeof RefreshTokenModel,
+    user: typeof UserModel,
+    emailVerification: typeof EmailVerificationModel
+  ) {
     this.refreshTokenModel = auth.getInstance();
     this.userModel = user.getInstance();
     this.jwtService = JwtService.getInstance();
     this.encryptionService = EncryptionService.getInstance();
+    this.emailVerificationModel = emailVerification.getInstance();
   }
 
   public static getInstance(
     auth: typeof RefreshTokenModel,
-    user: typeof UserModel
+    user: typeof UserModel,
+    emailVerification: typeof EmailVerificationModel
   ) {
     if (!this.instance) {
-      this.instance = new AuthService(auth, user);
+      this.instance = new AuthService(auth, user, emailVerification);
     }
     return this.instance;
   }
@@ -133,6 +146,22 @@ class AuthService {
 
   public async logout(dto: LogoutDTO) {
     await this.refreshTokenModel.removeRefreshToken(dto.refreshToken);
+  }
+
+  public async verifyEmail(dto: EmailVerificationDto) {
+    const emailVerification = await this.emailVerificationModel.getByToken(
+      dto.confirm_token
+    );
+
+    if (!emailVerification) {
+      throw { status: 400, message: "Invalid token" };
+    }
+
+    const res = await this.userModel.verifyEmail(emailVerification.user_id);
+    await this.emailVerificationModel.deleteByToken(dto.confirm_token);
+    if (res.affectedRows === 0) {
+      throw { status: 500, message: "Failed to verify email" };
+    }
   }
 }
 
