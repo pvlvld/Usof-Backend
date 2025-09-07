@@ -33,6 +33,12 @@ export class NotFoundError extends CustomError {
   }
 }
 
+export class ConflictError extends CustomError {
+  constructor(message: string = "Conflict") {
+    super(message, 409);
+  }
+}
+
 export class InternalServerError extends CustomError {
   constructor(message: string = "Internal Server Error") {
     super(message, 500);
