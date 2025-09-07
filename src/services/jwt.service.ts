@@ -4,11 +4,13 @@ import type { StringValue } from "ms";
 import type { JwtPayload as JwtPayloadBase } from "jsonwebtoken";
 import type { IUserRole } from "../dto/user.dto.js";
 
-type JwtPayload = JwtPayloadBase & {
+type IJwtPayload = JwtPayloadBase & {
   sub: string;
-  role?: IUserRole;
 };
 
+type IJwtPayloadAuth = IJwtPayload & {
+  role: IUserRole;
+};
 class JwtService {
   private static instance: JwtService | null = null;
   private readonly accessSecret: string;
@@ -38,7 +40,7 @@ class JwtService {
     return this.instance;
   }
 
-  public signAccessToken(payload: JwtPayload) {
+  public signAccessToken(payload: IJwtPayloadAuth) {
     const options: jwt.SignOptions = {
       expiresIn: this.accessExpiresIn,
       algorithm: this.algorithm
@@ -46,7 +48,7 @@ class JwtService {
     return jwt.sign(payload, this.accessSecret as jwt.Secret, options);
   }
 
-  public signRefreshToken(payload: JwtPayload) {
+  public signRefreshToken(payload: IJwtPayload) {
     const options: jwt.SignOptions = {
       expiresIn: this.refreshExpiresIn,
       algorithm: this.algorithm
@@ -59,7 +61,7 @@ class JwtService {
       token,
       this.accessSecret,
       this.verifyOptions
-    ) as JwtPayload;
+    ) as IJwtPayloadAuth;
   }
 
   public verifyRefreshToken(token: string) {
@@ -67,7 +69,7 @@ class JwtService {
       token,
       this.refreshSecret,
       this.verifyOptions
-    ) as JwtPayload;
+    ) as IJwtPayload;
   }
 }
 
