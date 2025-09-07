@@ -27,10 +27,12 @@ class UserController {
       return res.status(400).json({ errors });
     }
 
-    this.userService
-      .getUsers(dto)
-      .then((users) => res.status(200).json(users))
-      .catch((err) => res.status(500).json({ error: err.message }));
+    try {
+      const users = await this.userService.getUsers(dto);
+      res.status(200).json(users);
+    } catch (err) {
+      next(err);
+    }
   }
 
   @isRequestBody()
@@ -42,10 +44,12 @@ class UserController {
       return res.status(400).json({ errors });
     }
 
-    this.userService
-      .createUser(userData)
-      .then((user) => res.status(201).json(user))
-      .catch((err) => res.status(500).json({ error: err.message }));
+    try {
+      const user = await this.userService.createUser(userData);
+      res.status(201).json(user);
+    } catch (err) {
+      next(err);
+    }
   }
 
   // TODO: Filter sensitive data
@@ -62,10 +66,12 @@ class UserController {
       });
     }
 
-    this.userService
-      .getUserById({ user_id: +user_id })
-      .then((user) => res.status(200).json(user))
-      .catch((err) => res.status(500).json({ error: err.message }));
+    try {
+      const user = await this.userService.getUserById({ user_id: +user_id });
+      res.status(200).json(user);
+    } catch (err) {
+      next(err);
+    }
   }
 
   @isRequestBody()
@@ -95,18 +101,20 @@ class UserController {
       user_id: +user_id
     };
 
-    this.userService
-      .updateUser(updateData)
-      .then((user) => res.status(200).json(user))
-      .catch((err) => res.status(500).json({ error: err.message }));
+    try {
+      await this.userService.updateUser(updateData);
+      res.status(200).json({ message: "User updated successfully" });
+    } catch (error) {
+      next(error);
+    }
   }
 
-  public updateAvatar(req: Request, res: Response, next: NextFunction) {
+  public async updateAvatar(req: Request, res: Response, next: NextFunction) {
     throw new Error("Method not implemented.");
   }
 
   @isRequestBody()
-  public banUser(req: Request, res: Response, next: NextFunction) {
+  public async banUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
@@ -143,20 +151,23 @@ class UserController {
       banned_until = new Date(0);
     }
 
-    this.userService
-      .banUser({ user_id: +user_id, banned_until, ban_reason })
-      .then(() =>
-        res.status(204).send({
-          message: isPermanent
-            ? `User banned permanently`
-            : `User banned successfully until ${banned_until.toDateString()}`
-        })
-      )
-      .catch((err) => res.status(500).json({ error: err.message }));
+    try {
+      await this.userService.banUser({
+        user_id: +user_id,
+        banned_until,
+        ban_reason
+      });
+      res.status(204).send({
+        message: `User banned successfully`,
+        untill: banned_until
+      });
+    } catch (err) {
+      next(err);
+    }
   }
 
   @isRequestBody()
-  public unbanUser(req: Request, res: Response, next: NextFunction) {
+  public async unbanUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
@@ -169,10 +180,12 @@ class UserController {
       });
     }
 
-    this.userService
-      .unbanUser({ user_id: +user_id })
-      .then(() => res.status(204).send())
-      .catch((err) => res.status(500).json({ error: err.message }));
+    try {
+      await this.userService.unbanUser({ user_id: +user_id });
+      res.status(204).send();
+    } catch (err) {
+      next(err);
+    }
   }
 
   public async deleteUser(req: Request, res: Response, next: NextFunction) {
@@ -187,6 +200,7 @@ class UserController {
         ]
       });
     }
+
     try {
       await this.userService.deleteUser({ user_id: +user_id });
       res.status(204).json({ message: "User deleted successfully" });
