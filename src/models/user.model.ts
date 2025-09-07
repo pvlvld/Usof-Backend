@@ -8,7 +8,7 @@ import type {
   UnbanUserDTO
 } from "../dto/user.dto.js";
 
-export type IUserRole = "user" | "admin";
+export type IUserRole = "user" | "admin" | "donator";
 
 export type IUserModel = {
   id: number;
@@ -25,6 +25,17 @@ export type IUserModel = {
   created_at: Date;
   updated_at: Date;
   banned_until: Date | null;
+};
+
+type IRegisterUser = {
+  login: string;
+  password_hash: string;
+  password_salt: string;
+  email: string;
+};
+
+type ICreateUser = IRegisterUser & {
+  role: IUserRole;
 };
 
 export class UserModel {
@@ -109,7 +120,7 @@ export class UserModel {
     password_hash,
     password_salt,
     email
-  }: any) {
+  }: IRegisterUser) {
     const [result] = await this.db.query(QUERIES.USER.REGISTER, [
       login,
       password_hash,
@@ -125,7 +136,7 @@ export class UserModel {
     password_salt,
     email,
     role
-  }: any) {
+  }: ICreateUser) {
     const [result] = await this.db.query(QUERIES.USER.CREATE, [
       login,
       password_hash,
