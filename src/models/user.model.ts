@@ -8,6 +8,7 @@ import type {
   UnbanUserDTO
 } from "../dto/user.dto.js";
 import { isErrorWithCode } from "../utils/typeGuards.js";
+import { BadRequestError, InternalServerError } from "../consts/errors.js";
 export type IUserRole = "user" | "admin" | "donator";
 
 export type IUserModel = {
@@ -64,7 +65,7 @@ export class UserModel {
         : null;
     } catch (error) {
       console.error("Error getting user by ID:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
   }
 
@@ -77,7 +78,7 @@ export class UserModel {
       return rows;
     } catch (error) {
       console.error("Error getting users:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
   }
 
@@ -99,7 +100,7 @@ export class UserModel {
       }
     } catch (error) {
       console.error("Error updating user:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
   }
 
@@ -134,8 +135,7 @@ export class UserModel {
         return rows[0] as IUserModel;
       }
     } catch (error) {
-      console.error("Error finding user by login or email:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
 
     return null;
@@ -158,12 +158,11 @@ export class UserModel {
     } catch (error) {
       if (isErrorWithCode(error)) {
         if (error.code === "ER_DUP_ENTRY") {
-          throw {
-            status: 400,
-            message: "User with this login or email already exists"
-          };
+          throw new BadRequestError(
+            "User with this login or email already exists"
+          );
         }
-        throw { status: 500, message: "Database error occurred" };
+        throw new InternalServerError("Database error occurred");
       }
       console.error("Error creating user:", error);
     }
@@ -187,12 +186,11 @@ export class UserModel {
     } catch (error) {
       if (isErrorWithCode(error)) {
         if (error.code === "ER_DUP_ENTRY") {
-          throw {
-            status: 400,
-            message: "User with this login or email already exists"
-          };
+          throw new BadRequestError(
+            "User with this login or email already exists"
+          );
         }
-        throw { status: 500, message: "Database error occurred" };
+        throw new InternalServerError("Database error occurred");
       }
       console.error("Error creating user:", error);
     }
@@ -211,7 +209,7 @@ export class UserModel {
       return result;
     } catch (error) {
       console.error("Error updating password:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
   }
 
@@ -224,7 +222,7 @@ export class UserModel {
       ]);
     } catch (error) {
       console.error("Error banning user:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
   }
 
@@ -233,7 +231,7 @@ export class UserModel {
       return this.db.query(QUERIES.USER.UNBAN, [dto.user_id]);
     } catch (error) {
       console.error("Error unbanning user:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
   }
 
@@ -246,7 +244,7 @@ export class UserModel {
       return res;
     } catch (error) {
       console.error("Error verifying email:", error);
-      throw { status: 500, message: "Database error occurred" };
+      throw new InternalServerError("Database error occurred");
     }
   }
 }
