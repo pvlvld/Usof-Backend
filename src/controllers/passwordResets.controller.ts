@@ -31,14 +31,18 @@ class PasswordResetsController {
     const dto = plainToInstance(EmailDTO, req.body);
     const errors = await validate(dto);
     if (errors.length > 0) {
-      return res.status(400).json({
-        error: "Invalid email"
-      });
+      return res.status(400).json(errors);
     }
 
-    const token = await this.passwordResetsService.createResetEntry(dto.email);
-    await this.emailService.sendPasswordResetEmail(dto.email, token);
-    return res.status(200).json({ message: "Password reset email sent" });
+    try {
+      const token = await this.passwordResetsService.createResetEntry(
+        dto.email
+      );
+      await this.emailService.sendPasswordResetEmail(dto.email, token);
+      res.status(200).json({ message: "Password reset email sent" });
+    } catch (error) {
+      next(error);
+    }
   }
 
   public async deleteUser(req: Request, res: Response, next: NextFunction) {
@@ -54,10 +58,12 @@ class PasswordResetsController {
       });
     }
 
-    this.userService
-      .deleteUser({ user_id: +user_id })
-      .then(() => res.status(204).send())
-      .catch((err) => res.status(500).json({ error: err.message }));
+    try {
+      await this.userService.deleteUser({ user_id: +user_id });
+      res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
   }
 }
 
