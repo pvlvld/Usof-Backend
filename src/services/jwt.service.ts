@@ -2,10 +2,11 @@ import jwt from "jsonwebtoken";
 import type { StringValue } from "ms";
 
 import type { JwtPayload as JwtPayloadBase } from "jsonwebtoken";
+import type { IUserRole } from "../models/user.model.js";
 
 type JwtPayload = JwtPayloadBase & {
   sub: string;
-  role?: string;
+  role?: IUserRole;
 };
 
 class JwtService {
