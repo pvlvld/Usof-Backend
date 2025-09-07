@@ -109,7 +109,11 @@ class AuthService {
     if (refreshToken) {
       try {
         const payload = this.jwtService.verifyRefreshToken(refreshToken);
-        if (payload && payload.sub && String(user.id) === String(payload.sub)) {
+        if (
+          payload &&
+          payload.sub &&
+          String(user.sub) === String(payload.sub)
+        ) {
           const storedToken = await this.refreshTokenModel.findRefreshToken(
             refreshToken
           );
@@ -123,21 +127,13 @@ class AuthService {
     }
 
     if (!validRefreshToken) {
-      refreshToken = this.jwtService.signRefreshToken({ sub: String(user.id) });
-      await this.refreshTokenModel.saveRefreshToken(user.id, refreshToken);
+      refreshToken = this.jwtService.signRefreshToken(user);
+      await this.refreshTokenModel.saveRefreshToken(+user.sub, refreshToken);
     }
 
-    const accessToken = this.jwtService.signAccessToken({
-      sub: String(user.id),
-      role: user.role
-    });
+    const accessToken = this.jwtService.signAccessToken(user);
     return {
-      user: {
-        id: user.id,
-        login: user.login,
-        email: user.email,
-        role: user.role
-      },
+      user,
       accessToken,
       refreshToken
     };
