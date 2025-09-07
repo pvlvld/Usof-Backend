@@ -5,6 +5,7 @@ import Adapter, { Database, Resource } from "@adminjs/sql";
 import express, { type Request, type Response } from "express";
 import { apiRouter } from "./routers/api.router.js";
 import cookieParser from "cookie-parser";
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
 async function startAdminJS(app: express.Express) {
   AdminJS.registerAdapter({
@@ -45,6 +46,8 @@ async function start() {
   });
 
   app.use("/api", apiRouter);
+
+  app.use(errorHandler);
 
   const PORT = process.env.PORT ? +process.env.PORT : 3000;
   app.listen(PORT, () => {
