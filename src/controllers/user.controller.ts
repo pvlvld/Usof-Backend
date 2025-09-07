@@ -6,7 +6,7 @@ import {
   GetUserByIdDTO,
   UpdateUserDataDTO
 } from "../dto/user.dto.js";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { isRequestBody } from "../decorators/isRequestBody.js";
 import { UserService } from "../services/user.service.js";
 import { UserModel } from "../models/user.model.js";
@@ -19,7 +19,7 @@ class UserController {
     this.userService = UserService.getInstance(UserModel);
   }
 
-  public async getUsers(req: Request, res: Response) {
+  public async getUsers(req: Request, res: Response, next: NextFunction) {
     req.query ??= {};
     const dto: GetUsersDto = plainToInstance(GetUsersDto, req.query);
     const errors = await validate(dto);
@@ -34,7 +34,7 @@ class UserController {
   }
 
   @isRequestBody()
-  public async createUser(req: Request, res: Response) {
+  public async createUser(req: Request, res: Response, next: NextFunction) {
     const userData = plainToInstance(CreateUserDTO, req.body);
     const errors = await validate(userData);
 
@@ -49,7 +49,7 @@ class UserController {
   }
 
   // TODO: Filter sensitive data
-  public async getUserById(req: Request, res: Response) {
+  public async getUserById(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
@@ -69,7 +69,7 @@ class UserController {
   }
 
   @isRequestBody()
-  public async updateUser(req: Request, res: Response) {
+  public async updateUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
@@ -101,12 +101,12 @@ class UserController {
       .catch((err) => res.status(500).json({ error: err.message }));
   }
 
-  public updateAvatar(req: Request, res: Response) {
+  public updateAvatar(req: Request, res: Response, next: NextFunction) {
     throw new Error("Method not implemented.");
   }
 
   @isRequestBody()
-  public banUser(req: Request, res: Response) {
+  public banUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
@@ -156,7 +156,7 @@ class UserController {
   }
 
   @isRequestBody()
-  public unbanUser(req: Request, res: Response) {
+  public unbanUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
@@ -175,7 +175,7 @@ class UserController {
       .catch((err) => res.status(500).json({ error: err.message }));
   }
 
-  public async deleteUser(req: Request, res: Response) {
+  public async deleteUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
@@ -187,20 +187,12 @@ class UserController {
         ]
       });
     }
-
-    this.userService
-      .deleteUser({ user_id: +user_id })
-      .then(() =>
-        res.status(204).json({ message: "User deleted successfully" })
-      )
-      .catch((err) => {
-        if (err instanceof CustomError) {
-          res.status(err.statusCode).json({ error: err.message });
-        } else {
-          console.error("[UserController] deleteUser: Unexpected error:", err);
-          res.status(500).json({ error: "Internal Server Error" });
-        }
-      });
+    try {
+      await this.userService.deleteUser({ user_id: +user_id });
+      res.status(204).json({ message: "User deleted successfully" });
+    } catch (err) {
+      next(err);
+    }
   }
 }
 

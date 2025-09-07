@@ -1,42 +1,64 @@
-import express from "express";
+import express, {
+  type NextFunction,
+  type Request,
+  type Response
+} from "express";
 import { userController } from "../controllers/user.controller.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/", (req, res) => {
-  userController.getUsers(req, res);
+userRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
+  userController.getUsers(req, res, next);
 });
 
-userRouter.get("/:user_id", (req, res) => {
-  userController.getUserById(req, res);
-});
+userRouter.get(
+  "/:user_id",
+  (req: Request, res: Response, next: NextFunction) => {
+    userController.getUserById(req, res, next);
+  }
+);
 
 // ADMINS ONLY
-userRouter.post("/", (req, res) => {
-  userController.createUser(req, res);
+userRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
+  userController.createUser(req, res, next);
 });
 
-userRouter.patch("/avatar", (req, res) => {
-  userController.updateAvatar(req, res);
-});
+userRouter.patch(
+  "/avatar",
+  (req: Request, res: Response, next: NextFunction) => {
+    userController.updateAvatar(req, res, next);
+  }
+);
 
-userRouter.patch("/:user_id", (req, res) => {
-  userController.updateUser(req, res);
-});
+userRouter.patch(
+  "/:user_id",
+  (req: Request, res: Response, next: NextFunction) => {
+    userController.updateUser(req, res, next);
+  }
+);
 
-userRouter.delete("/:user_id", (req, res) => {
-  userController.deleteUser(req, res);
-});
+userRouter.delete(
+  "/:user_id",
+  (req: Request, res: Response, next: NextFunction) => {
+    userController.deleteUser(req, res, next);
+  }
+);
 
 // ADMIN ONLY
-userRouter.post("/:user_id/ban", (req, res) => {
-  userController.banUser(req, res);
-});
+userRouter.post(
+  "/:user_id/ban",
+  (req: Request, res: Response, next: NextFunction) => {
+    userController.banUser(req, res, next);
+  }
+);
 
 // ADMIN ONLY
-userRouter.post("/:user_id/unban", (req, res) => {
-  const { user_id } = req.params;
-  userController.unbanUser(req, res);
-});
+userRouter.post(
+  "/:user_id/unban",
+  (req: Request, res: Response, next: NextFunction) => {
+    const { user_id } = req.params;
+    userController.unbanUser(req, res, next);
+  }
+);
 
 export { userRouter };

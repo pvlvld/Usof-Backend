@@ -12,7 +12,7 @@ import { RefreshTokenModel } from "../models/refreshToken.model.js";
 import { UserModel } from "../models/user.model.js";
 import { UserService } from "../services/user.service.js";
 import { isRequestBody } from "../decorators/isRequestBody.js";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { PasswordResetsModel } from "../models/passwordResets.model.js";
 import { EmailVerificationModel } from "../models/emailVerifications.model.js";
 import crypto from "crypto";
@@ -39,7 +39,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  async register(req: Request, res: Response) {
+  async register(req: Request, res: Response, next: NextFunction) {
     const dto = plainToInstance(RegisterDto, req.body);
     const errors = await validate(dto);
 
@@ -92,7 +92,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  public async login(req: Request, res: Response) {
+  public async login(req: Request, res: Response, next: NextFunction) {
     const dto = plainToInstance(LoginDto, req.body);
     const errors = await validate(dto);
 
@@ -134,7 +134,7 @@ class AuthController {
     }
   }
 
-  public async logout(req: Request, res: Response) {
+  public async logout(req: Request, res: Response, next: NextFunction) {
     const refreshToken = req.cookies?.refreshToken;
     try {
       if (refreshToken) {
@@ -165,7 +165,11 @@ class AuthController {
   }
 
   @isRequestBody()
-  public async initiatePasswordReset(req: Request, res: Response) {
+  public async initiatePasswordReset(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     const dto = plainToInstance(PasswordResetRequestDto, req.body);
     const errors = await validate(dto);
     if (errors.length > 0) {
@@ -195,7 +199,7 @@ class AuthController {
   }
 
   @isRequestBody()
-  public async resetPassword(req: Request, res: Response) {
+  public async resetPassword(req: Request, res: Response, next: NextFunction) {
     const dto = plainToInstance(PasswordResetDto, {
       ...req.body,
       confirm_token: req.params.confirm_token
@@ -215,7 +219,7 @@ class AuthController {
     return res.status(200).json({ message: "Password reset successful!" });
   }
 
-  public async verifyEmail(req: Request, res: Response) {
+  public async verifyEmail(req: Request, res: Response, next: NextFunction) {
     req.params ??= {};
     const dto = plainToInstance(EmailVerificationDto, req.params);
     const errors = await validate(dto);

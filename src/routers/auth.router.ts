@@ -1,18 +1,36 @@
-import express from "express";
+import express, {
+  type NextFunction,
+  type Request,
+  type Response
+} from "express";
 import { authController } from "../controllers/auth.controller.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/register", (req, res) => authController.register(req, res));
-authRouter.post("/login", (req, res) => authController.login(req, res));
-authRouter.post("/logout", (req, res) => authController.logout(req, res));
-authRouter.post("/password-reset", (req, res) =>
-  authController.initiatePasswordReset(req, res)
+authRouter.post(
+  "/register",
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.register(req, res, next)
 );
-authRouter.post("/password-reset/:confirm_token", (req, res) =>
-  authController.resetPassword(req, res)
+authRouter.post("/login", (req: Request, res: Response, next: NextFunction) =>
+  authController.login(req, res, next)
 );
-authRouter.post("/verify-email", (req, res) =>
-  authController.verifyEmail(req, res)
+authRouter.post("/logout", (req: Request, res: Response, next: NextFunction) =>
+  authController.logout(req, res, next)
+);
+authRouter.post(
+  "/password-reset",
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.initiatePasswordReset(req, res, next)
+);
+authRouter.post(
+  "/password-reset/:confirm_token",
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.resetPassword(req, res, next)
+);
+authRouter.post(
+  "/verify-email",
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.verifyEmail(req, res, next)
 );
 export { authRouter };

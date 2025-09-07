@@ -1,5 +1,5 @@
 import { validate } from "class-validator";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { isRequestBody } from "../decorators/isRequestBody.js";
 import { UserService } from "../services/user.service.js";
 import { UserModel } from "../models/user.model.js";
@@ -23,7 +23,11 @@ class PasswordResetsController {
   }
 
   @isRequestBody()
-  public async requestPasswordReset(req: Request, res: Response) {
+  public async requestPasswordReset(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     const dto = plainToInstance(EmailDTO, req.body);
     const errors = await validate(dto);
     if (errors.length > 0) {
@@ -37,7 +41,7 @@ class PasswordResetsController {
     return res.status(200).json({ message: "Password reset email sent" });
   }
 
-  public async deleteUser(req: Request, res: Response) {
+  public async deleteUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
       return res.status(400).json({
