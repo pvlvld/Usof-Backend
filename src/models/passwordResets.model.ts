@@ -1,3 +1,4 @@
+import { InternalServerError, NotFoundError } from "../consts/errors.js";
 import { QUERIES } from "../consts/queries.js";
 import Database from "../database/index.js";
 
@@ -54,14 +55,16 @@ export class PasswordResetsModel {
     try {
       const entry = await this.getResetEntry(token);
       if (!entry) {
-        throw new Error("Invalid or expired token");
+        throw new NotFoundError("Invalid or expired token");
       }
 
       // Probably better to use a soft delete
       await this.db.query(QUERIES.PASSWORD_RESETS.DELETE, [token]);
     } catch (error) {
       console.error("Error invalidating password reset token:", error);
-      throw new Error("Failed to invalidate password reset token");
+      throw new InternalServerError(
+        "Failed to invalidate password reset token"
+      );
     }
   }
 }
