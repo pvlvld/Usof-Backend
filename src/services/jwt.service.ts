@@ -8,7 +8,7 @@ type IJwtPayload = JwtPayloadBase & {
   sub: string;
 };
 
-type IJwtPayloadAuth = IJwtPayload & {
+export type IJwtPayloadAuth = IJwtPayload & {
   role: IUserRole;
 };
 class JwtService {
