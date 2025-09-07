@@ -4,6 +4,10 @@ import express, {
   type Response
 } from "express";
 import { userController } from "../controllers/user.controller.js";
+import {
+  authenticateMiddleware,
+  requireAdminMiddleware
+} from "../middlewares/auth.middleware.js";
 
 const userRouter = express.Router();
 
@@ -19,14 +23,12 @@ userRouter.get(
 );
 
 // ADMINS ONLY
-userRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
-  userController.createUser(req, res, next);
-});
-
-userRouter.patch(
-  "/avatar",
+userRouter.post(
+  "/",
+  authenticateMiddleware,
+  requireAdminMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
-    userController.updateAvatar(req, res, next);
+    userController.createUser(req, res, next);
   }
 );
 
