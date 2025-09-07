@@ -42,7 +42,18 @@ class UserService {
   }
 
   public async createUser(dto: CreateUserDTO) {
-    return await this.userModel.createUser(dto);
+    const password_salt = this.encryptionService.genSalt(10);
+    const password_hash = this.encryptionService.hash(
+      dto.password,
+      password_salt
+    );
+    return await this.userModel.createUser({
+      login: dto.login,
+      password_hash,
+      password_salt,
+      email: dto.email,
+      role: dto.role
+    });
   }
 
   public async updateUser(dto: UpdateUserDataDTO & { user_id: number }) {
