@@ -27,14 +27,13 @@ export class RegisterDto {
   email!: string;
 }
 
+// Strange to require both login and email, but ok. As you wish.
 export class LoginDto {
-  @IsOptional()
   @IsString()
-  login?: string;
+  login!: string;
 
-  @IsOptional()
   @IsEmail()
-  email?: string;
+  email!: string;
 
   @IsString()
   @MinLength(6)
