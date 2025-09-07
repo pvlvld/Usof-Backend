@@ -1,6 +1,7 @@
 import { PasswordResetsModel } from "../models/passwordResets.model.js";
 import crypto from "node:crypto";
 import type { UserModel } from "../models/user.model.js";
+import { InternalServerError, NotFoundError } from "../consts/errors.js";
 
 class PasswordResetsService {
   private static instance: PasswordResetsService | null = null;
@@ -28,7 +29,7 @@ class PasswordResetsService {
   public async createResetEntry(email: string) {
     const user = await this.userModel.findUserByLoginOrEmail(email);
     if (!user) {
-      throw new Error("User not found");
+      throw new NotFoundError("User not found");
     }
 
     // 1 hour
@@ -43,7 +44,7 @@ class PasswordResetsService {
       );
     } catch (error) {
       console.error("Error creating password reset entry:", error);
-      throw new Error("Failed to create password reset token");
+      throw new InternalServerError("Failed to create password reset token");
     }
 
     return token;
@@ -59,7 +60,7 @@ class PasswordResetsService {
       return entry;
     } catch (error) {
       console.error("Error validating password reset token:", error);
-      throw new Error("Failed to validate password reset token");
+      throw new InternalServerError("Failed to validate password reset token");
     }
   }
 
@@ -71,7 +72,9 @@ class PasswordResetsService {
       }
     } catch (error) {
       console.error("Error invalidating password reset token:", error);
-      throw new Error("Failed to invalidate password reset token");
+      throw new InternalServerError(
+        "Failed to invalidate password reset token"
+      );
     }
   }
 }
