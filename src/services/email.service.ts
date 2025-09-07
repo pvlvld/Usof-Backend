@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { EMAIL_TEMPLATES } from "../consts/emailTemplates.js";
+import { InternalServerError } from "../consts/errors.js";
 
 class EmailService {
   private static instance: EmailService | null = null;
@@ -34,7 +35,7 @@ class EmailService {
     try {
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
-      console.error("Error sending password reset email:", error);
+      throw new InternalServerError("Failed to send password reset email");
     }
   }
 
@@ -51,7 +52,7 @@ class EmailService {
     try {
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
-      console.error("Error sending email verification:", error);
+      throw new InternalServerError("Failed to send email verification");
     }
   }
 
