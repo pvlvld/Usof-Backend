@@ -93,7 +93,9 @@ class AuthController {
     }
 
     try {
-      const result = await this.authService.login(dto);
+      // Pass refreshToken from cookies if present
+      const refreshTokenFromClient = req.cookies?.refreshToken;
+      const result = await this.authService.login(dto, refreshTokenFromClient);
       if (result.accessToken) {
         res.cookie("accessToken", result.accessToken, {
           httpOnly: true,
@@ -229,15 +231,21 @@ class AuthController {
     }
 
     try {
-      const accessToken = await this.authService.refreshAccessToken(
-        refreshToken
-      );
-      if (accessToken) {
-        res.cookie("accessToken", accessToken, {
+      // Now returns { user, accessToken, refreshToken }
+      const result = await this.authService.refreshAccessToken(refreshToken);
+      if (result.accessToken) {
+        res.cookie("accessToken", result.accessToken, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
           maxAge: 1000 * 60 * 15 // 15 minutes
+        });
+      }
+      if (result.refreshToken) {
+        res.cookie("refreshToken", result.refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict"
         });
       }
 

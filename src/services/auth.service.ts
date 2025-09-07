@@ -2,6 +2,7 @@ import {
   BadRequestError,
   ConflictError,
   InternalServerError,
+  NotFoundError,
   UnauthorizedError
 } from "../consts/errors.js";
 import type {
@@ -14,7 +15,7 @@ import { EmailVerificationModel } from "../models/emailVerifications.model.js";
 import type { RefreshTokenModel } from "../models/refreshToken.model.js";
 import type { UserModel } from "../models/user.model.js";
 import { EncryptionService } from "./encryption.service.js";
-import { JwtService } from "./jwt.service.js";
+import { JwtService, type IJwtPayloadAuth } from "./jwt.service.js";
 
 class AuthService {
   private static instance: AuthService | null = null;
@@ -98,35 +99,38 @@ class AuthService {
     };
   }
 
-  public async login(dto: LoginDto) {
-    const loginOrEmail = dto.login ? dto.login : dto.email ? dto.email : "";
-    if (!loginOrEmail) {
-      throw new BadRequestError("Login or email is required");
+  private async issueTokensForUser(
+    user: IJwtPayloadAuth,
+    refreshTokenFromClient?: string
+  ) {
+    let refreshToken = refreshTokenFromClient;
+    let validRefreshToken = false;
+
+    if (refreshToken) {
+      try {
+        const payload = this.jwtService.verifyRefreshToken(refreshToken);
+        if (payload && payload.sub && String(user.id) === String(payload.sub)) {
+          const storedToken = await this.refreshTokenModel.findRefreshToken(
+            refreshToken
+          );
+          if (storedToken) {
+            validRefreshToken = true;
+          }
+        }
+      } catch (e) {
+        validRefreshToken = false;
+      }
     }
 
-    const user = await this.userModel.findUserByLoginOrEmail(loginOrEmail);
-    if (!user) {
-      throw new UnauthorizedError("Invalid credentials");
-    }
-
-    const passwordValid = this.encryptionService.compare(
-      dto.password,
-      user.password_hash
-    );
-    if (!passwordValid) {
-      throw new UnauthorizedError("Invalid credentials");
+    if (!validRefreshToken) {
+      refreshToken = this.jwtService.signRefreshToken({ sub: String(user.id) });
+      await this.refreshTokenModel.saveRefreshToken(user.id, refreshToken);
     }
 
     const accessToken = this.jwtService.signAccessToken({
       sub: String(user.id),
       role: user.role
     });
-    const refreshToken = this.jwtService.signRefreshToken({
-      sub: String(user.id)
-    });
-
-    await this.refreshTokenModel.saveRefreshToken(user.id, refreshToken);
-
     return {
       user: {
         id: user.id,
@@ -137,6 +141,26 @@ class AuthService {
       accessToken,
       refreshToken
     };
+  }
+
+  public async login(dto: LoginDto, refreshTokenFromClient?: string) {
+    const user = await this.userModel.findUserByLoginOrEmail(dto.login);
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    const passwordValid = this.encryptionService.compare(
+      dto.password,
+      user.password_hash
+    );
+    if (!passwordValid) {
+      throw new UnauthorizedError("Invalid credentials");
+    }
+
+    return this.issueTokensForUser(
+      { sub: String(user.id), role: user.role },
+      refreshTokenFromClient
+    );
   }
 
   public async logout(dto: LogoutDTO) {
@@ -176,15 +200,13 @@ class AuthService {
       user_id: Number(payload.sub)
     });
     if (!user) {
-      throw new UnauthorizedError("User not found");
+      throw new NotFoundError("User not found");
     }
 
-    const accessToken = this.jwtService.signAccessToken({
-      sub: String(user.id),
-      role: user.role
-    });
-
-    return accessToken;
+    return this.issueTokensForUser(
+      { sub: String(user.id), role: user.role },
+      refreshToken
+    );
   }
 }
 
