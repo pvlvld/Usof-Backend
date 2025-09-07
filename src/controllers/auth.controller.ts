@@ -223,6 +223,33 @@ class AuthController {
       next(error);
     }
   }
+
+  public async refreshToken(req: Request, res: Response, next: NextFunction) {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh token missing" });
+    }
+
+    try {
+      const accessToken = await this.authService.refreshAccessToken(
+        refreshToken
+      );
+      if (accessToken) {
+        res.cookie("accessToken", accessToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 1000 * 60 * 15 // 15 minutes
+        });
+      }
+
+      return res.status(200).json({
+        message: "Tokens refreshed successfully!"
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export const authController = new AuthController();

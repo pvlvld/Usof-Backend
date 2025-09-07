@@ -158,6 +158,34 @@ class AuthService {
       throw new InternalServerError("Failed to verify email");
     }
   }
+
+  public async refreshAccessToken(refreshToken: string) {
+    const payload = this.jwtService.verifyRefreshToken(refreshToken);
+    if (!payload || !payload.sub) {
+      throw new UnauthorizedError("Invalid refresh token");
+    }
+
+    const storedToken = await this.refreshTokenModel.findRefreshToken(
+      refreshToken
+    );
+    if (!storedToken) {
+      throw new UnauthorizedError("Refresh token not found");
+    }
+
+    const user = await this.userModel.getUserById({
+      user_id: Number(payload.sub)
+    });
+    if (!user) {
+      throw new UnauthorizedError("User not found");
+    }
+
+    const accessToken = this.jwtService.signAccessToken({
+      sub: String(user.id),
+      role: user.role
+    });
+
+    return accessToken;
+  }
 }
 
 export { AuthService };
