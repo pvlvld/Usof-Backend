@@ -7,7 +7,7 @@ import type {
   GetUserByIdDTO,
   UnbanUserDTO
 } from "../dto/user.dto.js";
-
+import { isErrorWithCode } from "../utils/typeGuards.js";
 export type IUserRole = "user" | "admin" | "donator";
 
 export type IUserModel = {
@@ -53,63 +53,89 @@ export class UserModel {
   }
 
   public async getUserById(dto: GetUserByIdDTO) {
-    const [rows] = await this.db.query<RowDataPacket[]>(
-      QUERIES.USER.GET_BY_ID,
-      [dto.user_id]
-    );
+    try {
+      const [rows] = await this.db.query<RowDataPacket[]>(
+        QUERIES.USER.GET_BY_ID,
+        [dto.user_id]
+      );
 
-    return Array.isArray(rows) && rows.length > 0 && rows[0]
-      ? (rows[0] as IUserModel)
-      : null;
+      return Array.isArray(rows) && rows.length > 0 && rows[0]
+        ? (rows[0] as IUserModel)
+        : null;
+    } catch (error) {
+      console.error("Error getting user by ID:", error);
+      throw { status: 500, message: "Database error occurred" };
+    }
   }
 
   public async getUsers(limit: number, offset: number) {
-    const [rows] = await this.db.query<RowDataPacket[]>(
-      QUERIES.USER.GET_PAGINATED,
-      [limit, offset]
-    );
-    return rows;
+    try {
+      const [rows] = await this.db.query<RowDataPacket[]>(
+        QUERIES.USER.GET_PAGINATED,
+        [limit, offset]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error getting users:", error);
+      throw { status: 500, message: "Database error occurred" };
+    }
   }
 
   public async updateUser(dto: Partial<IUserModel>) {
-    const [res] = await this.db.query(QUERIES.USER.UPDATE, [
-      dto.login,
-      dto.email,
-      dto.password_hash,
-      dto.password_salt,
-      dto.full_name,
-      dto.avatar,
-      dto.rating,
-      dto.role,
-      dto.id
-    ]);
-
-    return res;
+    try {
+      const [res] = await this.db.query<ResultSetHeader>(QUERIES.USER.UPDATE, [
+        dto.login,
+        dto.email,
+        dto.password_hash,
+        dto.password_salt,
+        dto.full_name,
+        dto.avatar,
+        dto.rating,
+        dto.role,
+        dto.id
+      ]);
+      if (res.affectedRows > 0) {
+        return { user_id: dto.id };
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      throw { status: 500, message: "Database error occurred" };
+    }
   }
 
   public async deleteUser(dto: DeleteUserDTO) {
-    const [result] = await this.db.query(QUERIES.USER.DELETE, [dto.user_id]);
-    return result;
+    const [result] = await this.db.query<ResultSetHeader>(QUERIES.USER.DELETE, [
+      dto.user_id
+    ]);
+    if (result.affectedRows > 0) {
+      return { user_id: dto.user_id };
+    }
+    return null;
   }
 
   public async findUserByLoginOrEmail(
     loginOrEmail: string
   ): Promise<IUserModel | null> {
     let rows: RowDataPacket[] = [];
-    if (loginOrEmail.includes("@")) {
-      [rows] = await this.db.query<RowDataPacket[]>(
-        QUERIES.USER.FIND_BY_EMAIL,
-        [loginOrEmail]
-      );
-    } else {
-      [rows] = await this.db.query<RowDataPacket[]>(
-        QUERIES.USER.FIND_BY_LOGIN,
-        [loginOrEmail]
-      );
-    }
+    try {
+      if (loginOrEmail.includes("@")) {
+        [rows] = await this.db.query<RowDataPacket[]>(
+          QUERIES.USER.FIND_BY_EMAIL,
+          [loginOrEmail]
+        );
+      } else {
+        [rows] = await this.db.query<RowDataPacket[]>(
+          QUERIES.USER.FIND_BY_LOGIN,
+          [loginOrEmail]
+        );
+      }
 
-    if (Array.isArray(rows) && rows.length) {
-      return rows[0] as IUserModel;
+      if (Array.isArray(rows) && rows.length) {
+        return rows[0] as IUserModel;
+      }
+    } catch (error) {
+      console.error("Error finding user by login or email:", error);
+      throw { status: 500, message: "Database error occurred" };
     }
 
     return null;
@@ -121,13 +147,26 @@ export class UserModel {
     password_salt,
     email
   }: IRegisterUser) {
-    const [result] = await this.db.query(QUERIES.USER.REGISTER, [
-      login,
-      password_hash,
-      password_salt,
-      email
-    ]);
-    return result;
+    try {
+      const [result] = await this.db.query<ResultSetHeader>(
+        QUERIES.USER.REGISTER,
+        [login, password_hash, password_salt, email]
+      );
+      if (result.affectedRows > 0) {
+        return { user_id: result.insertId };
+      }
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        if (error.code === "ER_DUP_ENTRY") {
+          throw {
+            status: 400,
+            message: "User with this login or email already exists"
+          };
+        }
+        throw { status: 500, message: "Database error occurred" };
+      }
+      console.error("Error creating user:", error);
+    }
   }
 
   public async createUser({
@@ -137,14 +176,26 @@ export class UserModel {
     email,
     role
   }: ICreateUser) {
-    const [result] = await this.db.query(QUERIES.USER.CREATE, [
-      login,
-      password_hash,
-      password_salt,
-      email,
-      role
-    ]);
-    return result;
+    try {
+      const [result] = await this.db.query<ResultSetHeader>(
+        QUERIES.USER.CREATE,
+        [login, password_hash, password_salt, email, role]
+      );
+      if (result.affectedRows > 0) {
+        return { user_id: result.insertId };
+      }
+    } catch (error) {
+      if (isErrorWithCode(error)) {
+        if (error.code === "ER_DUP_ENTRY") {
+          throw {
+            status: 400,
+            message: "User with this login or email already exists"
+          };
+        }
+        throw { status: 500, message: "Database error occurred" };
+      }
+      console.error("Error creating user:", error);
+    }
   }
 
   public async updatePassword(
@@ -152,32 +203,51 @@ export class UserModel {
     password_hash: string,
     password_salt: string
   ) {
-    const [result] = await this.db.query(QUERIES.USER.RESET_PASSWORD, [
-      password_hash,
-      password_salt,
-      id
-    ]);
-    return result;
+    try {
+      const [result] = await this.db.query<ResultSetHeader>(
+        QUERIES.USER.RESET_PASSWORD,
+        [password_hash, password_salt, id]
+      );
+      return result;
+    } catch (error) {
+      console.error("Error updating password:", error);
+      throw { status: 500, message: "Database error occurred" };
+    }
   }
 
   public banUser(dto: BanUserDTO) {
-    return this.db.query(QUERIES.USER.BAN, [
-      dto.banned_until,
-      dto.ban_reason,
-      dto.user_id
-    ]);
+    try {
+      return this.db.query(QUERIES.USER.BAN, [
+        dto.banned_until,
+        dto.ban_reason,
+        dto.user_id
+      ]);
+    } catch (error) {
+      console.error("Error banning user:", error);
+      throw { status: 500, message: "Database error occurred" };
+    }
   }
 
   public unbanUser(dto: UnbanUserDTO) {
-    return this.db.query(QUERIES.USER.UNBAN, [dto.user_id]);
+    try {
+      return this.db.query(QUERIES.USER.UNBAN, [dto.user_id]);
+    } catch (error) {
+      console.error("Error unbanning user:", error);
+      throw { status: 500, message: "Database error occurred" };
+    }
   }
 
   public async verifyEmail(userId: number) {
-    const [res] = await this.db.query<ResultSetHeader>(
-      QUERIES.USER.VERIFY_EMAIL,
-      [userId]
-    );
-    return res;
+    try {
+      const [res] = await this.db.query<ResultSetHeader>(
+        QUERIES.USER.VERIFY_EMAIL,
+        [userId]
+      );
+      return res;
+    } catch (error) {
+      console.error("Error verifying email:", error);
+      throw { status: 500, message: "Database error occurred" };
+    }
   }
 }
 
