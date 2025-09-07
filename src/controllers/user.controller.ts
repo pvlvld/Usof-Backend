@@ -1,10 +1,10 @@
 import { validate } from "class-validator";
 import {
   GetUsersDto,
-  type CreateUserDTO,
-  type DeleteUserDTO,
-  type GetUserByIdDTO,
-  type UpdateUserDataDTO
+  CreateUserDTO,
+  DeleteUserDTO,
+  GetUserByIdDTO,
+  UpdateUserDataDTO
 } from "../dto/user.dto.js";
 import type { Request, Response } from "express";
 import { isRequestBody } from "../decorators/isRequestBody.js";
@@ -35,7 +35,7 @@ class UserController {
 
   @isRequestBody()
   public async createUser(req: Request, res: Response) {
-    const userData: CreateUserDTO = req.body;
+    const userData = plainToInstance(CreateUserDTO, req.body);
     const errors = await validate(userData);
 
     if (errors.length > 0) {
@@ -82,7 +82,7 @@ class UserController {
       });
     }
 
-    const userData: UpdateUserDataDTO = req.body;
+    const userData = plainToInstance(UpdateUserDataDTO, req.body);
     const errors = await validate(userData);
 
     if (errors.length > 0) {
