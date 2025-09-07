@@ -12,7 +12,7 @@ import {
   MinLength
 } from "class-validator";
 
-type IUserRole = "user" | "admin" | "donator";
+export type IUserRole = "user" | "admin" | "donator" | "moderator";
 
 export class GetUsersDto {
   @IsOptional()

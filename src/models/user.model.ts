@@ -5,11 +5,11 @@ import type {
   BanUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
+  IUserRole,
   UnbanUserDTO
 } from "../dto/user.dto.js";
 import { isErrorWithCode } from "../utils/typeGuards.js";
 import { BadRequestError, InternalServerError } from "../consts/errors.js";
-export type IUserRole = "user" | "admin" | "donator";
 
 export type IUserModel = {
   id: number;

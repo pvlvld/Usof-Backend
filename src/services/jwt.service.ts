@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import type { StringValue } from "ms";
 
 import type { JwtPayload as JwtPayloadBase } from "jsonwebtoken";
-import type { IUserRole } from "../models/user.model.js";
+import type { IUserRole } from "../dto/user.dto.js";
 
 type JwtPayload = JwtPayloadBase & {
   sub: string;
