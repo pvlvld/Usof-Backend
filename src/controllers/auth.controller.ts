@@ -80,14 +80,7 @@ class AuthController {
         message: "User registered successfully!"
       });
     } catch (err) {
-      let status = 500;
-      let message = "Registration failed";
-      if (typeof err === "object" && err !== null) {
-        status = (err as any).status || 500;
-        message = (err as any).message || message;
-      }
-
-      return res.status(status).json({ message });
+      next(err);
     }
   }
 
@@ -123,14 +116,7 @@ class AuthController {
         message: "User logged in successfully!"
       });
     } catch (err) {
-      let status = 500;
-      let message = "Login failed";
-      if (typeof err === "object" && err !== null) {
-        status = (err as any).status || 500;
-        message = (err as any).message || message;
-      }
-
-      return res.status(status).json({ message });
+      next(err);
     }
   }
 
@@ -154,13 +140,7 @@ class AuthController {
       });
       return res.status(200).json({ message: "User logged out successfully!" });
     } catch (err) {
-      let status = 500;
-      let message = "Logout failed";
-      if (typeof err === "object" && err !== null) {
-        status = (err as any).status || 500;
-        message = (err as any).message || message;
-      }
-      return res.status(status).json({ message });
+      next(err);
     }
   }
 
@@ -176,26 +156,31 @@ class AuthController {
       return res.status(400).json({ errors });
     }
 
-    const user = await this.userService.findUserByLoginOrEmail(dto.email);
+    try {
+      const user = await this.userService.findUserByLoginOrEmail(dto.email);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const token = crypto.randomBytes(32).toString("hex");
+      const resetEntry = await this.passwordResetsService.createResetEntry(
+        dto.email
+      );
+
+      if (!resetEntry) {
+        return res
+          .status(500)
+          .json({ message: "Could not create reset entry" });
+      }
+
+      await this.emailService.sendPasswordResetEmail(dto.email, token);
+      return res
+        .status(200)
+        .json({ message: "Password reset link sent to email!" });
+    } catch (error) {
+      next(error);
     }
-
-    const token = crypto.randomBytes(32).toString("hex");
-    const resetEntry = await this.passwordResetsService.createResetEntry(
-      dto.email
-    );
-
-    if (!resetEntry) {
-      return res.status(500).json({ message: "Could not create reset entry" });
-    }
-
-    await this.emailService.sendPasswordResetEmail(dto.email, token);
-
-    return res
-      .status(200)
-      .json({ message: "Password reset link sent to email!" });
   }
 
   @isRequestBody()
@@ -213,10 +198,10 @@ class AuthController {
 
     try {
       await this.userService.updatePassword(dto);
+      return res.status(200).json({ message: "Password reset successful!" });
     } catch (error) {
-      return res.status(500).json({ message: "Password reset failed" });
+      next(error);
     }
-    return res.status(200).json({ message: "Password reset successful!" });
   }
 
   public async verifyEmail(req: Request, res: Response, next: NextFunction) {
@@ -231,10 +216,12 @@ class AuthController {
 
     try {
       await this.authService.verifyEmail(dto);
+      return res
+        .status(200)
+        .json({ message: "Email verification successful!" });
     } catch (error) {
-      return res.status(500).json({ message: "Email verification failed" });
+      next(error);
     }
-    return res.status(200).json({ message: "Email verification successful!" });
   }
 }
 
