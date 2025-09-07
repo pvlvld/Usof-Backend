@@ -82,13 +82,13 @@ class UserService {
     const user = await this.userModel.getUserById({ user_id: dto.user_id });
 
     if (!user) {
-      throw { status: 404, message: "User not found" };
+      throw new NotFoundError("User not found");
     }
 
     const result = await this.userModel.deleteUser({ user_id: dto.user_id });
 
     if (!result) {
-      throw { status: 500, message: "Failed to delete user" };
+      throw new InternalServerError("Failed to delete user");
     }
 
     return result;
