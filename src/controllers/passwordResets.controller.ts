@@ -1,11 +1,4 @@
 import { validate } from "class-validator";
-import {
-  GetUsersDto,
-  type CreateUserDTO,
-  type DeleteUserDTO,
-  type GetUserByIdDTO,
-  type UpdateUserDataDTO
-} from "../dto/user.dto.js";
 import type { Request, Response } from "express";
 import { isRequestBody } from "../decorators/isRequestBody.js";
 import { UserService } from "../services/user.service.js";
@@ -14,16 +7,19 @@ import { plainToInstance } from "class-transformer";
 import { PasswordResetsService } from "../services/passwordResets.service.js";
 import { PasswordResetsModel } from "../models/passwordResets.model.js";
 import { EmailDTO } from "../dto/passwordResets.dto.js";
+import { EmailService } from "../services/email.service.js";
 
 class PasswordResetsController {
   private passwordResetsService: PasswordResetsService;
   private userService: UserService;
+  private emailService: EmailService;
   constructor() {
     this.passwordResetsService = PasswordResetsService.getInstance(
       PasswordResetsModel,
       UserModel
     );
     this.userService = UserService.getInstance(UserModel);
+    this.emailService = EmailService.getInstance();
   }
 
   @isRequestBody()
@@ -37,7 +33,7 @@ class PasswordResetsController {
     }
 
     const token = await this.passwordResetsService.createResetEntry(dto.email);
-    // TODO: Send email with token
+    await this.emailService.sendPasswordResetEmail(dto.email, token);
     return res.status(200).json({ message: "Password reset email sent" });
   }
 
