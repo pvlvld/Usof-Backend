@@ -1,6 +1,8 @@
 import { Type } from "class-transformer";
 import {
+  Equals,
   IsEmail,
+  IsIn,
   IsNumber,
   IsOptional,
   IsString,
@@ -9,6 +11,8 @@ import {
   Min,
   MinLength
 } from "class-validator";
+
+type IUserRole = "user" | "admin" | "donator";
 
 export class GetUsersDto {
   @IsOptional()
@@ -52,8 +56,10 @@ export class CreateUserDTO {
   email!: string;
 
   @IsString()
-  @MaxLength(50)
-  role!: string;
+  @IsIn(["user", "admin", "donator"], {
+    message: "role must be either 'user', 'admin' or 'donator'"
+  })
+  role!: IUserRole;
 }
 
 export class UploadUserAvatarDTO {
@@ -94,8 +100,10 @@ export class UpdateUserDataDTO {
 
   @IsOptional()
   @IsString()
-  @MaxLength(50)
-  role?: string;
+  @IsIn(["user", "admin", "donator"], {
+    message: "role must be either 'user', 'admin' or 'donator'"
+  })
+  role?: IUserRole;
 
   @IsOptional()
   @IsString()
