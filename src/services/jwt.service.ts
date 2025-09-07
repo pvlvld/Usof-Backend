@@ -55,11 +55,19 @@ class JwtService {
   }
 
   public verifyAccessToken(token: string) {
-    return jwt.verify(token, this.accessSecret, this.verifyOptions);
+    return jwt.verify(
+      token,
+      this.accessSecret,
+      this.verifyOptions
+    ) as JwtPayload;
   }
 
   public verifyRefreshToken(token: string) {
-    return jwt.verify(token, this.refreshSecret, this.verifyOptions);
+    return jwt.verify(
+      token,
+      this.refreshSecret,
+      this.verifyOptions
+    ) as JwtPayload;
   }
 }
 
