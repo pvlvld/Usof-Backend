@@ -10,6 +10,11 @@ import type {
 } from "../dto/user.dto.js";
 import type { IUserModel, UserModel } from "../models/user.model.js";
 import type { PasswordResetDto } from "../dto/auth.dto.js";
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError
+} from "../consts/errors.js";
 
 class UserService {
   private static instance: UserService | null = null;
@@ -31,7 +36,7 @@ class UserService {
   public async getUserById(dto: GetUserByIdDTO) {
     const user = await this.userModel.getUserById(dto);
     if (!user) {
-      throw { status: 404, message: "User not found" };
+      throw new NotFoundError("User not found");
     }
     return user;
   }
@@ -62,7 +67,7 @@ class UserService {
     });
 
     if (!currentUserData) {
-      throw { status: 404, message: "User not found" };
+      throw new NotFoundError("User not found");
     }
 
     const newUserData = { ...currentUserData, ...dto };
@@ -72,7 +77,7 @@ class UserService {
     );
 
     if (!newUser) {
-      throw { status: 500, message: "Failed to update user" };
+      throw new InternalServerError("Failed to update user");
     }
 
     return newUser;
@@ -96,7 +101,7 @@ class UserService {
 
   public async updatePassword(dto: PasswordResetDto) {
     if (dto.password !== dto.passwordConfirmation) {
-      throw { status: 400, message: "Passwords do not match" };
+      throw new BadRequestError("Passwords do not match");
     }
 
     const password_salt = this.encryptionService.genSalt(10);
