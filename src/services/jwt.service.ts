@@ -15,6 +15,12 @@ class JwtService {
   private readonly accessExpiresIn: StringValue;
   private readonly refreshExpiresIn: StringValue;
 
+  // Just in case
+  private algorithm: jwt.Algorithm = "HS256";
+  private verifyOptions: jwt.VerifyOptions = {
+    algorithms: [this.algorithm]
+  };
+
   private constructor() {
     // TODO: Config service
     this.accessSecret = process.env.JWT_SECRET || "json_secret";
@@ -32,21 +38,27 @@ class JwtService {
   }
 
   public signAccessToken(payload: JwtPayload) {
-    const options: jwt.SignOptions = { expiresIn: this.accessExpiresIn };
+    const options: jwt.SignOptions = {
+      expiresIn: this.accessExpiresIn,
+      algorithm: this.algorithm
+    };
     return jwt.sign(payload, this.accessSecret as jwt.Secret, options);
   }
 
   public signRefreshToken(payload: JwtPayload) {
-    const options: jwt.SignOptions = { expiresIn: this.refreshExpiresIn };
+    const options: jwt.SignOptions = {
+      expiresIn: this.refreshExpiresIn,
+      algorithm: this.algorithm
+    };
     return jwt.sign(payload, this.refreshSecret as jwt.Secret, options);
   }
 
   public verifyAccessToken(token: string) {
-    return jwt.verify(token, this.accessSecret);
+    return jwt.verify(token, this.accessSecret, this.verifyOptions);
   }
 
   public verifyRefreshToken(token: string) {
-    return jwt.verify(token, this.refreshSecret);
+    return jwt.verify(token, this.refreshSecret, this.verifyOptions);
   }
 }
 
