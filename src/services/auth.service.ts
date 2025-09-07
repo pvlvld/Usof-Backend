@@ -1,3 +1,9 @@
+import {
+  BadRequestError,
+  ConflictError,
+  InternalServerError,
+  UnauthorizedError
+} from "../consts/errors.js";
 import type {
   EmailVerificationDto,
   LoginDto,
@@ -43,17 +49,14 @@ class AuthService {
 
   public async register(dto: RegisterDto) {
     if (dto.login && !/^[A-Za-z](?:[A-Za-z0-9_]*[A-Za-z])?$/.test(dto.login)) {
-      throw { status: 400, message: "Invalid login format" };
+      throw new BadRequestError("Invalid login format");
     }
 
     if (
       (dto.login && (await this.userModel.findUserByLoginOrEmail(dto.login))) ||
       (dto.email && (await this.userModel.findUserByLoginOrEmail(dto.email)))
     ) {
-      throw {
-        status: 409,
-        message: "User with this login or email already exists"
-      };
+      throw new ConflictError("User with this login or email already exists");
     }
 
     const password_salt = this.encryptionService.genSalt(10);
@@ -70,7 +73,7 @@ class AuthService {
 
     const user = await this.userModel.findUserByLoginOrEmail(dto.login);
     if (!user) {
-      throw { status: 500, message: "Failed to create user" };
+      throw new InternalServerError("Failed to create user");
     }
 
     const accessToken = this.jwtService.signAccessToken({
@@ -102,12 +105,12 @@ class AuthService {
   public async login(dto: LoginDto) {
     const loginOrEmail = dto.login ? dto.login : dto.email ? dto.email : "";
     if (!loginOrEmail) {
-      throw { status: 400, message: "Login or email is required" };
+      throw new BadRequestError("Login or email is required");
     }
 
     const user = await this.userModel.findUserByLoginOrEmail(loginOrEmail);
     if (!user) {
-      throw { status: 401, message: "Invalid credentials" };
+      throw new UnauthorizedError("Invalid credentials");
     }
 
     const passwordValid = this.encryptionService.compare(
@@ -115,7 +118,7 @@ class AuthService {
       user.password_hash
     );
     if (!passwordValid) {
-      throw { status: 401, message: "Invalid credentials" };
+      throw new UnauthorizedError("Invalid credentials");
     }
 
     const accessToken = this.jwtService.signAccessToken({
@@ -154,13 +157,13 @@ class AuthService {
     );
 
     if (!emailVerification) {
-      throw { status: 400, message: "Invalid token" };
+      throw new BadRequestError("Invalid token");
     }
 
     const res = await this.userModel.verifyEmail(emailVerification.user_id);
     await this.emailVerificationModel.deleteByToken(dto.confirm_token);
     if (res.affectedRows === 0) {
-      throw { status: 500, message: "Failed to verify email" };
+      throw new InternalServerError("Failed to verify email");
     }
   }
 }
