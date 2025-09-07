@@ -84,11 +84,7 @@ class AuthService {
       sub: String(user.id)
     });
 
-    await this.refreshTokenModel.saveRefreshToken(
-      user.id,
-      refreshToken,
-      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-    );
+    await this.refreshTokenModel.saveRefreshToken(user.id, refreshToken);
 
     return {
       user: {
@@ -129,11 +125,7 @@ class AuthService {
       sub: String(user.id)
     });
 
-    await this.refreshTokenModel.saveRefreshToken(
-      user.id,
-      refreshToken,
-      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-    );
+    await this.refreshTokenModel.saveRefreshToken(user.id, refreshToken);
 
     return {
       user: {

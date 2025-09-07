@@ -44,11 +44,9 @@ export const QUERIES = Object.freeze({
       "DELETE FROM like_dislike WHERE user_id = ? AND post_id = ? AND comment_id = ?"
   },
   REFRESH_TOKEN: {
-    CREATE:
-      "INSERT INTO refresh_token (user_id, token, expires_at) VALUES (?, ?, ?)",
+    CREATE: "INSERT INTO refresh_token (user_id, token) VALUES (?, ?)",
     READ: "SELECT * FROM refresh_token WHERE user_id = ?",
-    UPDATE:
-      "UPDATE refresh_token SET token = ?, expires_at = ? WHERE user_id = ?",
+    UPDATE: "UPDATE refresh_token SET token = ? WHERE user_id = ?",
     DELETE: "DELETE FROM refresh_token WHERE token = ?"
   },
   PASSWORD_RESETS: {

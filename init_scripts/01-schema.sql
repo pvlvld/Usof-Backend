@@ -22,7 +22,6 @@ CREATE TABLE refresh_token (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     token VARCHAR(255) NOT NULL,
-    expires_at DATETIME NOT NULL, -- TODO: is there a better way to handle expiration?
 
     FOREIGN KEY (user_id) REFERENCES user(id)  ON DELETE CASCADE
 );
