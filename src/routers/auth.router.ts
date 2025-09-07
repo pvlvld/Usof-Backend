@@ -33,4 +33,10 @@ authRouter.post(
   (req: Request, res: Response, next: NextFunction) =>
     authController.verifyEmail(req, res, next)
 );
+
+authRouter.post(
+  "/token/refresh",
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.refreshToken(req, res, next)
+);
 export { authRouter };
