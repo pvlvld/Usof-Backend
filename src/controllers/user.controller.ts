@@ -190,8 +190,17 @@ class UserController {
 
     this.userService
       .deleteUser({ user_id: +user_id })
-      .then(() => res.status(204).send())
-      .catch((err) => res.status(500).json({ error: err.message }));
+      .then(() =>
+        res.status(204).json({ message: "User deleted successfully" })
+      )
+      .catch((err) => {
+        if (err instanceof CustomError) {
+          res.status(err.statusCode).json({ error: err.message });
+        } else {
+          console.error("[UserController] deleteUser: Unexpected error:", err);
+          res.status(500).json({ error: "Internal Server Error" });
+        }
+      });
   }
 }
 
