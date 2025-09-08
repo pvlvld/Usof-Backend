@@ -67,7 +67,12 @@ userRouter.post(
 userRouter.patch(
   "/avatar",
   authenticateMiddleware,
-  uploadAvatar.single("avatar")
+  uploadAvatar.single("avatar"),
+  (req: Request, res: Response) => {
+    res
+      .status(200)
+      .json({ message: "Avatar uploaded successfully", file: req.file });
+  }
 );
 
 // TODO: how in da hell create regex route?
