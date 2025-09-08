@@ -36,9 +36,12 @@ export function authenticateMiddleware(
     const payload = JwtService.getInstance().verifyAccessToken(token);
 
     req.user = {
-      id: payload.id,
+      id: +payload.sub,
       role: payload.role
     };
+    if (!req.user.id || !req.user.role) {
+      throw new UnauthorizedError("Invalid token payload");
+    }
     next();
   } catch (err) {
     next(new UnauthorizedError("Invalid or expired access token"));
