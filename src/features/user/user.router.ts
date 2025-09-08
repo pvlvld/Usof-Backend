@@ -40,9 +40,7 @@ const uploadAvatar = multer({
     },
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
-      console.log(file);
-      console.log(req.body);
-      const filename = `avatar_${req.body.user_id}${ext}`;
+      const filename = `avatar_${req.user?.id}${ext}`;
       cb(null, filename);
     }
   })
