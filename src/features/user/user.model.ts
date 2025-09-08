@@ -1,15 +1,18 @@
-import Database from "../database/index.js";
-import { QUERIES } from "../consts/queries.js";
 import type { ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import Database from "../../shared/database/index.js";
 import type {
   BanUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
   IUserRole,
   UnbanUserDTO
-} from "../dto/user.dto.js";
-import { isErrorWithCode } from "../utils/typeGuards.js";
-import { BadRequestError, InternalServerError } from "../consts/errors.js";
+} from "./user.dto.js";
+import { QUERIES } from "../../shared/consts/queries.js";
+import {
+  BadRequestError,
+  InternalServerError
+} from "../../shared/consts/errors.js";
+import { isErrorWithCode } from "../../shared/utils/typeGuards.js";
 
 export type IUserModel = {
   id: number;

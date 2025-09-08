@@ -3,7 +3,7 @@ import express, {
   type Request,
   type Response
 } from "express";
-import { authController } from "../controllers/auth.controller.js";
+import { authController } from "./auth.controller.js";
 
 const authRouter = express.Router();
 

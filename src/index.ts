@@ -3,9 +3,9 @@ import AdminJS from "adminjs";
 import Plugin from "@adminjs/express";
 import Adapter, { Database, Resource } from "@adminjs/sql";
 import express, { type Request, type Response } from "express";
-import { apiRouter } from "./routers/api.router.js";
+import { apiRouter } from "./api/api.router.js";
 import cookieParser from "cookie-parser";
-import { errorHandler } from "./middlewares/errorHandler.middleware.js";
+import { errorHandler } from "./shared/middlewares/errorHandler.middleware.js";
 
 async function startAdminJS(app: express.Express) {
   AdminJS.registerAdapter({

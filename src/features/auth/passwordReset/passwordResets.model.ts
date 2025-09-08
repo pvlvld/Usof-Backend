@@ -1,6 +1,9 @@
-import { InternalServerError, NotFoundError } from "../consts/errors.js";
-import { QUERIES } from "../consts/queries.js";
-import Database from "../database/index.js";
+import {
+  InternalServerError,
+  NotFoundError
+} from "../../../shared/consts/errors.js";
+import { QUERIES } from "../../../shared/consts/queries.js";
+import Database from "../../../shared/database/index.js";
 
 type IResetToken = {
   userId: number;

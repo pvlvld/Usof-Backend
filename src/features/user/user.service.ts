@@ -1,4 +1,4 @@
-import { EncryptionService } from "./encryption.service.js";
+import { EncryptionService } from "../../shared/services/encryption.service.js";
 import type {
   BanUserDTO,
   CreateUserDTO,
@@ -7,14 +7,14 @@ import type {
   GetUsersDto,
   UnbanUserDTO,
   UpdateUserDataDTO
-} from "../dto/user.dto.js";
-import type { IUserModel, UserModel } from "../models/user.model.js";
-import type { PasswordResetDto } from "../dto/auth.dto.js";
+} from "./user.dto.js";
+import type { PasswordResetDto } from "../auth/auth.dto.js";
 import {
   BadRequestError,
   InternalServerError,
   NotFoundError
-} from "../consts/errors.js";
+} from "../../shared/consts/errors.js";
+import type { IUserModel, UserModel } from "./user.model.js";
 
 class UserService {
   private static instance: UserService | null = null;

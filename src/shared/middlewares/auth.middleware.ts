@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import { JwtService } from "../services/jwt.service.js";
 import { UnauthorizedError, ForbiddenError } from "../consts/errors.js";
+import { JwtService } from "../services/jwt.service.js";
 
 // Extend Express Request to include user
 declare global {

@@ -5,12 +5,12 @@ import {
   DeleteUserDTO,
   GetUserByIdDTO,
   UpdateUserDataDTO
-} from "../dto/user.dto.js";
+} from "./user.dto.js";
 import type { NextFunction, Request, Response } from "express";
-import { isRequestBody } from "../decorators/isRequestBody.js";
-import { UserService } from "../services/user.service.js";
-import { UserModel } from "../models/user.model.js";
+import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
+import { UserService } from "./user.service.js";
 import { plainToInstance } from "class-transformer";
+import { UserModel } from "./user.model.js";
 
 class UserController {
   private userService: UserService;

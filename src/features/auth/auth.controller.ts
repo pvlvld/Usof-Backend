@@ -6,18 +6,18 @@ import {
   PasswordResetRequestDto,
   PasswordResetDto,
   EmailVerificationDto
-} from "../dto/auth.dto.js";
-import { AuthService } from "../services/auth.service.js";
-import { RefreshTokenModel } from "../models/refreshToken.model.js";
-import { UserModel } from "../models/user.model.js";
-import { UserService } from "../services/user.service.js";
-import { isRequestBody } from "../decorators/isRequestBody.js";
+} from "./auth.dto.js";
+import { AuthService } from "./auth.service.js";
+import { RefreshTokenModel } from "./refreshToken/refreshToken.model.js";
+import { UserService } from "../user/user.service.js";
+import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
 import type { NextFunction, Request, Response } from "express";
-import { PasswordResetsModel } from "../models/passwordResets.model.js";
-import { EmailVerificationModel } from "../models/emailVerifications.model.js";
+import { EmailVerificationModel } from "./emailVerification/emailVerifications.model.js";
 import crypto from "crypto";
-import { EmailService } from "../services/email.service.js";
-import { PasswordResetsService } from "../services/passwordResets.service.js";
+import { PasswordResetsService } from "./passwordReset/passwordResets.service.js";
+import { EmailService } from "../../shared/services/email.service.js";
+import { UserModel } from "../user/user.model.js";
+import { PasswordResetsModel } from "./passwordReset/passwordResets.model.js";
 
 class AuthController {
   private authService: AuthService;

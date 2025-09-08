@@ -1,7 +1,10 @@
-import { PasswordResetsModel } from "../models/passwordResets.model.js";
 import crypto from "node:crypto";
-import type { UserModel } from "../models/user.model.js";
-import { InternalServerError, NotFoundError } from "../consts/errors.js";
+import {
+  InternalServerError,
+  NotFoundError
+} from "../../../shared/consts/errors.js";
+import type { PasswordResetsModel } from "./passwordResets.model.js";
+import type { UserModel } from "../../user/user.model.js";
 
 class PasswordResetsService {
   private static instance: PasswordResetsService | null = null;

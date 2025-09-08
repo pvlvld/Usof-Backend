@@ -3,13 +3,13 @@ import express, {
   type Request,
   type Response
 } from "express";
-import { userController } from "../controllers/user.controller.js";
+import { userController } from "./user.controller.js";
 import multer from "multer";
 import path from "node:path";
 import {
   authenticateMiddleware,
   requireAdminMiddleware
-} from "../middlewares/auth.middleware.js";
+} from "../../shared/middlewares/auth.middleware.js";
 
 const userRouter = express.Router();
 

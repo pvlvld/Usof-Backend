@@ -1,5 +1,5 @@
-import { QUERIES } from "../consts/queries.js";
-import Database from "../database/index.js";
+import { QUERIES } from "../../../shared/consts/queries.js";
+import Database from "../../../shared/database/index.js";
 
 export class RefreshTokenModel {
   private static instance: RefreshTokenModel | null = null;

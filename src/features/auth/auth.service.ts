@@ -4,18 +4,21 @@ import {
   InternalServerError,
   NotFoundError,
   UnauthorizedError
-} from "../consts/errors.js";
+} from "../../shared/consts/errors.js";
 import type {
   EmailVerificationDto,
   LoginDto,
   LogoutDTO,
   RegisterDto
-} from "../dto/auth.dto.js";
-import { EmailVerificationModel } from "../models/emailVerifications.model.js";
-import type { RefreshTokenModel } from "../models/refreshToken.model.js";
-import type { UserModel } from "../models/user.model.js";
-import { EncryptionService } from "./encryption.service.js";
-import { JwtService, type IJwtPayloadAuth } from "./jwt.service.js";
+} from "./auth.dto.js";
+import { EmailVerificationModel } from "./emailVerification/emailVerifications.model.js";
+import type { RefreshTokenModel } from "./refreshToken/refreshToken.model.js";
+import { EncryptionService } from "../../shared/services/encryption.service.js";
+import {
+  JwtService,
+  type IJwtPayloadAuth
+} from "../../shared/services/jwt.service.js";
+import type { UserModel } from "../user/user.model.js";
 
 class AuthService {
   private static instance: AuthService | null = null;
