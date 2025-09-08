@@ -78,6 +78,10 @@ userRouter.patch(
   "/:user_id",
   authenticateMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
+    const { user_id } = req.params;
+    if (user_id === "avatar") {
+      return next();
+    }
     console.log("Update user");
     userController.updateUser(req, res, next);
   }
