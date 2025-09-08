@@ -1,36 +1,13 @@
 import "reflect-metadata";
-import AdminJS from "adminjs";
-import Plugin from "@adminjs/express";
-import Adapter, { Database, Resource } from "@adminjs/sql";
 import express, { type Request, type Response } from "express";
 import { apiRouter } from "./api/api.router.js";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./shared/middlewares/errorHandler.middleware.js";
-
-async function startAdminJS(app: express.Express) {
-  AdminJS.registerAdapter({
-    Database,
-    Resource
-  });
-
-  const db = await new Adapter("mysql2", {
-    database: process.env.DB_NAME || "usof",
-    host: process.env.DB_HOST || "127.0.0.1",
-    port: process.env.DB_PORT ? +process.env.DB_PORT : 3306,
-    user: process.env.DB_USER || "usof",
-    password: process.env.DB_PASSWORD || "usofpassword"
-  }).init();
-
-  const admin = new AdminJS({
-    databases: [db]
-  });
-
-  admin.watch(); // Development mode
-
-  const router = Plugin.buildRouter(admin);
-
-  return router;
-}
+import { initializeAdminJs } from "./admin.js";
+import {
+  authenticateMiddleware,
+  requireAdminMiddleware
+} from "./shared/middlewares/auth.middleware.js";
 
 async function start() {
   const app = express();
@@ -38,8 +15,13 @@ async function start() {
   app.use(express.json());
   app.use(cookieParser());
 
-  const adminRouter = await startAdminJS(app);
-  app.use("/admin", adminRouter);
+  const adminRouter = await initializeAdminJs();
+  app.use(
+    "/admin",
+    authenticateMiddleware,
+    requireAdminMiddleware,
+    adminRouter
+  );
 
   app.get("/", (req: Request, res: Response) => {
     res.redirect("/api");
