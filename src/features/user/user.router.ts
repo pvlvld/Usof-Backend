@@ -10,6 +10,7 @@ import {
   authenticateMiddleware,
   requireAdminMiddleware
 } from "../../shared/middlewares/auth.middleware.js";
+import { InternalServerError } from "../../shared/consts/errors.js";
 
 const userRouter = express.Router();
 
@@ -26,7 +27,11 @@ const uploadAvatar = multer({
     if (allowedMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error("Invalid file type. Only JPEG, PNG and WEBP are allowed."));
+      cb(
+        new InternalServerError(
+          "Invalid file type. Only JPEG, PNG and WEBP are allowed."
+        )
+      );
     }
   },
   storage: multer.diskStorage({
