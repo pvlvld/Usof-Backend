@@ -15,7 +15,7 @@ export const QUERIES = Object.freeze({
     /** password_hash, password_salt, id */
     RESET_PASSWORD:
       "UPDATE user SET password_hash = ?, password_salt = ? WHERE id = ?",
-    DELETE: "DELETE FROM user WHERE id = ?",
+    DELETE: "UPDATE user SET deleted_at = NOW() WHERE id = ?",
     BAN: "UPDATE user SET banned_until = ?, ban_reason = ? WHERE id = ?",
     UNBAN:
       "UPDATE user SET banned_until = NULL, ban_reason = NULL WHERE id = ?",
