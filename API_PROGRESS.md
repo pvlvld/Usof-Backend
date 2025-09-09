@@ -4,8 +4,8 @@ This document provides an overview of the API development process, listing requi
 
 **Legend:**
 
-- `[ ]` — Feature not yet implemented
-- `[x]` — Feature completed
+- - [ ] — Feature not yet implemented
+- - [x] — Feature completed
 - **Additional** — Feature proposed by me
 - **Optional** — Recommended extra feature
 - All other items are from the main requirements
