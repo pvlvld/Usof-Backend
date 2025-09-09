@@ -15,11 +15,14 @@ import {
   NotFoundError
 } from "../../shared/consts/errors.js";
 import type { IUserModel, UserModel } from "./user.model.js";
+import path from "node:path";
+import fs from "node:fs";
 
 class UserService {
   private static instance: UserService | null = null;
   private userModel: UserModel;
   private encryptionService: EncryptionService;
+  private avatarDir = path.join(process.cwd(), "public", "avatars");
 
   private constructor(user: typeof UserModel) {
     this.userModel = user.getInstance();
@@ -123,6 +126,17 @@ class UserService {
 
   public findUserByLoginOrEmail(loginOrEmail: string) {
     return this.userModel.findUserByLoginOrEmail(loginOrEmail);
+  }
+
+  public async getAvatarPath(userId: number): Promise<string | null> {
+    const filename = `avatar_${userId}.webp`;
+    const filePath = path.join(this.avatarDir, filename);
+    try {
+      await fs.promises.access(filePath);
+      return filePath;
+    } catch (error) {
+      return null;
+    }
   }
 }
 
