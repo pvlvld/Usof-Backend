@@ -22,7 +22,7 @@ class UserService {
   private static instance: UserService | null = null;
   private userModel: UserModel;
   private encryptionService: EncryptionService;
-  private avatarDir = path.join(process.cwd(), "public", "avatars");
+  private avatarDir = path.join(process.cwd(), "public", "uploads", "avatars");
 
   private constructor(user: typeof UserModel) {
     this.userModel = user.getInstance();
