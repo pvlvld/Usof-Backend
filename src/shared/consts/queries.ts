@@ -66,5 +66,33 @@ export const QUERIES = Object.freeze({
     GET_BY_TOKEN: "SELECT * FROM email_verifications WHERE token = ?",
     GET_BY_USER_ID: "SELECT * FROM email_verifications WHERE user_id = ?",
     DELETE: "DELETE FROM email_verifications WHERE token = ?"
+  },
+  POST: {
+    /** user_id, title, content */
+    CREATE: "INSERT INTO post (user_id, title, content) VALUES (?, ?, ?)",
+    /** id */
+    READ: "SELECT * FROM post WHERE id = ?",
+    /** title, content, status, id */
+    UPDATE: "UPDATE post SET title = ?, content = ?, status = ? WHERE id = ?",
+    /** id */
+    DELETE: "UPDATE post SET deleted_at = NOW() WHERE id = ?",
+    /** limit, offset */
+    GET_PAGINATED:
+      "SELECT * FROM post WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT ? OFFSET ?",
+    /** user_id */
+    GET_BY_USER_ID:
+      "SELECT * FROM post WHERE user_id = ? AND deleted_at IS NULL ORDER BY created_at DESC",
+    /** category_id */
+    GET_BY_CATEGORY_ID: `SELECT p.* FROM post p JOIN post_categories pc ON p.id = pc.post_id WHERE pc.category_id = ? AND p.deleted_at IS NULL ORDER BY p.created_at DESC`,
+    /** post_id, category_id */
+    ADD_CATEGORY:
+      "INSERT INTO post_categories (post_id, category_id) VALUES (?, ?)",
+    /** post_id, category_id */
+    REMOVE_CATEGORY:
+      "DELETE FROM post_categories WHERE post_id = ? AND category_id = ?",
+    /** id */
+    ACTIVATE: "UPDATE post SET status = 'active' WHERE id = ?",
+    /** id */
+    LOCK: "UPDATE post SET status = 'locked' WHERE id = ?"
   }
 });
