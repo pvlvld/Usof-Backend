@@ -18,6 +18,8 @@ CREATE TABLE user (
 CREATE INDEX idx_login ON user (login);
 CREATE INDEX idx_email ON user (email);
 CREATE INDEX idx_rating ON user (rating);
+CREATE INDEX idx_banned_until ON user (banned_until);
+CREATE INDEX idx_deleted_at ON user (deleted_at);
 
 CREATE TABLE refresh_token (
     id INT PRIMARY KEY AUTO_INCREMENT,
