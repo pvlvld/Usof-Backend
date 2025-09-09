@@ -23,7 +23,8 @@ const uploadAvatar = multer({
     },
     filename: (req, file, cb) => {
       const ext = path.extname(file.originalname);
-      const filename = `${req.user?.id}${ext}`;
+      // Use avatar_ prefix to allow future avatar frames or other decorations
+      const filename = `avatar_${req.user?.id}${ext}`;
       cb(null, filename);
     }
   })
