@@ -5,41 +5,41 @@ This document provides an overview of the API development process, listing requi
 **Legend:**
 
 - `[ ]` — Feature not yet implemented
-- `[*]` — Feature completed
+- `[x]` — Feature completed
 - **Additional** — Feature proposed by me
 - **Optional** — Recommended extra feature
 - All other items are from the main requirements
 
 # Auth
-- [*]  POST - /api/auth/register - registration of a new user, required parameters are [login, password, password confirmation, email]
-- [*]  POST - /api/auth/login - log in user, required parameters are [login, email, password]. Only users with a confirmed email can sign in
-- - [*] Additional: refresh accessToken if refreshToken is valid
-- [*]  POST - /api/auth/logout - log out authorized user
+- [x]  POST - /api/auth/register - registration of a new user, required parameters are [login, password, password confirmation, email]
+- [x]  POST - /api/auth/login - log in user, required parameters are [login, email, password]. Only users with a confirmed email can sign in
+- - [x] Additional: refresh accessToken if refreshToken is valid
+- [x]  POST - /api/auth/logout - log out authorized user
 - [ ]  POST - /api/auth/password-reset - send a reset link to user email, required parameter is [email]
 - [ ]  POST - /api/auth/password-reset/:confirm_token - confirm new password with a token from email, required parameter is a [new password]
 
 Additional:
-- [*]  POST - /token/refresh - refresh accessToken (15m) using refreshToken
+- [x]  POST - /token/refresh - refresh accessToken (15m) using refreshToken
 
 
 # User
-- [*]  GET - /api/users get all users (page)
-- - [*]  ?page=
-- - [*]  ?limit=
-- [*]  GET - /api/users/:user_id get specified user data
-- [*]  POST - /api/users create a new user, required parameters are [login, password, password confirmation, email, role].
-- - [*]  Admins only
-- [*]  PATCH - /api/users/avatar upload user avatar
-- - [*]  Additional: Resize & compress
-- - [*]  Additional: Convert all to webp
-- - [*]  Additional: Allow animated avatars for donators
+- [x]  GET - /api/users get all users (page)
+- - [x]  ?page=
+- - [x]  ?limit=
+- [x]  GET - /api/users/:user_id get specified user data
+- [x]  POST - /api/users create a new user, required parameters are [login, password, password confirmation, email, role].
+- - [x]  Admins only
+- [x]  PATCH - /api/users/avatar upload user avatar
+- - [x]  Additional: Resize & compress
+- - [x]  Additional: Convert all to webp
+- - [x]  Additional: Allow animated avatars for donators
 - [ ]  PATCH /api/users/:user_id update user data
 - - [ ]  Additional: Partial update?
 - [ ]  DELETE - /api/users/:user_id delete user
 - - [ ] Additional: soft delete
 
 Aditional:
-- [*]  GET /api/users/:user_id/avatar
+- [x]  GET /api/users/:user_id/avatar
 - [ ]  POST - /api/users/:user_id/ban ban user untill / permanent (epoch)
 - [ ]  POST - /api/users/:user_id/unban unban user
 
