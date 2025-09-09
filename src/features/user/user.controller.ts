@@ -113,6 +113,27 @@ class UserController {
     throw new Error("Method not implemented.");
   }
 
+  public async getAvatar(req: Request, res: Response, next: NextFunction) {
+    const { user_id } = req.params;
+    if (!user_id || isNaN(Number(user_id))) {
+      return res.status(400).json({
+        errors: [
+          {
+            property: "user_id",
+            constraints: { isNumber: "user_id must be a number" }
+          }
+        ]
+      });
+    }
+
+    const filePath = await this.userService.getAvatarPath(+user_id);
+    if (filePath) {
+      res.sendFile(filePath);
+    } else {
+      res.status(404).json({ message: "Avatar not found" });
+    }
+  }
+
   @isRequestBody()
   public async banUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
