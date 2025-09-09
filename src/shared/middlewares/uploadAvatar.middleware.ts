@@ -34,7 +34,10 @@ class MulterAvatarStorage implements multer.StorageEngine {
     file: Express.Multer.File,
     callback: (error: Error | null) => void
   ): void {
-    fs.unlink(file.path, callback);
+    fs.promises
+      .unlink(file.path)
+      .then(() => callback(null))
+      .catch(callback);
   }
 
   _handleFile(
