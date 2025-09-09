@@ -32,7 +32,7 @@ export const QUERIES = Object.freeze({
       "INSERT INTO comment (post_id, user_id, parent_id, content) VALUES (?, ?, ?, ?)",
     READ: "SELECT * FROM comment WHERE post_id = ?",
     UPDATE: "UPDATE comment SET content = ? WHERE id = ?",
-    DELETE: "DELETE FROM comment WHERE id = ?"
+    DELETE: "UPDATE comment SET deleted_at = NOW() WHERE id = ?"
   },
   LIKE: {
     CREATE:
