@@ -4,47 +4,20 @@ import express, {
   type Response
 } from "express";
 import { userController } from "./user.controller.js";
-import multer from "multer";
-import path from "node:path";
 import {
   authenticateMiddleware,
   requireAdminMiddleware
 } from "../../shared/middlewares/auth.middleware.js";
-import { InternalServerError } from "../../shared/consts/errors.js";
+import { uploadAvatar } from "../../shared/middlewares/uploadAvatar.middleware.js";
 
 const userRouter = express.Router();
 
-// TODO:
-// - Utilize auth data to get user_id
-// - Move to the controller
-// - Convert all to the webp
-// - Async i/o? If possible
-const uploadAvatar = multer({
-  dest: "public/uploads/avatars/",
-  limits: { fileSize: 5 * 1024 * 1024, files: 1 },
-  fileFilter: (req, file, cb) => {
-    const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
-    if (allowedMimeTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(
-        new InternalServerError(
-          "Invalid file type. Only JPEG, PNG and WEBP are allowed."
-        )
-      );
-    }
-  },
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "public/uploads/avatars/");
-    },
-    filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname);
-      const filename = `avatar_${req.user?.id}${ext}`;
-      cb(null, filename);
-    }
-  })
-});
+userRouter.get(
+  "/:user_id/avatar",
+  async (req: Request, res: Response, next: NextFunction) => {
+    userController.getAvatar(req, res, next);
+  }
+);
 
 userRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
   userController.getUsers(req, res, next);
@@ -90,7 +63,6 @@ userRouter.patch(
     if (user_id === "avatar") {
       return next();
     }
-    console.log("Update user");
     userController.updateUser(req, res, next);
   }
 );
