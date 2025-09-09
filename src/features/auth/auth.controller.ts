@@ -13,7 +13,7 @@ import { UserService } from "../user/user.service.js";
 import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
 import type { NextFunction, Request, Response } from "express";
 import { EmailVerificationModel } from "./emailVerification/emailVerifications.model.js";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { PasswordResetsService } from "./passwordReset/passwordResets.service.js";
 import { EmailService } from "../../shared/services/email.service.js";
 import { UserModel } from "../user/user.model.js";
