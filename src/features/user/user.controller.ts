@@ -134,7 +134,6 @@ class UserController {
     }
   }
 
-  @isRequestBody()
   public async banUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
@@ -192,7 +191,6 @@ class UserController {
     }
   }
 
-  @isRequestBody()
   public async unbanUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
     if (!user_id || isNaN(Number(user_id))) {
