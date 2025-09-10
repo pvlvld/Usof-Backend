@@ -49,6 +49,9 @@ class AvatarUploadBuilder {
     this.donatorOnlyMimeTypes = options.donatorOnlyMimeTypes || ["image/gif"];
     this.fileSizeLimitMB = options.fileSizeLimitMB || 5;
     fs.mkdirSync(this.avatarDir, { recursive: true });
+
+    // Required to ensure 'this' context is correct in fileFilter
+    this.fileFilter = this.fileFilter.bind(this);
   }
 
   private getFilename(req: Request) {
