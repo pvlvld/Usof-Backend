@@ -40,6 +40,7 @@ Additional:
 
 Aditional:
 - [x]  GET /api/users/:user_id/avatar
+- - [x]  Serve a default pfp if the user does not have one
 - [ ]  POST - /api/users/:user_id/ban ban user untill / permanent (epoch)
 - [ ]  POST - /api/users/:user_id/unban unban user
 

@@ -136,6 +136,14 @@ class UserService {
       await fs.promises.access(filePath);
       return filePath;
     } catch (error) {
+      // Check user existence only if avatar file is missing
+      // to avoid unnecessary DB calls and potential performance hit
+      const isUserExists = await this.userModel.getUserById({
+        user_id: userId
+      });
+      if (!isUserExists) {
+        throw new NotFoundError("User not found");
+      }
       return this.defaultAvatarPath;
     }
   }
