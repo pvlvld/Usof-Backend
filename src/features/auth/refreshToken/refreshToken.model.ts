@@ -3,7 +3,7 @@ import Database from "../../../shared/database/index.js";
 
 export class RefreshTokenModel {
   private static instance: RefreshTokenModel | null = null;
-  constructor(private db: ReturnType<typeof Database.getPool>) {
+  private constructor(private db: ReturnType<typeof Database.getPool>) {
     this.db = Database.getPool();
   }
 
