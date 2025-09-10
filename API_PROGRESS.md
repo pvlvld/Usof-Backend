@@ -41,8 +41,8 @@ Additional:
 Aditional:
 - [x]  GET /api/users/:user_id/avatar
 - - [x]  Serve a default pfp if the user does not have one
-- [ ]  POST - /api/users/:user_id/ban ban user untill / permanent (epoch)
-- [ ]  POST - /api/users/:user_id/unban unban user
+- [x]  POST - /api/users/:user_id/ban ban user untill / permanent (epoch)
+- [x]  POST - /api/users/:user_id/unban unban user
 
 # Post
 - [ ]  POST /api/posts/:post_id/comments create a new comment, required parameter is [content]

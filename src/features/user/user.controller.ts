@@ -174,16 +174,20 @@ class UserController {
     }
 
     try {
-      await this.userService.banUser({
+      const [result] = await this.userService.banUser({
         user_id: +user_id,
         banned_until,
         ban_reason
       });
-      res.status(204).send({
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(204).send({
         message: `User banned successfully`,
-        untill: banned_until
+        until: banned_until
       });
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }
@@ -203,8 +207,11 @@ class UserController {
     }
 
     try {
-      await this.userService.unbanUser({ user_id: +user_id });
-      res.status(204).send();
+      const [result] = await this.userService.unbanUser({ user_id: +user_id });
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(204).send();
     } catch (err) {
       next(err);
     }

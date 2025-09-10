@@ -218,7 +218,7 @@ export class UserModel {
 
   public banUser(dto: BanUserDTO) {
     try {
-      return this.db.query(QUERIES.USER.BAN, [
+      return this.db.query<ResultSetHeader>(QUERIES.USER.BAN, [
         dto.banned_until,
         dto.ban_reason,
         dto.user_id
@@ -231,7 +231,7 @@ export class UserModel {
 
   public unbanUser(dto: UnbanUserDTO) {
     try {
-      return this.db.query(QUERIES.USER.UNBAN, [dto.user_id]);
+      return this.db.query<ResultSetHeader>(QUERIES.USER.UNBAN, [dto.user_id]);
     } catch (error) {
       console.error("Error unbanning user:", error);
       throw new InternalServerError("Database error occurred");
