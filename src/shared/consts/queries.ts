@@ -6,65 +6,97 @@ export const QUERIES = Object.freeze({
     /**login, password_hash, password_salt, email */
     REGISTER:
       "INSERT INTO user (login, password_hash, password_salt, email) VALUES (?, ?, ?, ?)",
+    /** id */
     GET_BY_ID: "SELECT * FROM user WHERE id = ?",
+    /** limit, offset */
     GET_PAGINATED: "SELECT * FROM user LIMIT ? OFFSET ?",
     /**login, email, password_hash, password_salt, full_name, avatar, rating, role, id */
     UPDATE: `UPDATE user SET login = ?, email = ?, password_hash = ?, password_salt = ?, full_name = ?, avatar = ?, rating = ?, role = ? WHERE id = ?`,
+    /** email */
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
+    /** login */
     FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
     /** password_hash, password_salt, id */
     RESET_PASSWORD:
       "UPDATE user SET password_hash = ?, password_salt = ? WHERE id = ?",
+    /** id */
     DELETE: "UPDATE user SET deleted_at = NOW() WHERE id = ?",
+    /** banned_until, ban_reason, id */
     BAN: "UPDATE user SET banned_until = ?, ban_reason = ? WHERE id = ?",
+    /** id */
     UNBAN:
       "UPDATE user SET banned_until = NULL, ban_reason = NULL WHERE id = ?",
+    /** id */
     VERIFY_EMAIL: "UPDATE user SET is_email_verified = TRUE WHERE id = ?"
   },
   CATEGORY: {
+    /** name, description */
     CREATE: "INSERT INTO category (name, description) VALUES (?, ?)",
+    /** id */
     READ: "SELECT * FROM category WHERE id = ?",
+    /** name, description, id */
     UPDATE: "UPDATE category SET name = ?, description = ? WHERE id = ?",
+    /** id */
     DELETE: "DELETE FROM category WHERE id = ?"
   },
   COMMENT: {
+    /** post_id, user_id, parent_id, content */
     CREATE:
       "INSERT INTO comment (post_id, user_id, parent_id, content) VALUES (?, ?, ?, ?)",
+    /** post_id */
     READ: "SELECT * FROM comment WHERE post_id = ?",
+    /** content, id */
     UPDATE: "UPDATE comment SET content = ? WHERE id = ?",
+    /** id */
     DELETE: "UPDATE comment SET deleted_at = NOW() WHERE id = ?"
   },
   LIKE: {
+    /** user_id, post_id, comment_id, is_like */
     CREATE:
       "INSERT INTO like_dislike (user_id, post_id, comment_id, is_like) VALUES (?, ?, ?, ?)",
+    /** user_id */
     READ: "SELECT * FROM like_dislike WHERE user_id = ?",
+    /** is_like, user_id, post_id, comment_id */
     UPDATE:
       "UPDATE like_dislike SET is_like = ? WHERE user_id = ? AND post_id = ? AND comment_id = ?",
+    /** user_id, post_id, comment_id */
     DELETE:
       "DELETE FROM like_dislike WHERE user_id = ? AND post_id = ? AND comment_id = ?"
   },
   REFRESH_TOKEN: {
+    /** user_id, token */
     CREATE: "INSERT INTO refresh_token (user_id, token) VALUES (?, ?)",
+    /** user_id */
     READ: "SELECT * FROM refresh_token WHERE user_id = ?",
+    /** token, user_id */
     UPDATE: "UPDATE refresh_token SET token = ? WHERE user_id = ?",
+    /** token */
     DELETE: "DELETE FROM refresh_token WHERE token = ?"
   },
   PASSWORD_RESETS: {
     /** user_id, token (64), expires_at */
     CREATE:
       "INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)",
+    /** token */
     GET_BY_TOKEN: "SELECT * FROM password_resets WHERE token = ?",
+    /** user_id */
     GET_BY_USER_ID: "SELECT * FROM password_resets WHERE user_id = ?",
+    /** token, expires_at, user_id */
     UPDATE:
       "UPDATE password_resets SET token = ?, expires_at = ? WHERE user_id = ?",
+    /** token */
     DELETE: "DELETE FROM password_resets WHERE token = ?",
     /** expires_at <*/
     DELETE_EXPIRED: "DELETE FROM password_resets WHERE expires_at < ?"
   },
   EMAIL_VERIFICATIONS: {
+    /** user_id, token (64) */
     CREATE: "INSERT INTO email_verifications (user_id, token) VALUES (?, ?)",
+    /** token */
     GET_BY_TOKEN: "SELECT * FROM email_verifications WHERE token = ?",
+    /** user_id */
     GET_BY_USER_ID: "SELECT * FROM email_verifications WHERE user_id = ?",
+    /** token */
     DELETE: "DELETE FROM email_verifications WHERE token = ?"
   },
   POST: {
