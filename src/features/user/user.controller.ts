@@ -150,6 +150,7 @@ class UserController {
     req.body ??= {};
     let isPermanent = false;
     let { banned_until, ban_reason } = req.body;
+    ban_reason ??= "No reason provided";
 
     if (banned_until && !Date.parse(banned_until)) {
       return res.status(400).json({
