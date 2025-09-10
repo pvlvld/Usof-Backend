@@ -231,8 +231,11 @@ class UserController {
     }
 
     try {
-      await this.userService.deleteUser({ user_id: +user_id });
-      res.status(204).json({ message: "User deleted successfully" });
+      const result = await this.userService.deleteUser({ user_id: +user_id });
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(204).json({ message: "User deleted successfully" });
     } catch (err) {
       next(err);
     }

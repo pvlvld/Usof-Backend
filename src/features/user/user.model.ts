@@ -111,10 +111,7 @@ export class UserModel {
     const [result] = await this.db.query<ResultSetHeader>(QUERIES.USER.DELETE, [
       dto.user_id
     ]);
-    if (result.affectedRows > 0) {
-      return { user_id: dto.user_id };
-    }
-    return null;
+    return result;
   }
 
   public async findUserByLoginOrEmail(

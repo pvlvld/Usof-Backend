@@ -35,8 +35,8 @@ Additional:
 - - [x]  Additional: Allow animated avatars for donators
 - [ ]  PATCH /api/users/:user_id update user data
 - - [ ]  Additional: Partial update?
-- [ ]  DELETE - /api/users/:user_id delete user
-- - [ ] Additional: soft delete
+- [x]  DELETE - /api/users/:user_id delete user
+- - [x] Additional: soft delete
 
 Aditional:
 - [x]  GET /api/users/:user_id/avatar
