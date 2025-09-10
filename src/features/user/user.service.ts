@@ -23,6 +23,7 @@ class UserService {
   private userModel: UserModel;
   private encryptionService: EncryptionService;
   private avatarDir = path.join(process.cwd(), "public", "uploads", "avatars");
+  private defaultAvatarPath = path.join(this.avatarDir, "default_avatar.webp");
 
   private constructor(user: typeof UserModel) {
     this.userModel = user.getInstance();
@@ -135,7 +136,7 @@ class UserService {
       await fs.promises.access(filePath);
       return filePath;
     } catch (error) {
-      return null;
+      return this.defaultAvatarPath;
     }
   }
 }
