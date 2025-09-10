@@ -41,6 +41,7 @@ class AvatarUploadBuilder {
     };
     this.allowedMimeTypes = options.allowedMimeTypes || [
       "image/jpeg",
+      "image/jpg",
       "image/png",
       "image/webp",
       "image/gif"
