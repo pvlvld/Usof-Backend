@@ -11,8 +11,8 @@ CREATE TABLE user (
     role ENUM('user', 'donator', 'moderator', 'admin') DEFAULT 'user',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    banned_until DATETIME,
-    ban_reason VARCHAR(255),
+    banned_until DATETIME DEFAULT NULL,
+    ban_reason VARCHAR(255) DEFAULT NULL,
     deleted_at DATETIME DEFAULT NULL
 );
 CREATE INDEX idx_login ON user (login);
