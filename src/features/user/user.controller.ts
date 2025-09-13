@@ -71,16 +71,8 @@ class UserController {
   @isRequestBody()
   public async updateUser(req: Request, res: Response, next: NextFunction) {
     const { user_id } = req.params;
-    if (!user_id || isNaN(Number(user_id))) {
-      return res.status(400).json({
-        errors: [
-          {
-            property: "user_id",
-            constraints: { isNumber: "user_id must be a number" }
-          }
-        ]
-      });
-    }
+    req.body ??= {};
+    req.body.user_id = user_id;
 
     const userData = plainToInstance(UpdateUserDataDTO, req.body);
     const errors = await validate(userData);
@@ -89,14 +81,8 @@ class UserController {
       return res.status(400).json({ errors });
     }
 
-    // Oh God how mutch I hate spreads... but ok
-    const updateData = {
-      ...userData,
-      user_id: +user_id
-    };
-
     try {
-      await this.userService.updateUser(updateData);
+      await this.userService.updateUser(userData);
       res.status(200).json({ message: "User updated successfully" });
     } catch (error) {
       next(error);
