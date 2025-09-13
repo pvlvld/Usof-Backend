@@ -21,7 +21,7 @@ export type IUserModel = {
   password_salt: string;
   full_name: string;
   email: string;
-  is_email_verified: boolean;
+  email_verified: boolean;
   avatar: string;
   rating: number;
   role: IUserRole;
@@ -29,6 +29,8 @@ export type IUserModel = {
   created_at: Date;
   updated_at: Date;
   banned_until: Date | null;
+  ban_reason: string | null;
+  deleted_at: Date | null;
 };
 
 type IRegisterUser = {
