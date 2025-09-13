@@ -15,129 +15,129 @@ import {
 export type IUserRole = "user" | "admin" | "donator" | "moderator";
 
 export class GetUsersDto {
-  @IsOptional()
+  @Min(1)
   @Type(() => Number)
   @IsNumber()
-  @Min(1)
+  @IsOptional()
   page: number = 1;
 
-  @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
   @Min(1)
   @Max(100)
+  @Type(() => Number)
+  @IsNumber()
+  @IsOptional()
   limit: number = 10;
 }
 
 export class GetUserByIdDTO {
-  @IsNumber()
   @Min(1)
+  @Type(() => Number)
+  @IsNumber()
   user_id!: number;
 }
 
 export class CreateUserDTO {
-  @IsString()
   @MinLength(2)
   @MaxLength(100)
+  @IsString()
   login!: string;
 
-  @IsString()
   @MinLength(6)
   @MaxLength(100)
+  @IsString()
   password!: string;
 
-  @IsString()
   @MinLength(6)
   @MaxLength(100)
+  @IsString()
   passwordConfirmation!: string;
 
-  @IsString()
   @IsEmail()
   email!: string;
 
-  @IsString()
   @IsIn(["user", "admin", "donator"], {
     message: "role must be either 'user', 'admin' or 'donator'"
   })
+  @IsString()
   role!: IUserRole;
 }
 
 export class UploadUserAvatarDTO {
-  @IsNumber()
   @Min(1)
+  @IsNumber()
   user_id!: number;
 
-  @IsString()
   @MaxLength(100)
+  @IsString()
   avatar!: string;
 }
 
 export class UpdateUserDataDTO {
-  @IsOptional()
-  @IsNumber()
   @Min(1)
-  user_id?: number;
+  @Type(() => Number)
+  @IsNumber()
+  user_id!: number;
 
-  @IsOptional()
-  @IsString()
   @MaxLength(100)
+  @IsString()
+  @IsOptional()
   login?: string;
 
-  @IsOptional()
-  @IsString()
   @MaxLength(100)
+  @IsString()
+  @IsOptional()
   email?: string;
 
-  @IsString()
   @MinLength(6)
   @MaxLength(100)
+  @IsString()
   password!: string;
 
-  @IsString()
   @MinLength(6)
   @MaxLength(100)
+  @IsString()
   passwordConfirmation!: string;
 
-  @IsOptional()
-  @IsString()
   @IsIn(["user", "admin", "donator"], {
     message: "role must be either 'user', 'admin' or 'donator'"
   })
+  @IsString()
+  @IsOptional()
   role?: IUserRole;
 
-  @IsOptional()
-  @IsString()
   @MaxLength(100)
+  @IsString()
+  @IsOptional()
   avatar?: string;
 
-  @IsOptional()
-  @IsString()
   @MaxLength(100)
+  @IsString()
+  @IsOptional()
   fullName?: string;
 }
 
 export class DeleteUserDTO {
-  @IsNumber()
   @Min(1)
+  @IsNumber()
   user_id!: number;
 }
 
 export class BanUserDTO {
-  @IsNumber()
   @Min(1)
+  @IsNumber()
   user_id!: number;
 
-  @IsString()
   @MaxLength(100)
+  @IsString()
   banned_until!: string;
 
-  @IsString()
   @MaxLength(255)
+  @IsString()
   ban_reason!: string;
 }
 
 export class UnbanUserDTO {
-  @IsNumber()
   @Min(1)
+  @IsNumber()
   user_id!: number;
 }

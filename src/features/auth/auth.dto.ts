@@ -8,19 +8,19 @@ import {
 } from "class-validator";
 
 export class RegisterDto {
-  @IsString()
   @MinLength(6)
   @MaxLength(50)
+  @IsString()
   login!: string;
 
-  @IsString()
   @MinLength(6)
   @MaxLength(100)
+  @IsString()
   password!: string;
 
-  @IsString()
   @MinLength(6)
   @MaxLength(100)
+  @IsString()
   passwordConfirmation!: string;
 
   @IsEmail()
@@ -35,8 +35,8 @@ export class LoginDto {
   @IsEmail()
   email!: string;
 
-  @IsString()
   @MinLength(6)
+  @IsString()
   password!: string;
 }
 
@@ -49,24 +49,24 @@ export class PasswordResetDto {
   @IsString()
   confirm_token!: string;
 
-  @IsString()
   @MinLength(6)
+  @IsString()
   password!: string;
 
-  @IsString()
   @MinLength(6)
+  @IsString()
   passwordConfirmation!: string;
 }
 
 export class LogoutDTO {
-  @IsString()
   @MinLength(6)
   @MaxLength(100)
+  @IsString()
   refreshToken!: string;
 }
 
 export class EmailVerificationDto {
-  @IsString()
   @Length(36, 36)
+  @IsString()
   confirm_token!: string;
 }
