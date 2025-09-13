@@ -4,6 +4,7 @@ import express, {
   type Response
 } from "express";
 import { postController } from "./post.controller.js";
+import { authenticateMiddleware } from "../../shared/middlewares/auth.middleware.js";
 
 const postRouter = express.Router();
 
@@ -23,6 +24,7 @@ postRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 postRouter.get(
   "/:post_id",
+  (req, res, next) => authenticateMiddleware(req, res, next, true),
   (req: Request, res: Response, next: NextFunction) => {
     postController.getPostById(req, res, next);
   }
