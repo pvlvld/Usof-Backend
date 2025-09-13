@@ -39,6 +39,12 @@ export class ConflictError extends CustomError {
   }
 }
 
+export class GoneError extends CustomError {
+  constructor(message: string = "Gone") {
+    super(message, 410);
+  }
+}
+
 export class InternalServerError extends CustomError {
   constructor(message: string = "Internal Server Error") {
     super(message, 500);
