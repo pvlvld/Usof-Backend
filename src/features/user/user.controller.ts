@@ -54,20 +54,14 @@ class UserController {
 
   // TODO: Filter sensitive data
   public async getUserById(req: Request, res: Response, next: NextFunction) {
-    const { user_id } = req.params;
-    if (!user_id || isNaN(Number(user_id))) {
-      return res.status(400).json({
-        errors: [
-          {
-            property: "user_id",
-            constraints: { isNumber: "user_id must be a number" }
-          }
-        ]
-      });
+    const dto = plainToInstance(GetUserByIdDTO, req.params);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     try {
-      const user = await this.userService.getUserById({ user_id: +user_id });
+      const user = await this.userService.getUserById(dto);
       res.status(200).json(user);
     } catch (err) {
       next(err);
