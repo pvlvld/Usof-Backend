@@ -24,7 +24,6 @@ export class RegisterDto {
     message: "passwordConfirmation must match password"
   })
   @ValidateIf((o) => o.password !== undefined)
-  @IsOptional()
   passwordConfirmation!: string;
 
   @IsEmail()
