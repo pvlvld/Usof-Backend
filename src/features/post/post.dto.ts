@@ -6,7 +6,6 @@ import {
   Min,
   MinLength
 } from "class-validator";
-import { UserIdDTO } from "../user/user.dto.js";
 
 export class PostIdDTO {
   @Min(1)
@@ -21,7 +20,7 @@ export class CreatePostCommentDTO extends PostIdDTO {
   content!: string;
 }
 
-export class CreatePostDTO extends UserIdDTO {
+export class CreatePostDTO {
   @MinLength(1)
   @MaxLength(200)
   @IsString()
@@ -48,8 +47,20 @@ export class PostCommentIdDTO {
 }
 
 /** Post creator only */
-export class PostUpdateDTO extends CreatePostDTO {
-  @Min(1)
-  @IsInt()
-  post_id!: number;
+export class PostUpdateDTO extends PostIdDTO {
+  @MinLength(1)
+  @MaxLength(200)
+  @IsString()
+  @IsOptional()
+  title!: string;
+
+  @MinLength(1)
+  @MaxLength(5000)
+  @IsString()
+  @IsOptional()
+  content!: string;
+
+  @IsInt({ each: true })
+  @IsOptional()
+  categories!: number[];
 }
