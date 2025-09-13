@@ -48,4 +48,8 @@ export class PostCommentIdDTO {
 }
 
 /** Post creator only */
-export class PostUpdateDTO extends CreatePostDTO {}
+export class PostUpdateDTO extends CreatePostDTO {
+  @Min(1)
+  @IsInt()
+  post_id!: number;
+}
