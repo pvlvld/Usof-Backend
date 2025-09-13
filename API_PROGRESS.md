@@ -36,8 +36,8 @@ Additional:
 - - [x]  Additional: Resize & compress
 - - [x]  Additional: Convert all to webp
 - - [x]  Additional: Allow animated avatars for donators
-- [ ]  PATCH /api/users/:user_id update user data
-- - [ ]  Additional: Partial update?
+- [x]  PATCH /api/users/:user_id update user data
+- - [x]  Additional: Partial update?
 - [x]  DELETE - /api/users/:user_id delete user
 - - [x] Additional: soft delete
 
