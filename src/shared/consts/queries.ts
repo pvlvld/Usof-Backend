@@ -10,8 +10,8 @@ export const QUERIES = Object.freeze({
     GET_BY_ID: "SELECT * FROM user WHERE id = ?",
     /** limit, offset */
     GET_PAGINATED: "SELECT * FROM user LIMIT ? OFFSET ?",
-    /**login, email, password_hash, password_salt, full_name, avatar, rating, role, id */
-    UPDATE: `UPDATE user SET login = ?, email = ?, password_hash = ?, password_salt = ?, full_name = ?, avatar = ?, rating = ?, role = ? WHERE id = ?`,
+    /**login, password_hash, password_salt, full_name, email, email_verified, avatar, rating, role, created_at, updated_at, banned_until, ban_reason, deleted_at, id */
+    UPDATE: `UPDATE user SET login = ?, password_hash = ?, password_salt = ?, full_name = ?, email = ?, email_verified = ?, avatar = ?, rating = ?, role = ?, created_at = ?, updated_at = ?, banned_until = ?, ban_reason = ?, deleted_at = ? WHERE id = ?`,
     /** email */
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
     /** login */

@@ -74,11 +74,15 @@ class UserService {
       throw new NotFoundError("User not found");
     }
 
-    const newUserData = { ...currentUserData, ...dto };
-
-    const newUser = await this.userModel.updateUser(
-      newUserData as Partial<IUserModel>
-    );
+    // Only overwrite fields from dto if they are not undefined
+    const newUserData = { ...currentUserData };
+    for (const key of Object.keys(dto)) {
+      const value = (dto as any)[key];
+      if (value !== undefined) {
+        (newUserData as any)[key] = value;
+      }
+    }
+    const newUser = await this.userModel.updateUser(newUserData);
 
     if (!newUser) {
       throw new InternalServerError("Failed to update user");

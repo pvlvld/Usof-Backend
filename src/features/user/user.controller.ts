@@ -11,7 +11,7 @@ import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
 import { UserService } from "./user.service.js";
 import { plainToInstance } from "class-transformer";
 import { UserModel } from "./user.model.js";
-import { ForbiddenError } from "adminjs";
+import { ForbiddenError } from "../../shared/consts/errors.js";
 
 class UserController {
   private userService: UserService;
@@ -75,11 +75,30 @@ class UserController {
     req.body ??= {};
     req.body.user_id = user_id;
 
-    const userData = plainToInstance(UpdateUserDataDTO, req.body);
-    const errors = await validate(userData);
+    const userData = plainToInstance(UpdateUserDataDTO, req.body, {
+      exposeUnsetFields: false
+    });
+
+    const errors = await validate(userData, {
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      skipMissingProperties: true
+    });
 
     if (req.user?.id !== userData.user_id && req.user?.role !== "admin") {
       return next(new ForbiddenError("You can only update your own profile"));
+    }
+
+    if (req.user?.role !== "admin") {
+      if (userData.role) {
+        return next(new ForbiddenError("Only admins can change user roles"));
+      }
+      if (userData.banned_until || userData.ban_reason) {
+        return next(new ForbiddenError("Only admins can ban users"));
+      }
+      if (userData.deleted_at) {
+        return next(new ForbiddenError("Only admins can delete users"));
+      }
     }
 
     if (errors.length > 0) {

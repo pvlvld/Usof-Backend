@@ -1,5 +1,6 @@
 import { Type } from "class-transformer";
 import {
+  IsDate,
   IsEmail,
   IsEmpty,
   IsIn,
@@ -13,6 +14,7 @@ import {
   MinLength,
   ValidateIf
 } from "class-validator";
+import type { IUserModel } from "./user.model.js";
 
 export type IUserRole = "user" | "admin" | "donator" | "moderator";
 
@@ -75,6 +77,25 @@ export class UploadUserAvatarDTO {
   avatar!: string;
 }
 
+class UserDTO implements IUserModel {
+  id!: number;
+  login!: string;
+  password_hash!: string;
+  password_salt!: string;
+  full_name!: string;
+  email!: string;
+  email_verified!: boolean;
+  avatar!: string;
+  rating!: number;
+  role!: IUserRole;
+
+  created_at!: Date;
+  updated_at!: Date;
+  banned_until!: Date | null;
+  ban_reason!: string | null;
+  deleted_at!: Date | null;
+}
+
 export class UpdateUserDataDTO {
   @Min(1)
   @Type(() => Number)
@@ -115,10 +136,29 @@ export class UpdateUserDataDTO {
   @IsOptional()
   avatar?: string;
 
+  @IsInt()
+  @IsOptional()
+  rating?: number;
+
   @MaxLength(100)
   @IsString()
   @IsOptional()
   fullName?: string;
+
+  @IsDate()
+  @Type(() => Date)
+  @IsOptional()
+  banned_until?: Date | null;
+
+  @MaxLength(255)
+  @IsString()
+  @IsOptional()
+  ban_reason?: string | null;
+
+  @IsDate()
+  @Type(() => Date)
+  @IsOptional()
+  deleted_at?: Date | null;
 }
 
 export class DeleteUserDTO {

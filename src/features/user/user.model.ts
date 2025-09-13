@@ -5,7 +5,8 @@ import type {
   DeleteUserDTO,
   GetUserByIdDTO,
   IUserRole,
-  UnbanUserDTO
+  UnbanUserDTO,
+  UpdateUserDataDTO
 } from "./user.dto.js";
 import { QUERIES } from "../../shared/consts/queries.js";
 import {
@@ -87,21 +88,31 @@ export class UserModel {
     }
   }
 
-  public async updateUser(dto: Partial<IUserModel>) {
+  public async updateUser(user: IUserModel) {
     try {
+      if (!user.id) {
+        throw new BadRequestError("User ID is required for update");
+      }
+
       const [res] = await this.db.query<ResultSetHeader>(QUERIES.USER.UPDATE, [
-        dto.login,
-        dto.email,
-        dto.password_hash,
-        dto.password_salt,
-        dto.full_name,
-        dto.avatar,
-        dto.rating,
-        dto.role,
-        dto.id
+        user.login,
+        user.password_hash,
+        user.password_salt,
+        user.full_name,
+        user.email,
+        user.email_verified,
+        user.avatar,
+        user.rating,
+        user.role,
+        user.created_at,
+        user.updated_at,
+        user.banned_until,
+        user.ban_reason,
+        user.deleted_at,
+        user.id
       ]);
       if (res.affectedRows > 0) {
-        return { user_id: dto.id };
+        return { user_id: user.id };
       }
     } catch (error) {
       console.error("Error updating user:", error);
@@ -249,23 +260,4 @@ export class UserModel {
       throw new InternalServerError("Database error occurred");
     }
   }
-}
-
-// Do I need it with DTO's?
-export class User implements IUserModel {
-  constructor(
-    public id: number,
-    public login: string,
-    public password_hash: string,
-    public password_salt: string,
-    public full_name: string,
-    public email: string,
-    public is_email_verified: boolean,
-    public avatar: string,
-    public rating: number,
-    public role: IUserRole,
-    public created_at: Date,
-    public updated_at: Date,
-    public banned_until: Date | null
-  ) {}
 }
