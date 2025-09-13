@@ -48,13 +48,20 @@ Aditional:
 - [x]  POST - /api/users/:user_id/unban unban user
 
 # Post
-- [ ]  POST /api/posts/:post_id/comments create a new comment, required parameter is [content]
+- [ ]  GET /api/posts get all posts. This endpoint doesn't require any role, it is public. If there are too many posts, you must implement pagination. Page size is up to you.
+- [ ]  GET /api/posts/:post_id get specified post data. Endpoint is public.
+- [ ]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
+public.
+- [ ]  POST /api/posts/:post_id/comments create a new comment, required parameter is
+[content]
 - [ ]  GET /api/posts/:post_id/categories get all categories associated with the specified post
 - [ ]  GET /api/posts/:post_id/like get all likes under the specified post
 - [ ]  POST /api/posts/ create a new post, required parameters are [title, content, categories]
 - [ ]  POST /api/posts/:post_id/like create a new like under a post
-- [ ]  PATCH /api/posts/:post_id update the specified post (its title, body or category). It's accessible only for the creator of the post
-- [ ]  DELETE /api/posts/:post_id delete a post 
+- [ ]  PATCH /api/posts/:post_id update the specified post (its title, body or category).
+- - [ ]  It's accessible only for the creator of the post
+- [ ]  DELETE /api/posts/:post_id delete a post
+- - [ ] Additional: soft delete
 - [ ]  DELETE /api/posts/:post_id/like delete a like under a post
 
 Don't forget about a feature that allows locking posts/comments. Think about how you will implement it.
