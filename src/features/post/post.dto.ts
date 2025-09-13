@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import {
   IsInt,
   IsOptional,
@@ -9,6 +10,7 @@ import {
 
 export class PostIdDTO {
   @Min(1)
+  @Type(() => Number)
   @IsInt()
   post_id!: number;
 }
