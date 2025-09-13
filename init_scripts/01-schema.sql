@@ -36,6 +36,7 @@ CREATE TABLE post (
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     status ENUM('active', 'locked') DEFAULT 'active',
+    rating INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
@@ -129,17 +130,32 @@ BEGIN
     DECLARE target_user_id INT;
     IF NEW.post_id IS NOT NULL THEN
         SELECT user_id INTO target_user_id FROM post WHERE id = NEW.post_id;
+        IF NEW.is_like THEN
+            UPDATE user
+            SET rating = rating + 1
+            WHERE id = target_user_id;
+            UPDATE post
+            SET rating = rating + 1
+            WHERE id = NEW.post_id;
+        ELSE
+            UPDATE user
+            SET rating = rating - 1
+            WHERE id = target_user_id;
+            UPDATE post
+            SET rating = rating - 1
+            WHERE id = NEW.post_id;
+        END IF;
     ELSEIF NEW.comment_id IS NOT NULL THEN
         SELECT user_id INTO target_user_id FROM comment WHERE id = NEW.comment_id;
-    END IF;
-    IF NEW.is_like THEN
-        UPDATE user
-        SET rating = rating + 1
-        WHERE id = target_user_id;
-    ELSE
-        UPDATE user
-        SET rating = rating - 1
-        WHERE id = target_user_id;
+        IF NEW.is_like THEN
+            UPDATE user
+            SET rating = rating + 1
+            WHERE id = target_user_id;
+        ELSE
+            UPDATE user
+            SET rating = rating - 1
+            WHERE id = target_user_id;
+        END IF;
     END IF;
 END$$
 
