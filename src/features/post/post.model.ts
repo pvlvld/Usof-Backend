@@ -1,7 +1,25 @@
-import type { ResultSetHeader } from "mysql2";
+import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import Database from "../../shared/database/index.js";
 import type { CreatePostDTO, PostUpdateDTO } from "./post.dto.js";
 import { QUERIES } from "../../shared/consts/queries.js";
+
+type IPostStatus = "active" | "locked";
+
+type IPostModel = {
+  id: number;
+  user_id: number;
+  title: string;
+  content: string;
+  status: IPostStatus;
+  rating: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date | null;
+};
+
+type IPostFullDataModel = IPostModel & {
+  categories: { id: number; title: string }[];
+};
 
 export class PostModel {
   private static instance: PostModel | null = null;
@@ -58,6 +76,37 @@ export class PostModel {
       return { ...dto };
     } catch (error) {
       console.error("Error updating post:", error);
+      return null;
+    }
+  }
+
+  public async deletePost(postId: number) {
+    try {
+      const [result] = await this.db.query<ResultSetHeader>(
+        QUERIES.POST.DELETE,
+        [postId]
+      );
+      if (result.affectedRows === 0) {
+        return null;
+      }
+      return { postId };
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      return null;
+    }
+  }
+
+  public async getPostById(postId: number) {
+    try {
+      const [rows] = await this.db.query<RowDataPacket[]>(QUERIES.POST.READ, [
+        postId
+      ]);
+
+      return Array.isArray(rows) && rows.length > 0 && rows[0]
+        ? (rows[0] as IPostModel)
+        : null;
+    } catch (error) {
+      console.error("Error getting post by ID:", error);
       return null;
     }
   }
