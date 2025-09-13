@@ -3,6 +3,7 @@ import express, {
   type Request,
   type Response
 } from "express";
+import { postController } from "./post.controller.js";
 
 const postRouter = express.Router();
 
@@ -23,7 +24,7 @@ postRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
 postRouter.get(
   "/:post_id",
   (req: Request, res: Response, next: NextFunction) => {
-    res.send(`Post with id ${req.params.post_id}`);
+    postController.getPostById(req, res, next);
   }
 );
 
