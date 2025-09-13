@@ -3,7 +3,7 @@ import {
   Equals,
   IsEmail,
   IsIn,
-  IsNumber,
+  IsInt,
   IsOptional,
   IsString,
   Max,
@@ -18,14 +18,14 @@ export type IUserRole = "user" | "admin" | "donator" | "moderator";
 export class GetUsersDto {
   @Min(1)
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   page: number = 1;
 
   @Min(1)
   @Max(100)
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   @IsOptional()
   limit: number = 10;
 }
@@ -33,7 +33,7 @@ export class GetUsersDto {
 export class GetUserByIdDTO {
   @Min(1)
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   user_id!: number;
 }
 
@@ -67,7 +67,7 @@ export class CreateUserDTO {
 
 export class UploadUserAvatarDTO {
   @Min(1)
-  @IsNumber()
+  @IsInt()
   user_id!: number;
 
   @MaxLength(100)
@@ -78,7 +78,7 @@ export class UploadUserAvatarDTO {
 export class UpdateUserDataDTO {
   @Min(1)
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   user_id!: number;
 
   @MaxLength(100)
@@ -124,13 +124,13 @@ export class UpdateUserDataDTO {
 
 export class DeleteUserDTO {
   @Min(1)
-  @IsNumber()
+  @IsInt()
   user_id!: number;
 }
 
 export class BanUserDTO {
   @Min(1)
-  @IsNumber()
+  @IsInt()
   user_id!: number;
 
   @MaxLength(100)
@@ -144,6 +144,6 @@ export class BanUserDTO {
 
 export class UnbanUserDTO {
   @Min(1)
-  @IsNumber()
+  @IsInt()
   user_id!: number;
 }
