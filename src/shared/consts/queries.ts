@@ -119,6 +119,9 @@ export const QUERIES = Object.freeze({
     /** post_id, category_id */
     ADD_CATEGORY:
       "INSERT INTO post_categories (post_id, category_id) VALUES (?, ?)",
+    /** [[post_id, category_id], ...] */
+    ADD_CATEGORIES:
+      "INSERT INTO post_categories (post_id, category_id) VALUES ?",
     /** post_id, category_id */
     REMOVE_CATEGORY:
       "DELETE FROM post_categories WHERE post_id = ? AND category_id = ?",
