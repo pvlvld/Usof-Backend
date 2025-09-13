@@ -85,8 +85,9 @@ postRouter.patch(
 
 postRouter.delete(
   "/:post_id",
+  authenticateMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
-    res.send(`Deleted post ${req.params.post_id}`);
+    postController.deletePost(req, res, next);
   }
 );
 
