@@ -31,10 +31,8 @@ export class CreatePostDTO {
   @IsString()
   content!: string;
 
-  @MinLength(1, { each: true })
-  @MaxLength(20, { each: true })
-  @IsString({ each: true })
-  categories!: string[];
+  @IsInt({ each: true })
+  categories!: number[];
 }
 
 export class PostLikeDislikeDTO extends PostIdDTO {
