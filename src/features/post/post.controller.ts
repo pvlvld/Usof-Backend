@@ -20,9 +20,14 @@ class PostController {
 
     try {
       const post = await this.postService.getPostById(dto);
-      res.json(post);
+
+      if (post.deleted_at && req.user?.role !== "admin") {
+        return res.status(410).json({ message: "Post has been deleted" });
+      }
+
+      return res.json(post);
     } catch (error) {
-      next(error);
+      return next(error);
     }
   }
 }
