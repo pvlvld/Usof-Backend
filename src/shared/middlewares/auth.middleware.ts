@@ -18,7 +18,8 @@ declare global {
 export function authenticateMiddleware(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  isOptional: boolean = false
 ) {
   try {
     let token = "";
@@ -39,12 +40,16 @@ export function authenticateMiddleware(
       id: +payload.sub,
       role: payload.role
     };
-    if (!req.user.id || !req.user.role) {
+    if (isOptional && (!req.user.id || !req.user.role)) {
       throw new UnauthorizedError("Invalid token payload");
     }
     next();
   } catch (err) {
-    next(new UnauthorizedError("Invalid or expired access token"));
+    if (isOptional) {
+      return next();
+    } else {
+      next(new UnauthorizedError("Invalid or expired access token"));
+    }
   }
 }
 
