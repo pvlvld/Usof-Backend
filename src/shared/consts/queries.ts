@@ -103,7 +103,16 @@ export const QUERIES = Object.freeze({
     /** user_id, title, content */
     CREATE: "INSERT INTO post (user_id, title, content) VALUES (?, ?, ?)",
     /** id */
-    READ: "SELECT * FROM post WHERE id = ?",
+    READ: `
+      SELECT
+        p.*,
+        JSON_ARRAYAGG(JSON_OBJECT('id', c.id, 'title', c.title)) AS categories
+      FROM post p
+      LEFT JOIN post_categories pc ON p.id = pc.post_id
+      LEFT JOIN category c ON pc.category_id = c.id
+      WHERE p.id = ?
+      GROUP BY p.id;
+    `,
     /** title, content, status, id */
     UPDATE: "UPDATE post SET title = ?, content = ?, status = ? WHERE id = ?",
     /** id */
