@@ -18,6 +18,12 @@ import type { IUserModel } from "./user.model.js";
 
 export type IUserRole = "user" | "admin" | "donator" | "moderator";
 
+export class UserIdDTO {
+  @Min(1)
+  @IsInt()
+  user_id!: number;
+}
+
 export class GetUsersDto {
   @Min(1)
   @Type(() => Number)
