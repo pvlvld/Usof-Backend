@@ -59,6 +59,7 @@ public.
 - [ ]  GET /api/posts/:post_id/like get all likes under the specified post
 - [ ]  POST /api/posts/ create a new post, required parameters are [title, content, categories]
 - [ ]  POST /api/posts/:post_id/like create a new like under a post
+- [ ]  Additional: POST /api/posts/:post_id/dislike create a new dislike under a post
 - [ ]  PATCH /api/posts/:post_id update the specified post (its title, body or category).
 - - [ ]  It's accessible only for the creator of the post
 - [x]  DELETE /api/posts/:post_id delete a post
@@ -95,6 +96,7 @@ Optional:
 - [ ]  GET /api/comments/:comment_id get specified comment data
 - [ ]  GET /api/comments/:comment_id/like get all likes under the specified comment
 - [ ]  POST /api/comments/:comment_id/like create a new like under a comment
+- [ ]  Additional: POST /api/comments/:comment_id/dislike create a new dislike under a comment
 - [ ]  PATCH /api/comments/:comment_id update specified comment data
 - [ ]  DELETE /api/comments/:comment_id delete a comment
 - [ ]  DELETE /api/comments/:comment_id/like delete a like under a comment
