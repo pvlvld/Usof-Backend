@@ -9,7 +9,8 @@ import {
   Max,
   MaxLength,
   Min,
-  MinLength
+  MinLength,
+  ValidateIf
 } from "class-validator";
 
 export type IUserRole = "user" | "admin" | "donator" | "moderator";
@@ -47,9 +48,11 @@ export class CreateUserDTO {
   @IsString()
   password!: string;
 
-  @MinLength(6)
-  @MaxLength(100)
-  @IsString()
+  @Equals("password", {
+    message: "passwordConfirmation must match password"
+  })
+  @ValidateIf((o) => o.password !== undefined)
+  @IsOptional()
   passwordConfirmation!: string;
 
   @IsEmail()
@@ -91,11 +94,14 @@ export class UpdateUserDataDTO {
   @MinLength(6)
   @MaxLength(100)
   @IsString()
+  @IsOptional()
   password!: string;
 
-  @MinLength(6)
-  @MaxLength(100)
-  @IsString()
+  @Equals("password", {
+    message: "passwordConfirmation must match password"
+  })
+  @ValidateIf((o) => o.password !== undefined)
+  @IsOptional()
   passwordConfirmation!: string;
 
   @IsIn(["user", "admin", "donator"], {
