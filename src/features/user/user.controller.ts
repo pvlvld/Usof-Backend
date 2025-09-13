@@ -11,6 +11,7 @@ import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
 import { UserService } from "./user.service.js";
 import { plainToInstance } from "class-transformer";
 import { UserModel } from "./user.model.js";
+import { ForbiddenError } from "adminjs";
 
 class UserController {
   private userService: UserService;
@@ -76,6 +77,10 @@ class UserController {
 
     const userData = plainToInstance(UpdateUserDataDTO, req.body);
     const errors = await validate(userData);
+
+    if (req.user?.id !== userData.user_id && req.user?.role !== "admin") {
+      return next(new ForbiddenError("You can only update your own profile"));
+    }
 
     if (errors.length > 0) {
       return res.status(400).json({ errors });

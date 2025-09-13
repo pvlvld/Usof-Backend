@@ -20,6 +20,7 @@ export class RegisterDto {
   @IsString()
   password!: string;
 
+  // https://github.com/typestack/class-validator/issues/486
   @ValidateIf((o) => o.password !== o.passwordConfirmation)
   @IsNotEmpty()
   @IsEmpty({ message: "passwordConfirmation must match password" })
@@ -57,6 +58,7 @@ export class PasswordResetDto {
   @IsString()
   password!: string;
 
+  // https://github.com/typestack/class-validator/issues/486
   @ValidateIf((o) => o.password !== o.passwordConfirmation)
   @IsNotEmpty()
   @IsEmpty({ message: "passwordConfirmation must match password" })
