@@ -10,6 +10,9 @@ This document provides an overview of the API development process, listing requi
 - **Optional** — Recommended extra feature
 - All other items are from the main requirements
 
+# TODO
+- [ ]  Remove target from validation errors
+
 # Auth
 - [x]  POST - /api/auth/register - registration of a new user, required parameters are [login, password, password confirmation, email]
 - [x]  POST - /api/auth/login - log in user, required parameters are [login, email, password]. Only users with a confirmed email can sign in
