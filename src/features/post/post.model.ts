@@ -1,6 +1,6 @@
 import type { ResultSetHeader } from "mysql2";
 import Database from "../../shared/database/index.js";
-import type { CreatePostDTO } from "./post.dto.js";
+import type { CreatePostDTO, PostUpdateDTO } from "./post.dto.js";
 import { QUERIES } from "../../shared/consts/queries.js";
 
 export class PostModel {
@@ -17,11 +17,11 @@ export class PostModel {
     return this.instance;
   }
 
-  public async createPost(dto: CreatePostDTO) {
+  public async createPost(userId: number, dto: CreatePostDTO) {
     let result: ResultSetHeader;
     try {
       [result] = await this.db.query<ResultSetHeader>(QUERIES.POST.CREATE, [
-        dto.user_id,
+        userId,
         dto.title,
         dto.content
       ]);
@@ -44,5 +44,21 @@ export class PostModel {
       console.error("Error adding post categories:", error);
     }
     return { post_id: result.insertId, ...dto };
+  }
+
+  public async updatePost(postId: number, userId: number, dto: CreatePostDTO) {
+    try {
+      const [result] = await this.db.query<ResultSetHeader>(
+        QUERIES.POST.UPDATE,
+        [dto.title, dto.content, userId, postId]
+      );
+      if (result.affectedRows === 0) {
+        return null;
+      }
+      return { ...dto };
+    } catch (error) {
+      console.error("Error updating post:", error);
+      return null;
+    }
   }
 }
