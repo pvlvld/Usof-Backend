@@ -4,7 +4,9 @@ import {
   MinLength,
   MaxLength,
   IsOptional,
-  Length
+  Length,
+  ValidateIf,
+  Equals
 } from "class-validator";
 
 export class RegisterDto {
@@ -18,9 +20,11 @@ export class RegisterDto {
   @IsString()
   password!: string;
 
-  @MinLength(6)
-  @MaxLength(100)
-  @IsString()
+  @Equals("password", {
+    message: "passwordConfirmation must match password"
+  })
+  @ValidateIf((o) => o.password !== undefined)
+  @IsOptional()
   passwordConfirmation!: string;
 
   @IsEmail()
@@ -35,6 +39,7 @@ export class LoginDto {
   @IsEmail()
   email!: string;
 
+  @MaxLength(100)
   @MinLength(6)
   @IsString()
   password!: string;
@@ -49,12 +54,16 @@ export class PasswordResetDto {
   @IsString()
   confirm_token!: string;
 
+  @MaxLength(100)
   @MinLength(6)
   @IsString()
   password!: string;
 
-  @MinLength(6)
-  @IsString()
+  @Equals("password", {
+    message: "passwordConfirmation must match password"
+  })
+  @ValidateIf((o) => o.password !== undefined)
+  @IsOptional()
   passwordConfirmation!: string;
 }
 
