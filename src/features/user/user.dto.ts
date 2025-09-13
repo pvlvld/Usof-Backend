@@ -1,9 +1,10 @@
 import { Type } from "class-transformer";
 import {
-  Equals,
   IsEmail,
+  IsEmpty,
   IsIn,
   IsInt,
+  IsNotEmpty,
   IsOptional,
   IsString,
   Max,
@@ -48,11 +49,9 @@ export class CreateUserDTO {
   @IsString()
   password!: string;
 
-  @Equals("password", {
-    message: "passwordConfirmation must match password"
-  })
-  @ValidateIf((o) => o.password !== undefined)
-  @IsOptional()
+  @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  @IsNotEmpty()
+  @IsEmpty({ message: "passwordConfirmation must match password" })
   passwordConfirmation!: string;
 
   @IsEmail()
@@ -97,11 +96,9 @@ export class UpdateUserDataDTO {
   @IsOptional()
   password!: string;
 
-  @Equals("password", {
-    message: "passwordConfirmation must match password"
-  })
-  @ValidateIf((o) => o.password !== undefined)
-  @IsOptional()
+  @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  @IsNotEmpty()
+  @IsEmpty({ message: "passwordConfirmation must match password" })
   passwordConfirmation!: string;
 
   @IsIn(["user", "admin", "donator"], {

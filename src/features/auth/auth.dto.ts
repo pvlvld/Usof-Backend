@@ -3,10 +3,10 @@ import {
   IsString,
   MinLength,
   MaxLength,
-  IsOptional,
   Length,
   ValidateIf,
-  Equals
+  IsNotEmpty,
+  IsEmpty
 } from "class-validator";
 
 export class RegisterDto {
@@ -20,10 +20,9 @@ export class RegisterDto {
   @IsString()
   password!: string;
 
-  @Equals("password", {
-    message: "passwordConfirmation must match password"
-  })
-  @ValidateIf((o) => o.password !== undefined)
+  @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  @IsNotEmpty()
+  @IsEmpty({ message: "passwordConfirmation must match password" })
   passwordConfirmation!: string;
 
   @IsEmail()
@@ -58,11 +57,9 @@ export class PasswordResetDto {
   @IsString()
   password!: string;
 
-  @Equals("password", {
-    message: "passwordConfirmation must match password"
-  })
-  @ValidateIf((o) => o.password !== undefined)
-  @IsOptional()
+  @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  @IsNotEmpty()
+  @IsEmpty({ message: "passwordConfirmation must match password" })
   passwordConfirmation!: string;
 }
 
