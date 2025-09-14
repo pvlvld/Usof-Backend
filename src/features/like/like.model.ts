@@ -80,6 +80,13 @@ export class LikeModel {
     postId: number | null,
     commentId: number | null
   ): Promise<any> {
-    return this.db.query(QUERIES.LIKE.DELETE, [userId, postId, commentId]);
+    if (postId) {
+      return this.db.query(QUERIES.LIKE.DELETE_POST_LIKE, [userId, postId]);
+    } else if (commentId) {
+      return this.db.query(QUERIES.LIKE.DELETE_COMMENT_LIKE, [
+        userId,
+        commentId
+      ]);
+    }
   }
 }

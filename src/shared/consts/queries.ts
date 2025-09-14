@@ -63,9 +63,12 @@ export const QUERIES = Object.freeze({
     /** is_like, user_id, post_id, comment_id */
     UPDATE:
       "UPDATE like_dislike SET is_like = ? WHERE user_id = ? AND post_id = ? AND comment_id = ?",
-    /** user_id, post_id, comment_id */
-    DELETE:
-      "DELETE FROM like_dislike WHERE user_id = ? AND post_id = ? AND comment_id = ?",
+    /** user_id, post_id */
+    DELETE_POST_LIKE:
+      "DELETE FROM like_dislike WHERE user_id = ? AND post_id = ?",
+    /** user_id, comment_id */
+    DELETE_COMMENT_LIKE:
+      "DELETE FROM like_dislike WHERE user_id = ? AND comment_id = ?",
     /** user_id, post_id, comment_id, is_like */
     UPSERT: `
       INSERT INTO like_dislike (user_id, post_id, comment_id, is_like)
