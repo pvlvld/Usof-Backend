@@ -56,6 +56,7 @@ postRouter.get(
 );
 
 postRouter.use("/:post_id/like", likeRouter);
+postRouter.use("/:post_id/dislike", likeRouter);
 
 postRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
   const { title, content, categories } = req.body;
