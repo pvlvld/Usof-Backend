@@ -66,7 +66,7 @@ public.
 - - [x] Additional: Soft delete
 - - [x] Additional: Users can delete only their own posts
 - - [x] Additional: Admins can delete any post
-- [ ]  DELETE /api/posts/:post_id/like delete a like under a post
+- [x]  DELETE /api/posts/:post_id/like delete a like under a post
 
 Don't forget about a feature that allows locking posts/comments. Think about how you will implement it.
 You also must implement post sorting and filtering.
