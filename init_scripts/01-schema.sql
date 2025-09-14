@@ -98,7 +98,9 @@ CREATE TABLE like_dislike (
     FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
     FOREIGN KEY (comment_id) REFERENCES comment(id) ON DELETE CASCADE,
     CHECK (post_id IS NOT NULL OR comment_id IS NOT NULL),
-    CHECK (NOT (post_id IS NOT NULL AND comment_id IS NOT NULL))
+    CHECK (NOT (post_id IS NOT NULL AND comment_id IS NOT NULL)),
+    UNIQUE KEY uniq_user_post (user_id, post_id),
+    UNIQUE KEY uniq_user_comment (user_id, comment_id)
 );
 CREATE INDEX idx_like_dislike_user_id ON like_dislike (user_id);
 CREATE INDEX idx_like_dislike_post_id ON like_dislike (post_id);
