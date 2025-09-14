@@ -31,6 +31,7 @@ Additional:
 - - [x]  Additional: ?limit=
 - - [x]  Additional: ?sort=
 - - [x]  Additional: ?order=
+- - [x]  Additional: exclude soft deleted users
 - [x]  GET - /api/users/:user_id get specified user data
 - [x]  POST - /api/users create a new user, required parameters are [login, password, password confirmation, email, role].
 - - [x]  Admins only

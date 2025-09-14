@@ -15,7 +15,7 @@ export const QUERIES = Object.freeze({
       limit: number,
       offset: number
     ) =>
-      `SELECT * FROM user ORDER BY ${order_by} ${order_direction} LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT * FROM user WHERE deleted_at IS NULL ORDER BY ${order_by} ${order_direction} LIMIT ${limit} OFFSET ${offset}`,
     /**login, password_hash, password_salt, full_name, email, email_verified, avatar, rating, role, created_at, updated_at, banned_until, ban_reason, deleted_at, id */
     UPDATE: `UPDATE user SET login = ?, password_hash = ?, password_salt = ?, full_name = ?, email = ?, email_verified = ?, avatar = ?, rating = ?, role = ?, created_at = ?, updated_at = ?, banned_until = ?, ban_reason = ?, deleted_at = ? WHERE id = ?`,
     /** email */
