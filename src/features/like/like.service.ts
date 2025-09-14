@@ -49,11 +49,10 @@ export class LikeService {
   }
 
   public async handleUnsetLike(
-    user: Express.UserInfo,
+    userId: number,
     postId: number | null,
     commentId: number | null
   ): Promise<LikeServiceResult> {
-    const userId = user.id;
     await this.likeModel.delete(userId, postId, commentId);
     return {
       status: 200,

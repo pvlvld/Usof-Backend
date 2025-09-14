@@ -103,7 +103,7 @@ class LikeController {
 
     try {
       const result = await this.likeService.handleUnsetLike(
-        req.user!,
+        req.user?.id!,
         Number(post_id) || null,
         Number(comment_id) || null
       );
