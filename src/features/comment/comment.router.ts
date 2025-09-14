@@ -3,6 +3,7 @@ import express, {
   type Request,
   type Response
 } from "express";
+import { likeRouter } from "../like/like.router.js";
 
 const commentRouter = express.Router();
 
@@ -14,21 +15,7 @@ commentRouter.get(
   }
 );
 
-commentRouter.get(
-  "/:comment_id/like",
-  (req: Request, res: Response, next: NextFunction) => {
-    const { comment_id } = req.params;
-    res.json({ message: `Likes for comment ${comment_id}` });
-  }
-);
-
-commentRouter.post(
-  "/:comment_id/like",
-  (req: Request, res: Response, next: NextFunction) => {
-    const { comment_id } = req.params;
-    res.json({ message: `Like added to comment ${comment_id}` });
-  }
-);
+commentRouter.use("/:comment_id/like", likeRouter);
 
 commentRouter.patch(
   "/:comment_id",
@@ -44,14 +31,6 @@ commentRouter.delete(
   (req: Request, res: Response, next: NextFunction) => {
     const { comment_id } = req.params;
     res.json({ message: `Comment ${comment_id} deleted` });
-  }
-);
-
-commentRouter.delete(
-  "/:comment_id/like",
-  (req: Request, res: Response, next: NextFunction) => {
-    const { comment_id } = req.params;
-    res.json({ message: `Like removed from comment ${comment_id}` });
   }
 );
 

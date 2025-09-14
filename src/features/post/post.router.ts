@@ -5,6 +5,7 @@ import express, {
 } from "express";
 import { postController } from "./post.controller.js";
 import { authenticateMiddleware } from "../../shared/middlewares/auth.middleware.js";
+import { likeRouter } from "../like/like.router.js";
 
 const postRouter = express.Router();
 
@@ -54,12 +55,7 @@ postRouter.get(
   }
 );
 
-postRouter.get(
-  "/:post_id/like",
-  (req: Request, res: Response, next: NextFunction) => {
-    res.send(`All likes for post ${req.params.post_id}`);
-  }
-);
+postRouter.use("/:post_id/like", likeRouter);
 
 postRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
   const { title, content, categories } = req.body;
@@ -67,13 +63,6 @@ postRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
     `Created new post with title: ${title}, content: ${content}, categories: ${categories}`
   );
 });
-
-postRouter.post(
-  "/:post_id/like",
-  (req: Request, res: Response, next: NextFunction) => {
-    res.send(`Liked post ${req.params.post_id}`);
-  }
-);
 
 // POST CREATOR ONLY
 postRouter.patch(
@@ -88,13 +77,6 @@ postRouter.delete(
   authenticateMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
     postController.deletePost(req, res, next);
-  }
-);
-
-postRouter.delete(
-  "/:post_id/like",
-  (req: Request, res: Response, next: NextFunction) => {
-    res.send(`Deleted like for post ${req.params.post_id}`);
   }
 );
 
