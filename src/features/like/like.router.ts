@@ -4,7 +4,7 @@ import express, {
   type Response
 } from "express";
 
-const likeRouter = express.Router();
+const likeRouter = express.Router({ mergeParams: true });
 
 likeRouter.post(
   "/:id/like",
