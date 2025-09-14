@@ -31,6 +31,11 @@ class LikeController {
     if (!["like", "dislike"].includes(req.body.action || "")) {
       req.body.action = "like";
     }
+
+    if (req.baseUrl.includes("/dislike")) {
+      req.body.action = "dislike";
+    }
+
     const action: ILikeAction = req.body.action;
 
     let targetType = "";
