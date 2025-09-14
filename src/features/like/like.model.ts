@@ -32,6 +32,21 @@ export class LikeModel {
     return rows[0] ? { is_like: !!rows[0]?.is_like } : null;
   }
 
+  public async findEntityLikes(
+    postId: number | null,
+    commentId: number | null
+  ): Promise<Array<{ user_id: number; is_like: boolean }>> {
+    const [rows] = await this.db.query<RowDataPacket[]>(
+      QUERIES.LIKE.READ_ENTITY_LIKES,
+      [postId, commentId]
+    );
+    if (!Array.isArray(rows)) return [];
+    return rows.map((row) => ({
+      user_id: row.user_id,
+      is_like: !!row.is_like
+    }));
+  }
+
   public async upsert(
     userId: number,
     postId: number | null,

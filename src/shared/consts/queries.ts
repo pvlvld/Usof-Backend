@@ -56,6 +56,9 @@ export const QUERIES = Object.freeze({
       "INSERT INTO like_dislike (user_id, post_id, comment_id, is_like) VALUES (?, ?, ?, ?)",
     /** user_id, post_id, comment_id */
     READ: "SELECT * FROM like_dislike WHERE user_id = ? AND post_id = ? AND comment_id = ?",
+    /** post_id, comment_id */
+    READ_ENTITY_LIKES:
+      "SELECT * FROM like_dislike WHERE post_id = ? AND comment_id = ?",
     /** is_like, user_id, post_id, comment_id */
     UPDATE:
       "UPDATE like_dislike SET is_like = ? WHERE user_id = ? AND post_id = ? AND comment_id = ?",
