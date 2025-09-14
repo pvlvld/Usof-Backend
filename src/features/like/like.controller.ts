@@ -11,6 +11,28 @@ class LikeController {
     this.likeService = LikeService.getInstance(LikeModel);
   }
 
+  public async getEntityLikes(req: Request, res: Response, next: NextFunction) {
+    const { post_id, comment_id } = req.params;
+    const target_id = parseInt(post_id ?? comment_id ?? "", 10);
+    if (isNaN(target_id)) {
+      if (!!post_id) {
+        next(new BadRequestError("Invalid post ID"));
+      } else {
+        next(new BadRequestError("Invalid comment ID"));
+      }
+    }
+
+    try {
+      const result = await this.likeService.getEntityLikes(
+        Number(post_id) || null,
+        Number(comment_id) || null
+      );
+      return res.status(200).json({ likes: result });
+    } catch (err) {
+      next(err);
+    }
+  }
+
   public async handleLikeAction(
     req: Request,
     res: Response,

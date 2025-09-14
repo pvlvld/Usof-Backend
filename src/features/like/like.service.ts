@@ -19,6 +19,17 @@ export class LikeService {
     return this.instance;
   }
 
+  public async getEntityLikes(
+    postId: number | null,
+    commentId: number | null
+  ): Promise<Array<{ user_id: number; is_like: boolean }>> {
+    if (!postId && !commentId) {
+      throw new BadRequestError("Either postId or commentId must be provided");
+    }
+
+    return this.likeModel.findEntityLikes(postId, commentId);
+  }
+
   public async handleLike(
     user: Express.UserInfo,
     postId: number | null,

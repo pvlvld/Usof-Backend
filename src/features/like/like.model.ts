@@ -36,10 +36,24 @@ export class LikeModel {
     postId: number | null,
     commentId: number | null
   ): Promise<Array<{ user_id: number; is_like: boolean }>> {
-    const [rows] = await this.db.query<RowDataPacket[]>(
-      QUERIES.LIKE.READ_ENTITY_LIKES,
-      [postId, commentId]
-    );
+    if (postId === null && commentId === null) {
+      return [];
+    }
+
+    let rows: RowDataPacket[] = [];
+
+    if (postId) {
+      [rows] = await this.db.query<RowDataPacket[]>(
+        QUERIES.LIKE.READ_POST_LIKES,
+        [postId]
+      );
+    } else {
+      [rows] = await this.db.query<RowDataPacket[]>(
+        QUERIES.LIKE.READ_COMMENT_LIKES,
+        [commentId]
+      );
+    }
+
     if (!Array.isArray(rows)) return [];
     return rows.map((row) => ({
       user_id: row.user_id,

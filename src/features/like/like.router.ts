@@ -8,6 +8,10 @@ import { authenticateMiddleware } from "../../shared/middlewares/auth.middleware
 
 const likeRouter = express.Router({ mergeParams: true });
 
+likeRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
+  likeController.getEntityLikes(req, res, next);
+});
+
 likeRouter.post(
   "/",
   authenticateMiddleware,
