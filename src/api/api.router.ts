@@ -8,8 +8,7 @@ import { likeRouter } from "../features/like/like.router.js";
 
 const apiRouter = express.Router();
 
-postRouter.use("/like", likeRouter);
-commentRouter.use("/like", likeRouter);
+commentRouter.use("/:comment_id/like", likeRouter);
 
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/users", userRouter);
