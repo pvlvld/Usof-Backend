@@ -18,7 +18,6 @@ class LikeController {
   ) {
     const { post_id, comment_id } = req.params;
     const target_id = parseInt(post_id ?? comment_id ?? "", 10);
-    console.log(post_id, comment_id, target_id);
     if (isNaN(target_id)) {
       if (!!post_id) {
         next(new BadRequestError("Invalid post ID"));
