@@ -34,6 +34,7 @@ BEGIN
         END IF;
     END IF;
 END//
+
 CREATE TRIGGER after_like_dislike_update
 AFTER UPDATE ON like_dislike
 FOR EACH ROW
@@ -70,6 +71,42 @@ BEGIN
             ELSE
                 UPDATE user SET rating = rating - 1 WHERE id = target_user_id;
             END IF;
+        END IF;
+    END IF;
+END//
+
+CREATE TRIGGER after_like_dislike_delete
+AFTER DELETE ON like_dislike
+FOR EACH ROW
+BEGIN
+    DECLARE target_user_id INT;
+    IF OLD.post_id IS NOT NULL THEN
+        SELECT user_id INTO target_user_id FROM post WHERE id = OLD.post_id;
+        IF OLD.is_like THEN
+            UPDATE user
+            SET rating = rating - 1
+            WHERE id = target_user_id;
+            UPDATE post
+            SET rating = rating - 1
+            WHERE id = OLD.post_id;
+        ELSE
+            UPDATE user
+            SET rating = rating + 1
+            WHERE id = target_user_id;
+            UPDATE post
+            SET rating = rating + 1
+            WHERE id = OLD.post_id;
+        END IF;
+    ELSEIF OLD.comment_id IS NOT NULL THEN
+        SELECT user_id INTO target_user_id FROM comment WHERE id = OLD.comment_id;
+        IF OLD.is_like THEN
+            UPDATE user
+            SET rating = rating - 1
+            WHERE id = target_user_id;
+        ELSE
+            UPDATE user
+            SET rating = rating + 1
+            WHERE id = target_user_id;
         END IF;
     END IF;
 END//
