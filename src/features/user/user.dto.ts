@@ -1,4 +1,4 @@
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import {
   IsDate,
   IsEmail,
@@ -37,6 +37,22 @@ export class GetUsersDto {
   @IsInt()
   @IsOptional()
   limit: number = 10;
+
+  @IsIn(["id", "login", "rating", "created_at", "updated_at"], {
+    message:
+      "sort must be one of the following values: id, login, rating, created_at, updated_at"
+  })
+  @IsString()
+  @IsOptional()
+  sort: "id" | "login" | "rating" | "created_at" | "updated_at" = "id";
+
+  @IsIn(["ASC", "DESC"], {
+    message: "order must be either 'ASC' or 'DESC'"
+  })
+  @Transform(({ value }) => ("" + value).toUpperCase())
+  @IsString()
+  @IsOptional()
+  order: "ASC" | "DESC" = "ASC";
 }
 
 export class GetUserByIdDTO {

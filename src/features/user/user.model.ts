@@ -4,6 +4,7 @@ import type {
   BanUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
+  GetUsersDto,
   IUserRole,
   UnbanUserDTO,
   UpdateUserDataDTO
@@ -75,11 +76,15 @@ export class UserModel {
     }
   }
 
-  public async getUsers(limit: number, offset: number) {
+  public async getUsers(
+    sort: GetUsersDto["sort"],
+    order: GetUsersDto["order"],
+    limit: GetUsersDto["limit"],
+    offset: number
+  ) {
     try {
       const [rows] = await this.db.query<RowDataPacket[]>(
-        QUERIES.USER.GET_PAGINATED,
-        [limit, offset]
+        QUERIES.USER.GET_PAGINATED(sort, order, limit, offset)
       );
       return rows;
     } catch (error) {

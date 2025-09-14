@@ -29,8 +29,8 @@ Additional:
 - [x]  GET - /api/users get all users (page)
 - - [x]  Additional: ?page=
 - - [x]  Additional: ?limit=
-- - [ ]  Additional: ?sort=
-- - [ ]  Additional: ?order=
+- - [x]  Additional: ?sort=
+- - [x]  Additional: ?order=
 - [x]  GET - /api/users/:user_id get specified user data
 - [x]  POST - /api/users create a new user, required parameters are [login, password, password confirmation, email, role].
 - - [x]  Admins only

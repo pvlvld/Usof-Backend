@@ -47,7 +47,12 @@ class UserService {
 
   public async getUsers(dto: GetUsersDto) {
     const offset = (dto.page - 1) * dto.limit;
-    return await this.userModel.getUsers(dto.limit, offset);
+    return await this.userModel.getUsers(
+      dto.sort,
+      dto.order,
+      dto.limit,
+      offset
+    );
   }
 
   public async createUser(dto: CreateUserDTO) {

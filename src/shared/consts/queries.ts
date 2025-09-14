@@ -8,8 +8,14 @@ export const QUERIES = Object.freeze({
       "INSERT INTO user (login, password_hash, password_salt, email) VALUES (?, ?, ?, ?)",
     /** id */
     GET_BY_ID: "SELECT * FROM user WHERE id = ?",
-    /** limit, offset */
-    GET_PAGINATED: "SELECT * FROM user LIMIT ? OFFSET ?",
+    /** order_by, order_direction (ASC | DESC), limit, offset */
+    GET_PAGINATED: (
+      order_by: string,
+      order_direction: "ASC" | "DESC",
+      limit: number,
+      offset: number
+    ) =>
+      `SELECT * FROM user ORDER BY ${order_by} ${order_direction} LIMIT ${limit} OFFSET ${offset}`,
     /**login, password_hash, password_salt, full_name, email, email_verified, avatar, rating, role, created_at, updated_at, banned_until, ban_reason, deleted_at, id */
     UPDATE: `UPDATE user SET login = ?, password_hash = ?, password_salt = ?, full_name = ?, email = ?, email_verified = ?, avatar = ?, rating = ?, role = ?, created_at = ?, updated_at = ?, banned_until = ?, ban_reason = ?, deleted_at = ? WHERE id = ?`,
     /** email */
