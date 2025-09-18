@@ -83,8 +83,9 @@ export const QUERIES = Object.freeze({
     `
   },
   REFRESH_TOKEN: {
-    /** user_id, token */
-    CREATE: "INSERT INTO refresh_token (user_id, token) VALUES (?, ?)",
+    /** user_id, token, ip, user_agent, expires_at */
+    CREATE:
+      "INSERT INTO refresh_token (user_id, token, ip, user_agent, expires_at) VALUES (?, ?, ?, ?, ?)",
     /** user_id */
     READ: "SELECT * FROM refresh_token WHERE user_id = ?",
     /** token, user_id */
