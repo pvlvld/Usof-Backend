@@ -88,8 +88,9 @@ export const QUERIES = Object.freeze({
       "INSERT INTO refresh_token (user_id, token, ip, user_agent, expires_at) VALUES (?, ?, ?, ?, ?)",
     /** user_id */
     READ: "SELECT * FROM refresh_token WHERE user_id = ?",
-    /** token, user_id */
-    UPDATE: "UPDATE refresh_token SET token = ? WHERE user_id = ?",
+    /** token, ip, user_agent, expires_at, user_id */
+    UPDATE:
+      "UPDATE refresh_token SET token = ?, ip = ?, user_agent = ?, expires_at = ? WHERE user_id = ?",
     /** token */
     DELETE: "DELETE FROM refresh_token WHERE token = ?"
   },
