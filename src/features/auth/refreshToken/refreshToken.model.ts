@@ -1,5 +1,16 @@
+import type { RowDataPacket } from "mysql2";
 import { QUERIES } from "../../../shared/consts/queries.js";
 import Database from "../../../shared/database/index.js";
+
+export type IRefreshTokenData = {
+  user_id: number;
+  token: string;
+  ip: string;
+  user_agent: string;
+  expires_at: Date;
+  created_at: Date;
+  updated_at: Date;
+};
 
 export class RefreshTokenModel {
   private static instance: RefreshTokenModel | null = null;
@@ -15,8 +26,20 @@ export class RefreshTokenModel {
     return this.instance;
   }
 
-  public async saveRefreshToken(user_id: number, token: string) {
-    await this.db.query(QUERIES.REFRESH_TOKEN.CREATE, [user_id, token]);
+  public async createRefreshToken(
+    user_id: number,
+    token: string,
+    ip: string,
+    user_agent: string,
+    expires_at: Date
+  ) {
+    await this.db.query(QUERIES.REFRESH_TOKEN.CREATE, [
+      user_id,
+      token,
+      ip,
+      user_agent,
+      expires_at
+    ]);
   }
 
   public async removeRefreshToken(refreshToken: string) {
@@ -24,7 +47,7 @@ export class RefreshTokenModel {
   }
 
   public async findRefreshToken(refreshToken: string) {
-    const [rows] = await this.db.query(
+    const [rows] = await this.db.query<(RowDataPacket & IRefreshTokenData)[]>(
       "SELECT * FROM refresh_token WHERE token = ?",
       [refreshToken]
     );

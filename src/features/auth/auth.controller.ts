@@ -7,7 +7,7 @@ import {
   PasswordResetDto,
   EmailVerificationDto
 } from "./auth.dto.js";
-import { AuthService } from "./auth.service.js";
+import { AuthService, type IUserLoginInfo } from "./auth.service.js";
 import { RefreshTokenModel } from "./refreshToken/refreshToken.model.js";
 import { UserService } from "../user/user.service.js";
 import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
@@ -57,8 +57,19 @@ class AuthController {
       return res.status(400).json({ errors });
     }
 
+    const userLoginInfo: IUserLoginInfo = {
+      ip: req.ip!,
+      user_agent: req.headers["user-agent"] || ""
+    };
+
+    if (!userLoginInfo.ip || !userLoginInfo.user_agent) {
+      return res
+        .status(400)
+        .json({ message: "User login information is incomplete" });
+    }
+
     try {
-      const result = await this.authService.register(dto);
+      const result = await this.authService.register(dto, userLoginInfo);
       if (result.accessToken) {
         res.cookie("accessToken", result.accessToken, {
           httpOnly: true,
@@ -230,9 +241,22 @@ class AuthController {
       return res.status(401).json({ message: "Refresh token missing" });
     }
 
+    const userLoginInfo: IUserLoginInfo = {
+      ip: req.ip!,
+      user_agent: req.headers["user-agent"] || ""
+    };
+
+    if (!userLoginInfo.ip || !userLoginInfo.user_agent) {
+      return res
+        .status(400)
+        .json({ message: "User login information is incomplete" });
+    }
+
     try {
-      // Now returns { user, accessToken, refreshToken }
-      const result = await this.authService.refreshAccessToken(refreshToken);
+      const result = await this.authService.refreshAccessToken(
+        refreshToken,
+        userLoginInfo
+      );
       if (result.accessToken) {
         res.cookie("accessToken", result.accessToken, {
           httpOnly: true,

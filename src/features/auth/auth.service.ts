@@ -20,6 +20,19 @@ import {
 } from "../../shared/services/jwt.service.js";
 import type { UserModel } from "../user/user.model.js";
 
+export type IUserLoginInfo = {
+  ip: string;
+  user_agent: string;
+};
+
+export type IRefreshTokenData = {
+  user_id: number;
+  token: string;
+  expires_at: Date;
+  created_at?: Date;
+  updated_at: Date;
+} & IUserLoginInfo;
+
 class AuthService {
   private static instance: AuthService | null = null;
   private refreshTokenModel: RefreshTokenModel;
@@ -51,7 +64,7 @@ class AuthService {
     return this.instance;
   }
 
-  public async register(dto: RegisterDto) {
+  public async register(dto: RegisterDto, userLoginInfo: IUserLoginInfo) {
     if (dto.login && !/^[A-Za-z](?:[A-Za-z0-9_]*[A-Za-z])?$/.test(dto.login)) {
       throw new BadRequestError("Invalid login format");
     }
@@ -88,7 +101,14 @@ class AuthService {
       sub: String(user.id)
     });
 
-    await this.refreshTokenModel.saveRefreshToken(user.id, refreshToken);
+    // Fill refreshTokenData with actual user_id and token
+    await this.refreshTokenModel.createRefreshToken(
+      user.id,
+      refreshToken,
+      userLoginInfo.ip,
+      userLoginInfo.user_agent,
+      new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30) // 30 days
+    );
 
     return {
       user: {
@@ -104,34 +124,37 @@ class AuthService {
 
   private async issueTokensForUser(
     user: IJwtPayloadAuth,
+    userLoginInfo: IUserLoginInfo,
     refreshTokenFromClient?: string
   ) {
     let refreshToken = refreshTokenFromClient;
-    let validRefreshToken = false;
 
     if (refreshToken) {
-      try {
-        const payload = this.jwtService.verifyRefreshToken(refreshToken);
-        if (
-          payload &&
-          payload.sub &&
-          String(user.sub) === String(payload.sub)
-        ) {
-          const storedToken = await this.refreshTokenModel.findRefreshToken(
-            refreshToken
-          );
-          if (storedToken) {
-            validRefreshToken = true;
-          }
+      const payload = this.jwtService.verifyRefreshToken(refreshToken);
+      if (payload && payload.sub && String(user.sub) === String(payload.sub)) {
+        const storedToken = await this.refreshTokenModel.findRefreshToken(
+          refreshToken
+        );
+        if (!storedToken) {
+          throw new UnauthorizedError("Refresh token not found");
         }
-      } catch (e) {
-        validRefreshToken = false;
+
+        if (storedToken.expires_at < new Date()) {
+          await this.refreshTokenModel.removeRefreshToken(refreshToken);
+          throw new UnauthorizedError("Refresh token expired");
+        }
       }
     }
 
-    if (!validRefreshToken) {
+    if (!refreshTokenFromClient) {
       refreshToken = this.jwtService.signRefreshToken(user);
-      await this.refreshTokenModel.saveRefreshToken(+user.sub, refreshToken);
+      await this.refreshTokenModel.createRefreshToken(
+        +user.sub,
+        refreshToken,
+        userLoginInfo.ip,
+        userLoginInfo.user_agent,
+        new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30) // 30 days
+      );
     }
 
     const accessToken = this.jwtService.signAccessToken(user);
@@ -142,23 +165,23 @@ class AuthService {
     };
   }
 
-  public async login(dto: LoginDto, refreshTokenFromClient?: string) {
+  public async login(dto: LoginDto, userLoginInfo: IUserLoginInfo) {
     const user = await this.userModel.findUserByLoginOrEmail(dto.login);
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    const passwordValid = this.encryptionService.compare(
+    const isPasswordValid = this.encryptionService.compare(
       dto.password,
       user.password_hash
     );
-    if (!passwordValid) {
+    if (!isPasswordValid) {
       throw new UnauthorizedError("Invalid credentials");
     }
 
     return this.issueTokensForUser(
       { sub: String(user.id), role: user.role },
-      refreshTokenFromClient
+      userLoginInfo
     );
   }
 
@@ -182,28 +205,26 @@ class AuthService {
     }
   }
 
-  public async refreshAccessToken(refreshToken: string) {
+  public async refreshAccessToken(
+    refreshToken: string,
+    userLoginInfo: IUserLoginInfo
+  ) {
+    // TODO: refactor to avoid code duplication with issueTokensForUser
     const payload = this.jwtService.verifyRefreshToken(refreshToken);
     if (!payload || !payload.sub) {
       throw new UnauthorizedError("Invalid refresh token");
     }
-
-    const storedToken = await this.refreshTokenModel.findRefreshToken(
-      refreshToken
-    );
-    if (!storedToken) {
-      throw new UnauthorizedError("Refresh token not found");
-    }
-
     const user = await this.userModel.getUserById({
       user_id: Number(payload.sub)
     });
+
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
     return this.issueTokensForUser(
       { sub: String(user.id), role: user.role },
+      userLoginInfo,
       refreshToken
     );
   }
