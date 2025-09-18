@@ -16,13 +16,12 @@ This document provides an overview of the API development process, listing requi
 # Auth
 - [x]  POST - /api/auth/register - registration of a new user, required parameters are [login, password, password confirmation, email]
 - [x]  POST - /api/auth/login - log in user, required parameters are [login, email, password]. Only users with a confirmed email can sign in
-- - [x] Additional: refresh accessToken if refreshToken is valid
 - [x]  POST - /api/auth/logout - log out authorized user
 - [ ]  POST - /api/auth/password-reset - send a reset link to user email, required parameter is [email]
 - [ ]  POST - /api/auth/password-reset/:confirm_token - confirm new password with a token from email, required parameter is a [new password]
 
 Additional:
-- [x]  POST - /token/refresh - refresh accessToken (15m) using refreshToken
+- [x]  POST - /token/refresh - refresh tokens using refreshToken
 
 
 # User
