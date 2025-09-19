@@ -40,6 +40,7 @@ export const QUERIES = Object.freeze({
     CREATE: "INSERT INTO category (name, description) VALUES (?, ?)",
     /** id */
     READ: "SELECT * FROM category WHERE id = ?",
+    GET_ALL: "SELECT * FROM category",
     /** name, description, id */
     UPDATE: "UPDATE category SET name = ?, description = ? WHERE id = ?",
     /** id */
