@@ -98,6 +98,10 @@ Optional:
 - [ ]  PATCH /api/categories/:category_id update specified category data
 - [ ]  DELETE /api/categories/:category_id delete a category
 
+
+Additional:
+- [x]  Require admin auth for the creation, update, and delete.
+
 # Comments
 - [ ]  GET /api/comments/:comment_id get specified comment data
 - [ ]  GET /api/comments/:comment_id/like get all likes under the specified comment
