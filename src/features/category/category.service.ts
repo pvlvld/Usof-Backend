@@ -44,7 +44,8 @@ class CategoryService {
       }
     });
 
-    return await this.categoryModel.updateCategory(category_id, category);
+    await this.categoryModel.updateCategory(category_id, category);
+    return category;
   }
 
   public async deleteCategory(category_id: number) {
