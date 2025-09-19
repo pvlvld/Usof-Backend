@@ -3,48 +3,59 @@ import express, {
   type Request,
   type Response
 } from "express";
+import { categoryController } from "./category.controller.js";
+import {
+  authenticateMiddleware,
+  requireAdminMiddleware
+} from "../../shared/middlewares/auth.middleware.js";
 
 const categoryRouter = express.Router();
 
-categoryRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.json({ message: "All categories" });
-});
+categoryRouter.get(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    await categoryController.getCategories(req, res, next);
+  }
+);
 
 categoryRouter.get(
   "/:category_id",
-  (req: Request, res: Response, next: NextFunction) => {
-    const { category_id } = req.params;
-    res.json({ message: `Category ${category_id}` });
+  async (req: Request, res: Response, next: NextFunction) => {
+    await categoryController.getCategoryById(req, res, next);
   }
 );
 
 categoryRouter.get(
   "/:category_id/posts",
-  (req: Request, res: Response, next: NextFunction) => {
-    const { category_id } = req.params;
-    res.json({ message: `Posts for category ${category_id}` });
+  async (req: Request, res: Response, next: NextFunction) => {
+    // await categoryController.getPostsByCategoryId(req, res, next);
   }
 );
 
-categoryRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
-  const { title } = req.body;
-  res.json({ message: `Category created`, title });
-});
+categoryRouter.post(
+  "/",
+  authenticateMiddleware,
+  requireAdminMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await categoryController.createCategory(req, res, next);
+  }
+);
 
 categoryRouter.patch(
   "/:category_id",
-  (req: Request, res: Response, next: NextFunction) => {
-    const { category_id } = req.params;
-    const { title } = req.body;
-    res.json({ message: `Category ${category_id} updated`, title });
+  authenticateMiddleware,
+  requireAdminMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await categoryController.updateCategory(req, res, next);
   }
 );
 
 categoryRouter.delete(
   "/:category_id",
-  (req: Request, res: Response, next: NextFunction) => {
-    const { category_id } = req.params;
-    res.json({ message: `Category ${category_id} deleted` });
+  authenticateMiddleware,
+  requireAdminMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await categoryController.deleteCategory(req, res, next);
   }
 );
 
