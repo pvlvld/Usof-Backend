@@ -9,7 +9,7 @@ import { CategoryModel } from "./category.model.js";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { CategoryService } from "./category.service.js";
-import { NotFoundError } from "../../shared/consts/errors.js";
+import { BadRequestError, NotFoundError } from "../../shared/consts/errors.js";
 
 class CategoryController {
   private categoryService: CategoryService;
@@ -91,6 +91,10 @@ class CategoryController {
     const errors = await validate(dataDto);
     if (errors.length > 0) {
       return res.status(400).json({ errors });
+    }
+
+    if (Object.keys(dataDto).every((key) => dataDto[key] === undefined)) {
+      return next(new BadRequestError("No valid fields to update"));
     }
 
     try {
