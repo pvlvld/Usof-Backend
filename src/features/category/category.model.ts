@@ -29,7 +29,7 @@ export class CategoryModel {
     try {
       const [result] = await this.db.query<ResultSetHeader>(
         QUERIES.CATEGORY.CREATE,
-        [dto.title]
+        [dto.title, dto.description]
       );
       return result.insertId;
     } catch (error) {
