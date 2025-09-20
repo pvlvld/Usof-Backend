@@ -58,6 +58,7 @@ class CategoryController {
   }
 
   public async createCategory(req: Request, res: Response, next: NextFunction) {
+    req.body ??= {};
     const dto: CreateCategoryDto = plainToInstance(CreateCategoryDto, req.body);
     const errors = await validate(dto);
     if (errors.length > 0) {
@@ -82,6 +83,7 @@ class CategoryController {
       return res.status(400).json({ errors: idErrors });
     }
 
+    req.body ??= {};
     const dataDto: UpdateCategoryDto = plainToInstance(
       UpdateCategoryDto,
       req.body
