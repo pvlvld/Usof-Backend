@@ -56,4 +56,13 @@ export class PostService {
 
     return result;
   }
+
+  public async getPostCategories(dto: PostIdDTO) {
+    const post = await this.postModel.getPostById(dto.post_id);
+    if (!post) {
+      throw new NotFoundError("Post not found");
+    }
+
+    return await this.categoryModel.getPostCategories(dto.post_id);
+  }
 }

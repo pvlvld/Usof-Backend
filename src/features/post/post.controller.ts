@@ -53,6 +53,25 @@ class PostController {
       return next(error);
     }
   }
+
+  public async getPostCategories(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const dto = plainToInstance(PostIdDTO, req.params);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    try {
+      const categories = await this.postService.getPostCategories(dto);
+      return res.status(200).json(categories);
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 export const postController = new PostController();

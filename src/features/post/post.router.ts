@@ -51,7 +51,7 @@ postRouter.post(
 postRouter.get(
   "/:post_id/categories",
   (req: Request, res: Response, next: NextFunction) => {
-    res.send(`All categories for post ${req.params.post_id}`);
+    postController.getPostCategories(req, res, next);
   }
 );
 
