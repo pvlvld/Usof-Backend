@@ -17,7 +17,7 @@ export class CategoryIdDto {
 }
 
 export class CreateCategoryDto {
-  @MinLength(2)
+  @MinLength(1)
   @MaxLength(50)
   @IsString()
   title!: string;
@@ -29,7 +29,7 @@ export class CreateCategoryDto {
 }
 
 export class UpdateCategoryDto {
-  @MinLength(2)
+  @MinLength(1)
   @MaxLength(50)
   @IsString()
   @IsOptional()
