@@ -65,7 +65,11 @@ export const QUERIES = Object.freeze({
     /** content, id */
     UPDATE: "UPDATE comment SET content = ? WHERE id = ?",
     /** id */
-    DELETE: "UPDATE comment SET deleted_at = NOW() WHERE id = ?"
+    DELETE: "UPDATE comment SET deleted_at = NOW() WHERE id = ?",
+    /** id */
+    ACTIVATE: "UPDATE comment SET status = 'active' WHERE id = ?",
+    /** id */
+    INACTIVATE: "UPDATE comment SET status = 'inactive' WHERE id = ?"
   },
   LIKE: {
     /** user_id, post_id, comment_id, is_like */
@@ -174,6 +178,6 @@ export const QUERIES = Object.freeze({
     /** id */
     ACTIVATE: "UPDATE post SET status = 'active' WHERE id = ?",
     /** id */
-    LOCK: "UPDATE post SET status = 'locked' WHERE id = ?"
+    INACTIVATE: "UPDATE post SET status = 'inactive' WHERE id = ?"
   }
 });

@@ -39,7 +39,7 @@ CREATE TABLE post (
     user_id INT NOT NULL, -- author
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    status ENUM('active', 'locked') DEFAULT 'active',
+    status ENUM('active', 'inactive') DEFAULT 'active',
     rating INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -79,6 +79,7 @@ CREATE TABLE comment (
     user_id INT NOT NULL,
     parent_id INT DEFAULT NULL, -- nested comment
     content TEXT NOT NULL,
+    status ENUM('active', 'inactive') DEFAULT 'active',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,

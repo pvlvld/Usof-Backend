@@ -3,7 +3,7 @@ import Database from "../../shared/database/index.js";
 import type { CreatePostDTO, PostUpdateDTO } from "./post.dto.js";
 import { QUERIES } from "../../shared/consts/queries.js";
 
-type IPostStatus = "active" | "locked";
+type IPostStatus = "active" | "inactive";
 
 type IPostModel = {
   id: number;

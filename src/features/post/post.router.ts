@@ -17,7 +17,7 @@ const postRouter = express.Router();
 // - post filtering
 // - - by category
 // - - by date interval
-// - - by status (locked?)
+// - - by status (inactive?)
 
 postRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("List of all posts. Page 1");
