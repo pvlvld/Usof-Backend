@@ -135,13 +135,18 @@ export const QUERIES = Object.freeze({
       WHERE p.id = ?
       GROUP BY p.id;
     `,
+    /** sort, order, limit, offset */
+    GET_PAGINATED: (
+      sort: string,
+      order: "ASC" | "DESC",
+      limit: number,
+      offset: number
+    ) =>
+      `SELECT * FROM post WHERE deleted_at IS NULL ORDER BY ${sort} ${order} LIMIT ${limit} OFFSET ${offset}`,
     /** title, content, status, id */
     UPDATE: "UPDATE post SET title = ?, content = ?, status = ? WHERE id = ?",
     /** id */
     DELETE: "UPDATE post SET deleted_at = NOW() WHERE id = ?",
-    /** limit, offset */
-    GET_PAGINATED:
-      "SELECT * FROM post WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT ? OFFSET ?",
     /** user_id */
     GET_BY_USER_ID:
       "SELECT * FROM post WHERE user_id = ? AND deleted_at IS NULL ORDER BY created_at DESC",
