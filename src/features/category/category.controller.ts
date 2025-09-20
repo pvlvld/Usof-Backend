@@ -120,7 +120,7 @@ class CategoryController {
 
     try {
       await this.categoryService.deleteCategory(categoryIdDto.category_id);
-      return res.status(204).send();
+      return res.status(204).json({ message: "Category deleted" });
     } catch (err) {
       next(err);
     }
