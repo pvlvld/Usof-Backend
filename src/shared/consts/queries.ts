@@ -46,7 +46,15 @@ export const QUERIES = Object.freeze({
     /** id */
     DELETE: "DELETE FROM category WHERE id = ?",
     /** post_id */
-    GET_POST_CATEGORIES: "SELECT * FROM post_categories WHERE post_id = ?"
+    GET_POST_CATEGORIES: `
+      SELECT
+        c.id,
+        c.title,
+        c.description
+      FROM post_categories pc
+      JOIN category c ON pc.category_id = c.id
+      WHERE pc.post_id = ?
+    `
   },
   COMMENT: {
     /** post_id, user_id, parent_id, content */
