@@ -36,13 +36,13 @@ export const QUERIES = Object.freeze({
     VERIFY_EMAIL: "UPDATE user SET email_verified = TRUE WHERE id = ?"
   },
   CATEGORY: {
-    /** name, description */
-    CREATE: "INSERT INTO category (name, description) VALUES (?, ?)",
+    /** title, description */
+    CREATE: "INSERT INTO category (title, description) VALUES (?, ?)",
     /** id */
     READ: "SELECT * FROM category WHERE id = ?",
     GET_ALL: "SELECT * FROM category",
-    /** name, description, id */
-    UPDATE: "UPDATE category SET name = ?, description = ? WHERE id = ?",
+    /** title, description, id */
+    UPDATE: "UPDATE category SET title = ?, description = ? WHERE id = ?",
     /** id */
     DELETE: "DELETE FROM category WHERE id = ?"
   },
