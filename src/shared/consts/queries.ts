@@ -44,7 +44,9 @@ export const QUERIES = Object.freeze({
     /** title, description, id */
     UPDATE: "UPDATE category SET title = ?, description = ? WHERE id = ?",
     /** id */
-    DELETE: "DELETE FROM category WHERE id = ?"
+    DELETE: "DELETE FROM category WHERE id = ?",
+    /** post_id */
+    GET_POST_CATEGORIES: "SELECT * FROM post_categories WHERE post_id = ?"
   },
   COMMENT: {
     /** post_id, user_id, parent_id, content */
