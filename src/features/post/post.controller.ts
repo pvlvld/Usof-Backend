@@ -4,11 +4,12 @@ import { PostService } from "./post.service.js";
 import { plainToInstance } from "class-transformer";
 import { PostIdDTO } from "./post.dto.js";
 import { validate } from "class-validator";
+import { CategoryModel } from "../category/category.model.js";
 
 class PostController {
   private postService: PostService;
   constructor() {
-    this.postService = PostService.getInstance(PostModel);
+    this.postService = PostService.getInstance(PostModel, CategoryModel);
   }
 
   public async getPostById(req: Request, res: Response, next: NextFunction) {

@@ -74,4 +74,12 @@ export class CategoryModel {
   public async getCategoryPosts(category_id: number) {
     throw new Error("Method not implemented.");
   }
+
+  public async getPostCategories(post_id: number) {
+    const [rows] = await this.db.query<RowDataPacket[]>(
+      QUERIES.CATEGORY.GET_POST_CATEGORIES,
+      [post_id]
+    );
+    return rows as ICategory[];
+  }
 }
