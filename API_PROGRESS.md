@@ -91,12 +91,12 @@ Optional:
 - [ ]  allow users to subscribe to some posts that they want to follow and send them notifications when some kind of activity was made with the post (it was changed somehow or it was commented by somebody)
 
 # Categories
-- [ ]  GET /api/categories get all categories
-- [ ]  GET /api/categories/:category_id get specified category data
+- [x]  GET /api/categories get all categories
+- [x]  GET /api/categories/:category_id get specified category data
 - [ ]  GET /api/categories/:category_id/posts get all posts associated with the specified category
-- [ ]  POST /api/categories create a new category, required parameter is [title]
-- [ ]  PATCH /api/categories/:category_id update specified category data
-- [ ]  DELETE /api/categories/:category_id delete a category
+- [x]  POST /api/categories create a new category, required parameter is [title]
+- [x]  PATCH /api/categories/:category_id update specified category data
+- [x]  DELETE /api/categories/:category_id delete a category
 
 
 Additional:
