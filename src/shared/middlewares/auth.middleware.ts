@@ -21,6 +21,7 @@ export function authenticateMiddleware(
   next: NextFunction,
   isOptional: boolean = false
 ) {
+  req.user ??= {} as any;
   try {
     let token = "";
     // Just in case
