@@ -61,6 +61,8 @@ Aditional:
 - - [x]  Additional: ?categories=
 - - [x]  Additional: ?status=
 - - [x]  Additional: ?user=
+- - [x]  Additional: ?from_date=
+- - [x]  Additional: ?to_date=
 - [x]  GET /api/posts/:post_id get specified post data. Endpoint is public.
 - - [x]  Additional: Admins can view deleted posts
 - [ ]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
@@ -89,7 +91,7 @@ Every user must have the opportunity to sort all viewable posts:
 
 The user must have the opportunity to filter all viewable posts as well:
 - [x]  by categories
-- [ ]  by date interval
+- [x]  by date interval
 - [x]  by status
 
 Optional:
