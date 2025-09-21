@@ -65,8 +65,21 @@ export class GetPostsDto {
   @IsInt()
   @IsOptional()
   user: number = 0;
-}
 
+  /** ISO 8601 date string, inclusive lower bound */
+  @MaxLength(30)
+  @MinLength(10)
+  @IsString()
+  @IsOptional()
+  from_date?: string;
+
+  /** ISO 8601 date string, inclusive upper bound */
+  @MaxLength(30)
+  @MinLength(10)
+  @IsString()
+  @IsOptional()
+  to_date?: string;
+}
 export class CreatePostCommentDTO extends PostIdDTO {
   @MinLength(1)
   @MaxLength(500)

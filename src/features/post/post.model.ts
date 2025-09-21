@@ -50,6 +50,8 @@ export class PostModel {
       dto.status,
       dto.user > 0 ? dto.user : undefined,
       ...(categories.length > 0 ? categories : []),
+      dto.from_date ? dto.from_date : undefined,
+      dto.to_date ? dto.to_date : undefined,
       dto.limit,
       offset
     ].filter((p) => p !== undefined);
@@ -62,7 +64,9 @@ export class PostModel {
         offset,
         dto.status,
         dto.user > 0 ? dto.user : undefined,
-        categories.length > 0 ? categories : undefined
+        categories.length > 0 ? categories : undefined,
+        dto.from_date,
+        dto.to_date
       );
 
       if (query.includes("--") || query.includes(";")) {

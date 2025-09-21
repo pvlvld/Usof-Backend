@@ -157,9 +157,11 @@ export const QUERIES = Object.freeze({
       order: "ASC" | "DESC",
       limit: number,
       offset: number,
-      status: string,
+      status: "active" | "inactive",
       userId: number | undefined,
-      categories: string[] | undefined
+      categories: string[] | undefined,
+      from_date?: string,
+      to_date?: string
     ) => {
       let whereClauses = ["p.deleted_at IS NULL", "p.status = ?"];
       let joinClause = "";
@@ -171,6 +173,12 @@ export const QUERIES = Object.freeze({
         whereClauses.push(
           `pc.category_id IN (${categories.map(() => "?").join(",")})`
         );
+      }
+      if (from_date) {
+        whereClauses.push("p.created_at >= ?");
+      }
+      if (to_date) {
+        whereClauses.push("p.created_at <= ?");
       }
       const where = whereClauses.length
         ? `WHERE ${whereClauses.join(" AND ")}`
