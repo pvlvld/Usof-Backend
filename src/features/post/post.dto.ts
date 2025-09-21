@@ -57,6 +57,10 @@ export class GetPostsDto {
   @IsOptional()
   categories: string = "all";
 
+  @IsIn(["active", "inactive", "all"], {
+    message: "status must be either 'active', 'inactive' or 'all'"
+  })
+  @Transform(({ value }) => ("" + value).toLowerCase())
   @IsString()
   @IsOptional()
   status: "active" | "inactive" | "all" = "all";
