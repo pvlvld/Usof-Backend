@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { PostModel } from "./post.model.js";
 import { PostService } from "./post.service.js";
 import { plainToInstance } from "class-transformer";
-import { PostIdDTO } from "./post.dto.js";
+import { GetPostsDto, PostIdDTO } from "./post.dto.js";
 import { validate } from "class-validator";
 import { CategoryModel } from "../category/category.model.js";
 
@@ -10,6 +10,24 @@ class PostController {
   private postService: PostService;
   constructor() {
     this.postService = PostService.getInstance(PostModel, CategoryModel);
+  }
+
+  public async getPostMany(req: Request, res: Response, next: NextFunction) {
+    const dto = plainToInstance(GetPostsDto, req.query);
+    const errors = await validate(dto, {
+      forbidNonWhitelisted: true,
+      whitelist: true
+    });
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    try {
+      const posts = await this.postService.getPostMany(dto);
+      return res.json(posts);
+    } catch (error) {
+      return next(error);
+    }
   }
 
   public async getPostById(req: Request, res: Response, next: NextFunction) {

@@ -1,7 +1,8 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import Database from "../../shared/database/index.js";
-import type { CreatePostDTO, PostUpdateDTO } from "./post.dto.js";
+import type { CreatePostDTO, GetPostsDto, PostUpdateDTO } from "./post.dto.js";
 import { QUERIES } from "../../shared/consts/queries.js";
+import { UnsafeQueryError } from "../../shared/consts/errors.js";
 
 type IPostStatus = "active" | "inactive";
 
@@ -33,6 +34,50 @@ export class PostModel {
       this.instance = new PostModel();
     }
     return this.instance;
+  }
+
+  public async getPostMany(dto: GetPostsDto) {
+    const offset = (dto.page - 1) * dto.limit;
+    let categories: string[] = [];
+    if (dto.categories !== "all") {
+      categories = dto.categories
+        .split(",")
+        .map((cat) => cat.trim())
+        .filter((cat) => cat.length > 0);
+    }
+
+    const params: (string | number)[] = [
+      dto.status,
+      dto.user > 0 ? dto.user : undefined,
+      ...(categories.length > 0 ? categories : []),
+      dto.limit,
+      offset
+    ].filter((p) => p !== undefined);
+
+    try {
+      const query = QUERIES.POST.GET_PAGINATED(
+        dto.sort,
+        dto.order,
+        dto.limit,
+        offset,
+        dto.status,
+        dto.user > 0 ? dto.user : undefined,
+        categories.length > 0 ? categories : undefined
+      );
+
+      if (query.includes("--") || query.includes(";")) {
+        throw new UnsafeQueryError(query);
+      }
+
+      const [rows] = await this.db.query<RowDataPacket[]>(query, params);
+
+      return Array.isArray(rows)
+        ? (rows as IPostModel[])
+        : ([] as IPostModel[]);
+    } catch (error) {
+      console.error("Error getting paginated posts:", error);
+      return [];
+    }
   }
 
   public async createPost(userId: number, dto: CreatePostDTO) {

@@ -4,7 +4,7 @@ import {
   NotFoundError
 } from "../../shared/consts/errors.js";
 import type { CategoryModel } from "../category/category.model.js";
-import type { PostIdDTO } from "./post.dto.js";
+import type { GetPostsDto, PostIdDTO } from "./post.dto.js";
 import type { PostModel } from "./post.model.js";
 
 export class PostService {
@@ -25,6 +25,10 @@ export class PostService {
       this.instance = new PostService(post, category);
     }
     return this.instance;
+  }
+
+  public async getPostMany(dto: GetPostsDto) {
+    return await this.postModel.getPostMany(dto);
   }
 
   public async getPostById(dto: PostIdDTO) {

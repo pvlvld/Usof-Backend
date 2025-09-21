@@ -20,7 +20,7 @@ const postRouter = express.Router();
 // - - by status (inactive?)
 
 postRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send("List of all posts. Page 1");
+  postController.getPostMany(req, res, next);
 });
 
 postRouter.get(
