@@ -149,14 +149,34 @@ export const QUERIES = Object.freeze({
       WHERE p.id = ?
       GROUP BY p.id;
     `,
-    /** sort, order, limit, offset */
+    /**
+     * Generates a paginated post query with dynamic filters for status, user, categories, sorting, and pagination.
+     */
     GET_PAGINATED: (
       sort: string,
       order: "ASC" | "DESC",
       limit: number,
-      offset: number
-    ) =>
-      `SELECT * FROM post WHERE deleted_at IS NULL ORDER BY ${sort} ${order} LIMIT ${limit} OFFSET ${offset}`,
+      offset: number,
+      status: string,
+      userId: number | undefined,
+      categories: string[] | undefined
+    ) => {
+      let whereClauses = ["p.deleted_at IS NULL", "p.status = ?"];
+      let joinClause = "";
+      if (userId && userId > 0) {
+        whereClauses.push("p.user_id = ?");
+      }
+      if (categories && categories.length > 0) {
+        joinClause = "JOIN post_categories pc ON p.id = pc.post_id";
+        whereClauses.push(
+          `pc.category_id IN (${categories.map(() => "?").join(",")})`
+        );
+      }
+      const where = whereClauses.length
+        ? `WHERE ${whereClauses.join(" AND ")}`
+        : "";
+      return `SELECT p.* FROM post p ${joinClause} ${where} ORDER BY ${sort} ${order} LIMIT ${limit} OFFSET ${offset}`;
+    },
     /** title, content, status, id */
     UPDATE: "UPDATE post SET title = ?, content = ?, status = ? WHERE id = ?",
     /** id */
