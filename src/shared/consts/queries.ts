@@ -157,13 +157,16 @@ export const QUERIES = Object.freeze({
       order: "ASC" | "DESC",
       limit: number,
       offset: number,
-      status: "active" | "inactive",
+      status: "active" | "inactive" | "all",
       userId: number | undefined,
       categories: string[] | undefined,
       from_date?: string,
       to_date?: string
     ) => {
-      let whereClauses = ["p.deleted_at IS NULL", "p.status = ?"];
+      let whereClauses = ["p.deleted_at IS NULL"];
+      if (status !== "all") {
+        whereClauses.push("p.status = ?");
+      }
       let joinClause = "";
       if (userId && userId > 0) {
         whereClauses.push("p.user_id = ?");

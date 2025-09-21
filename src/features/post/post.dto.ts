@@ -58,7 +58,7 @@ export class GetPostsDto {
 
   @IsString()
   @IsOptional()
-  status: "active" | "inactive" = "active";
+  status: "active" | "inactive" | "all" = "all";
 
   @Min(0)
   @Type(() => Number)
