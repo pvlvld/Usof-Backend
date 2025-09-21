@@ -34,9 +34,9 @@ export class GetPostsDto {
 
   // Don't allow created_at sorting, map it to id to avoid creating additional indexes
   @Transform(({ value }) => (value === "created_at" ? "id" : value))
-  @IsIn(["id", "login", "rating", "created_at", "updated_at"], {
+  @IsIn(["id", "rating", "created_at", "updated_at"], {
     message:
-      "sort must be one of the following values: id, login, rating, created_at, updated_at"
+      "sort must be one of the following values: id, rating, created_at, updated_at"
   })
   @Transform(({ value }) => ("" + value).toLowerCase())
   @IsString()
