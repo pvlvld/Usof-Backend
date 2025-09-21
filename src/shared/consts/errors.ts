@@ -50,3 +50,11 @@ export class InternalServerError extends CustomError {
     super(message, 500);
   }
 }
+
+export class UnsafeQueryError extends CustomError {
+  public _query: string;
+  constructor(query: string, message: string = "Bad Request") {
+    super(message, 400);
+    this._query = query;
+  }
+}
