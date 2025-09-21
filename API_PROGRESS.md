@@ -2,7 +2,7 @@
 
 This document provides an overview of the API development process, listing required, optional, and additional features along with their implementation status. It serves as a reference for tracking progress and planning next steps throughout the project. Features are grouped by area, and notes are included for clarity where needed.
 
-Endpoints 25/40
+Endpoints 26/40
 
 **Legend:**
 
@@ -14,6 +14,7 @@ Endpoints 25/40
 
 # TODO
 - [ ]  Remove target from validation errors
+- [ ]  Unsigned int for the AUTO_INCREMENT DB columns?
 
 # Auth
 - [x]  POST - /api/auth/register - registration of a new user, required parameters are [login, password, password confirmation, email]
@@ -52,14 +53,14 @@ Aditional:
 - [x]  POST - /api/users/:user_id/unban unban user
 
 # Post
-- [ ]  GET /api/posts get all posts. This endpoint doesn't require any role, it is public. If there are too many posts, you must implement pagination. Page size is up to you.
-- - [ ]  Additional: ?page=
-- - [ ]  Additional: ?limit=
-- - [ ]  Additional: ?sort=
-- - [ ]  Additional: ?order=
-- - [ ]  Additional: ?categories=
-- - [ ]  Additional: ?status=
-- - [ ]  Additional: ?user=
+- [x]  GET /api/posts get all posts. This endpoint doesn't require any role, it is public. If there are too many posts, you must implement pagination. Page size is up to you.
+- - [x]  Additional: ?page=
+- - [x]  Additional: ?limit=
+- - [x]  Additional: ?sort=
+- - [x]  Additional: ?order=
+- - [x]  Additional: ?categories=
+- - [x]  Additional: ?status=
+- - [x]  Additional: ?user=
 - [x]  GET /api/posts/:post_id get specified post data. Endpoint is public.
 - - [x]  Additional: Admins can view deleted posts
 - [ ]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
@@ -83,13 +84,13 @@ Don't forget about a feature that allows locking posts/comments. Think about how
 You also must implement post sorting and filtering.
 
 Every user must have the opportunity to sort all viewable posts:
-- [ ]  by number of likes by default
-- [ ]  by date
+- [x]  by number of likes by default
+- [x]  by date
 
 The user must have the opportunity to filter all viewable posts as well:
-- [ ]  by categories
+- [x]  by categories
 - [ ]  by date interval
-- [ ]  by status
+- [x]  by status
 
 Optional:
 - [ ]  implement an opportunity to add posts to the Favorites category, so that the user can quickly view all marked posts by going on the appropriate endpoint
