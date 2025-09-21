@@ -2,6 +2,7 @@ import { Transform, Type } from "class-transformer";
 import {
   IsIn,
   IsInt,
+  IsISO8601,
   IsOptional,
   IsString,
   Max,
@@ -66,17 +67,11 @@ export class GetPostsDto {
   @IsOptional()
   user: number = 0;
 
-  /** ISO 8601 date string, inclusive lower bound */
-  @MaxLength(30)
-  @MinLength(10)
-  @IsString()
+  @IsISO8601()
   @IsOptional()
   from_date?: string;
 
-  /** ISO 8601 date string, inclusive upper bound */
-  @MaxLength(30)
-  @MinLength(10)
-  @IsString()
+  @IsISO8601()
   @IsOptional()
   to_date?: string;
 }
