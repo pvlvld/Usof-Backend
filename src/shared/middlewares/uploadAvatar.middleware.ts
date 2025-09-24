@@ -4,16 +4,11 @@ import path from "node:path";
 import sharp from "sharp";
 import type { Request } from "express";
 import fs from "node:fs";
-
-type IImageMimeType = `image/${keyof sharp.FormatEnum}`;
+import type { IImageMimeType, ISharpImageOptions } from "../types.js";
 
 interface IAvatarUploadOptions {
   avatarDir?: string;
-  imageOptions?: {
-    width: number;
-    fileFormat: keyof sharp.FormatEnum;
-    quality: number;
-  };
+  imageOptions?: ISharpImageOptions;
   allowedMimeTypes?: IImageMimeType[];
   donatorOnlyMimeTypes?: IImageMimeType[];
   fileSizeLimitMB?: number;
