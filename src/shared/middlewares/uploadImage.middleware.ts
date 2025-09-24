@@ -19,7 +19,7 @@ interface IImageUploadOptions {
 }
 
 class ImageUploadBuilder {
-  private imageDir: string;
+  private _imageDir: string | (() => string);
   private imageOptions: {
     width: number;
     fileFormat: keyof sharp.FormatEnum;
@@ -30,7 +30,7 @@ class ImageUploadBuilder {
   private fileSizeLimitMB: number;
   private getFilename: IGetFilenameCallback;
   constructor(options: IImageUploadOptions = {}) {
-    this.imageDir =
+    this._imageDir =
       options.imageDir ||
       path.join(process.cwd(), "public", "uploads", "avatars");
     this.imageOptions = options.imageOptions || {
@@ -47,7 +47,6 @@ class ImageUploadBuilder {
     ];
     this.donatorOnlyMimeTypes = options.donatorOnlyMimeTypes || ["image/gif"];
     this.fileSizeLimitMB = options.fileSizeLimitMB || 5;
-    fs.mkdirSync(this.imageDir, { recursive: true });
 
     this.getFilename =
       options.getFilenameCb ||
@@ -89,12 +88,20 @@ class ImageUploadBuilder {
     cb(null, true);
   }
 
+  private imageDir(): string {
+    const path =
+      typeof this._imageDir === "function" ? this._imageDir() : this._imageDir;
+
+    fs.mkdirSync(path, { recursive: true });
+    return path;
+  }
+
   private storage: multer.StorageEngine = {
     _handleFile: (req, file, callback) => {
       const filename = `${this.getFilename(req, file)}.${
         this.imageOptions.fileFormat
       }`;
-      const outPath = path.join(this.imageDir, filename);
+      const outPath = path.join(this.imageDir(), filename);
 
       const transform = sharp({ pages: -1 })
         .resize(this.imageOptions.width, this.imageOptions.width, {
@@ -130,7 +137,6 @@ class ImageUploadBuilder {
 
   build() {
     return multer({
-      dest: this.imageDir,
       limits: { fileSize: this.fileSizeLimitMB * 1024 * 1024, files: 1 },
       fileFilter: this.fileFilter,
       storage: this.storage
