@@ -6,16 +6,20 @@ import type { Request } from "express";
 import fs from "node:fs";
 import type { IImageMimeType, ISharpImageOptions } from "../types.js";
 
-interface IAvatarUploadOptions {
-  avatarDir?: string;
+type IGetFilenameCallback = (req: Request, file: Express.Multer.File) => string;
+
+interface IImageUploadOptions {
+  imageFilePrefix?: string;
+  imageDir?: string;
   imageOptions?: ISharpImageOptions;
   allowedMimeTypes?: IImageMimeType[];
   donatorOnlyMimeTypes?: IImageMimeType[];
   fileSizeLimitMB?: number;
+  getFilenameCb?: IGetFilenameCallback;
 }
 
-class AvatarUploadBuilder {
-  private avatarDir: string;
+class ImageUploadBuilder {
+  private imageDir: string;
   private imageOptions: {
     width: number;
     fileFormat: keyof sharp.FormatEnum;
@@ -24,10 +28,10 @@ class AvatarUploadBuilder {
   private allowedMimeTypes: IImageMimeType[];
   private donatorOnlyMimeTypes: IImageMimeType[];
   private fileSizeLimitMB: number;
-
-  constructor(options: IAvatarUploadOptions = {}) {
-    this.avatarDir =
-      options.avatarDir ||
+  private getFilename: IGetFilenameCallback;
+  constructor(options: IImageUploadOptions = {}) {
+    this.imageDir =
+      options.imageDir ||
       path.join(process.cwd(), "public", "uploads", "avatars");
     this.imageOptions = options.imageOptions || {
       width: 512,
@@ -43,14 +47,17 @@ class AvatarUploadBuilder {
     ];
     this.donatorOnlyMimeTypes = options.donatorOnlyMimeTypes || ["image/gif"];
     this.fileSizeLimitMB = options.fileSizeLimitMB || 5;
-    fs.mkdirSync(this.avatarDir, { recursive: true });
+    fs.mkdirSync(this.imageDir, { recursive: true });
 
+    this.getFilename =
+      options.getFilenameCb ||
+      ((req, file) => {
+        const timestamp = process.hrtime.bigint().toString();
+        const prefix = options.imageFilePrefix || "img";
+        return `${prefix}_${timestamp}`;
+      });
     // Required to ensure 'this' context is correct in fileFilter
     this.fileFilter = this.fileFilter.bind(this);
-  }
-
-  private getFilename(req: Request) {
-    return `avatar_${req.user?.id}.${this.imageOptions.fileFormat}`;
   }
 
   private fileFilter(
@@ -84,8 +91,10 @@ class AvatarUploadBuilder {
 
   private storage: multer.StorageEngine = {
     _handleFile: (req, file, callback) => {
-      const filename = this.getFilename(req);
-      const outPath = path.join(this.avatarDir, filename);
+      const filename = `${this.getFilename(req, file)}.${
+        this.imageOptions.fileFormat
+      }`;
+      const outPath = path.join(this.imageDir, filename);
 
       const transform = sharp({ pages: -1 })
         .resize(this.imageOptions.width, this.imageOptions.width, {
@@ -97,9 +106,7 @@ class AvatarUploadBuilder {
         .toFile(outPath, (err, info) => {
           if (err) {
             console.error("Error processing image:", err);
-            return callback(
-              new InternalServerError("Error processing the avatar.")
-            );
+            return callback(new InternalServerError("Error processing image."));
           }
           callback(null, {
             path: outPath
@@ -110,7 +117,7 @@ class AvatarUploadBuilder {
 
       transform.on("error", (err) => {
         console.error("Sharp transformation error:", err);
-        callback(new InternalServerError("Error processing the avatar."));
+        callback(new InternalServerError("Error processing image."));
       });
     },
     _removeFile: (req, file, callback) => {
@@ -123,7 +130,7 @@ class AvatarUploadBuilder {
 
   build() {
     return multer({
-      dest: this.avatarDir,
+      dest: this.imageDir,
       limits: { fileSize: this.fileSizeLimitMB * 1024 * 1024, files: 1 },
       fileFilter: this.fileFilter,
       storage: this.storage
@@ -131,6 +138,10 @@ class AvatarUploadBuilder {
   }
 }
 
-const uploadAvatar = new AvatarUploadBuilder().build();
+const uploadAvatarMiddleware = new ImageUploadBuilder({
+  imageDir: path.join(process.cwd(), "public", "uploads", "avatars"),
+  imageFilePrefix: "avatar_",
+  getFilenameCb: (req) => `avatar_${req.user?.id}`
+}).build();
 
-export { uploadAvatar };
+export { ImageUploadBuilder, uploadAvatarMiddleware };

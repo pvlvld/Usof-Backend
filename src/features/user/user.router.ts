@@ -8,7 +8,7 @@ import {
   authenticateMiddleware,
   requireAdminMiddleware
 } from "../../shared/middlewares/auth.middleware.js";
-import { uploadAvatar } from "../../shared/middlewares/uploadAvatar.middleware.js";
+import { uploadAvatarMiddleware } from "../../shared/middlewares/uploadImage.middleware.js";
 
 const userRouter = express.Router();
 
@@ -43,7 +43,7 @@ userRouter.post(
 userRouter.patch(
   "/avatar",
   authenticateMiddleware,
-  uploadAvatar.single("avatar"),
+  uploadAvatarMiddleware.single("avatar"),
   (req: Request, res: Response) => {
     res
       .status(200)
