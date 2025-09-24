@@ -10,7 +10,7 @@ type IGetFilenameCallback = (req: Request, file: Express.Multer.File) => string;
 
 interface IImageUploadOptions {
   imageFilePrefix?: string;
-  imageDir?: string;
+  imageDir?: string | (() => string);
   imageOptions?: ISharpImageOptions;
   allowedMimeTypes?: IImageMimeType[];
   donatorOnlyMimeTypes?: IImageMimeType[];
@@ -19,12 +19,8 @@ interface IImageUploadOptions {
 }
 
 class ImageUploadBuilder {
-  private _imageDir: string | (() => string);
-  private imageOptions: {
-    width: number;
-    fileFormat: keyof sharp.FormatEnum;
-    quality: number;
-  };
+  private _imageDir: NonNullable<IImageUploadOptions["imageDir"]>;
+  private imageOptions: ISharpImageOptions;
   private allowedMimeTypes: IImageMimeType[];
   private donatorOnlyMimeTypes: IImageMimeType[];
   private fileSizeLimitMB: number;
