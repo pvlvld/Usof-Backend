@@ -147,7 +147,14 @@ const uploadAvatarMiddleware = new ImageUploadBuilder({
 }).build();
 
 const uploadPostImageMiddleware = new ImageUploadBuilder({
-  imageDir: path.join(process.cwd(), "public", "uploads", "posts"),
+  imageDir: () => {
+    // Date based subdirectory (e.g., "2024/06" - "year/month")
+    const now = new Date();
+    const year = now.getFullYear().toString();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+
+    return path.join(process.cwd(), "public", "uploads", "posts", year, month);
+  },
   imageFilePrefix: "post_",
   imageOptions: {
     width: 1080,
