@@ -144,4 +144,26 @@ const uploadAvatarMiddleware = new ImageUploadBuilder({
   getFilenameCb: (req) => `avatar_${req.user?.id}`
 }).build();
 
-export { ImageUploadBuilder, uploadAvatarMiddleware };
+const uploadPostImageMiddleware = new ImageUploadBuilder({
+  imageDir: path.join(process.cwd(), "public", "uploads", "posts"),
+  imageFilePrefix: "post_",
+  imageOptions: {
+    width: 1080,
+    fileFormat: "webp",
+    quality: 85
+  },
+  fileSizeLimitMB: 13,
+  getFilenameCb: (req, file) => {
+    const timestamp = process.hrtime.bigint().toString();
+    const safeOriginalName = file.originalname
+      .replace(/\s+/g, "_")
+      .replace(/[^a-zA-Z0-9._-]/g, "");
+    return `post_${timestamp}_${safeOriginalName}`;
+  }
+}).build();
+
+export {
+  ImageUploadBuilder,
+  uploadAvatarMiddleware,
+  uploadPostImageMiddleware
+};
