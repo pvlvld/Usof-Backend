@@ -112,7 +112,7 @@ class UserService {
     return result;
   }
 
-  public async updatePassword(dto: PasswordResetDto) {
+  public async updatePassword(dto: PasswordResetDto & { userId: number }) {
     if (dto.password !== dto.passwordConfirmation) {
       throw new BadRequestError("Passwords do not match");
     }
@@ -123,7 +123,11 @@ class UserService {
       password_salt
     );
 
-    return await this.userModel.updatePassword(1, password_hash, password_salt);
+    return await this.userModel.updatePassword(
+      dto.userId,
+      password_hash,
+      password_salt
+    );
   }
 
   public banUser(dto: BanUserDTO) {
