@@ -58,20 +58,15 @@ export class CommentModel {
   }
 
   public async createComment(
-    commentData: Pick<
-      ICommentModel,
-      "post_id" | "user_id" | "parent_id" | "content"
-    >
+    post_id: number,
+    user_id: number,
+    parent_id: number | null,
+    content: string
   ) {
     try {
       const [result] = await this.db.execute<ResultSetHeader>(
         QUERIES.COMMENT.CREATE,
-        [
-          commentData.post_id,
-          commentData.user_id,
-          commentData.parent_id,
-          commentData.content
-        ]
+        [post_id, user_id, parent_id, content]
       );
       return result.insertId;
     } catch (error) {
