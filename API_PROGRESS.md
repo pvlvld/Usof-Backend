@@ -111,10 +111,10 @@ Additional:
 - [x]  Require admin auth for the creation, update, and delete.
 
 # Comments
-- [ ]  GET /api/comments/:comment_id get specified comment data
-- [ ]  GET /api/comments/:comment_id/like get all likes under the specified comment
-- [ ]  POST /api/comments/:comment_id/like create a new like under a comment
-- [ ]  Additional: POST /api/comments/:comment_id/dislike create a new dislike under a comment
-- [ ]  PATCH /api/comments/:comment_id update specified comment data
-- [ ]  DELETE /api/comments/:comment_id delete a comment
-- [ ]  DELETE /api/comments/:comment_id/like delete a like under a comment
+- [x]  GET /api/comments/:comment_id get specified comment data
+- [x]  PATCH /api/comments/:comment_id update specified comment data
+- [x]  DELETE /api/comments/:comment_id delete a comment
+- [x]  GET /api/comments/:comment_id/like get all likes under the specified comment
+- [x]  POST /api/comments/:comment_id/like create a new like under a comment
+- [x]  Additional: POST /api/comments/:comment_id/dislike create a new dislike under a comment
+- [x]  DELETE /api/comments/:comment_id/like delete a like under a comment
