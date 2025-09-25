@@ -7,7 +7,7 @@ import { likeRouter } from "../like/like.router.js";
 import { commentController } from "./comment.controller.js";
 import { authenticateMiddleware } from "../../shared/middlewares/auth.middleware.js";
 
-const commentRouter = express.Router();
+const commentRouter = express.Router({ mergeParams: true });
 
 commentRouter.get(
   "/:comment_id",
