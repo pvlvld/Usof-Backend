@@ -2,7 +2,12 @@ import type { NextFunction, Request, Response } from "express";
 import { PostModel } from "./post.model.js";
 import { PostService } from "./post.service.js";
 import { plainToInstance } from "class-transformer";
-import { CreatePostDTO, GetPostsDto, PostIdDTO } from "./post.dto.js";
+import {
+  CreatePostDTO,
+  GetPostsDto,
+  PostIdDTO,
+  PostUpdateDTO
+} from "./post.dto.js";
 import { validate } from "class-validator";
 import { CategoryModel } from "../category/category.model.js";
 import { CommentModel } from "../comment/comment.model.js";
@@ -32,6 +37,33 @@ class PostController {
     try {
       const post = await this.postService.createPost(dto, req.user.id);
       return res.status(201).json(post);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  public async updatePost(req: Request, res: Response, next: NextFunction) {
+    const dto = plainToInstance(PostIdDTO, req.params);
+    const bodyDto = plainToInstance(PostUpdateDTO, req.body);
+    const errors = await validate(dto);
+    const bodyErrors = await validate(bodyDto);
+    if (errors.length > 0 || bodyErrors.length > 0) {
+      return res.status(400).json({ errors: [...errors, ...bodyErrors] });
+    }
+
+    if (!req.user) {
+      console.error(
+        "[PostController.updatePost] No user auth data in request object."
+      );
+      return next(new UnauthorizedError());
+    }
+
+    try {
+      const post = await this.postService.updatePost(
+        { post_id: dto.post_id, ...bodyDto },
+        req.user
+      );
+      return res.status(200).json(post);
     } catch (error) {
       return next(error);
     }
