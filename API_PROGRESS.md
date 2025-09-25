@@ -105,10 +105,18 @@ Optional:
 - [x]  POST /api/categories create a new category, required parameter is [title]
 - [x]  PATCH /api/categories/:category_id update specified category data
 - [x]  DELETE /api/categories/:category_id delete a category
-
-
 Additional:
 - [x]  Require admin auth for the creation, update, and delete.
+
+# Collections (additional)
+- [x]  GET /api/collections Returns a list of all collections created by the authenticated user.
+- [x]  POST /api/collections Creates a new collection for the authenticated user.
+- [x]  GET /api/collections/:collection_name Returns details about a specific collection.
+- [x]  GET /api/collections/:collection_name/posts Returns all posts in a specific collection with their details.
+- [x]  PATCH /api/collections/:collection_name Updates a collection's name and/or description.
+- [x]  DELETE /api/collections/:collection_name Deletes a collection and removes all posts from it.
+- [x]  POST /api/collections/:collection_name/posts Adds a post to a collection.
+- [x]  DELETE /api/collections/:collection_name/posts/:post_id Removes a post from a collection.
 
 # Comments
 - [x]  GET /api/comments/:comment_id get specified comment data
