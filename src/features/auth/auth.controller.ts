@@ -205,10 +205,25 @@ class AuthController {
       return res.status(400).json({ errors });
     }
 
-    // TODO: Validate token, update password in DB
-
     try {
-      await this.userService.updatePassword(dto);
+      const resetEntry = await this.passwordResetsService.validateToken(
+        dto.confirm_token
+      );
+
+      if (!resetEntry) {
+        return res.status(400).json({ message: "Invalid or expired token" });
+      }
+
+      if (resetEntry.expiresAt < new Date()) {
+        await this.passwordResetsService.invalidateToken(dto.confirm_token);
+        return res.status(400).json({ message: "Token has expired" });
+      }
+
+      const updatedDto = { ...dto, userId: resetEntry.userId };
+      await this.userService.updatePassword(updatedDto);
+
+      await this.passwordResetsService.invalidateToken(dto.confirm_token);
+
       return res.status(200).json({ message: "Password reset successful!" });
     } catch (error) {
       next(error);
@@ -222,8 +237,6 @@ class AuthController {
     if (errors.length > 0) {
       return res.status(400).json({ message: "Invalid token" });
     }
-
-    // TODO: Validate token, update email in DB
 
     try {
       await this.authService.verifyEmail(dto);
