@@ -26,7 +26,8 @@ export const QUERIES = Object.freeze({
     RESET_PASSWORD:
       "UPDATE user SET password_hash = ?, password_salt = ? WHERE id = ?",
     /** id */
-    DELETE: "UPDATE user SET deleted_at = NOW() WHERE id = ?",
+    DELETE:
+      "UPDATE user SET deleted_at = NOW() WHERE id = ? AND deleted_at IS NULL",
     /** banned_until, ban_reason, id */
     BAN: "UPDATE user SET banned_until = ?, ban_reason = ? WHERE id = ?",
     /** id */
@@ -65,7 +66,8 @@ export const QUERIES = Object.freeze({
     /** content, id */
     UPDATE: "UPDATE comment SET content = ? WHERE id = ?",
     /** id */
-    DELETE: "UPDATE comment SET deleted_at = NOW() WHERE id = ?",
+    DELETE:
+      "UPDATE comment SET deleted_at = NOW() WHERE id = ? AND deleted_at IS NULL",
     /** id */
     ACTIVATE: "UPDATE comment SET status = 'active' WHERE id = ?",
     /** id */
@@ -191,7 +193,8 @@ export const QUERIES = Object.freeze({
     /** title, content, status, id */
     UPDATE: "UPDATE post SET title = ?, content = ?, status = ? WHERE id = ?",
     /** id */
-    DELETE: "UPDATE post SET deleted_at = NOW() WHERE id = ?",
+    DELETE:
+      "UPDATE post SET deleted_at = NOW() WHERE id = ? AND deleted_at IS NULL",
     /** user_id */
     GET_BY_USER_ID:
       "SELECT * FROM post WHERE user_id = ? AND deleted_at IS NULL ORDER BY created_at DESC",
