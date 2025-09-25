@@ -73,7 +73,6 @@ CREATE INDEX idx_post_categories_post_id ON post_categories (post_id);
 CREATE INDEX idx_post_categories_category_id ON post_categories (category_id);
 
 
--- Do we really need post_id here if we have parent_id?
 CREATE TABLE comment (
     id INT PRIMARY KEY AUTO_INCREMENT,
     post_id INT NOT NULL,
