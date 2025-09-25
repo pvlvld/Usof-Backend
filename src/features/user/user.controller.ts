@@ -4,7 +4,8 @@ import {
   CreateUserDTO,
   DeleteUserDTO,
   GetUserByIdDTO,
-  UpdateUserDataDTO
+  UpdateUserDataDTO,
+  UserResponseDTO
 } from "./user.dto.js";
 import type { NextFunction, Request, Response } from "express";
 import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
@@ -30,7 +31,10 @@ class UserController {
 
     try {
       const users = await this.userService.getUsers(dto);
-      res.status(200).json(users);
+      const usersResponse = users.map((user) =>
+        UserResponseDTO.fromUserModel(user as any)
+      );
+      res.status(200).json(usersResponse);
     } catch (err) {
       next(err);
     }
@@ -53,7 +57,6 @@ class UserController {
     }
   }
 
-  // TODO: Filter sensitive data
   public async getUserById(req: Request, res: Response, next: NextFunction) {
     const dto = plainToInstance(GetUserByIdDTO, req.params);
     const errors = await validate(dto);
@@ -63,7 +66,8 @@ class UserController {
 
     try {
       const user = await this.userService.getUserById(dto);
-      res.status(200).json(user);
+      const userResponse = UserResponseDTO.fromUserModel(user);
+      res.status(200).json(userResponse);
     } catch (err) {
       next(err);
     }

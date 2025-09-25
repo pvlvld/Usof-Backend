@@ -208,3 +208,37 @@ export class UnbanUserDTO {
   @IsInt()
   user_id!: number;
 }
+
+export class UserResponseDTO {
+  id!: number;
+  login!: string;
+  full_name!: string;
+  email!: string;
+  email_verified!: boolean;
+  avatar!: string;
+  rating!: number;
+  role!: IUserRole;
+  created_at!: Date;
+  updated_at!: Date;
+  banned_until!: Date | null;
+  ban_reason!: string | null;
+  deleted_at!: Date | null;
+
+  static fromUserModel(user: IUserModel): UserResponseDTO {
+    return {
+      id: user.id,
+      login: user.login,
+      full_name: user.full_name,
+      email: user.email,
+      email_verified: user.email_verified,
+      avatar: user.avatar,
+      rating: user.rating,
+      role: user.role,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+      banned_until: user.banned_until,
+      ban_reason: user.ban_reason,
+      deleted_at: user.deleted_at
+    };
+  }
+}
