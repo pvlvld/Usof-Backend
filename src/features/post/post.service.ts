@@ -4,6 +4,7 @@ import {
   NotFoundError
 } from "../../shared/consts/errors.js";
 import type { CategoryModel } from "../category/category.model.js";
+import type { CommentModel } from "../comment/comment.model.js";
 import type { GetPostsDto, PostIdDTO } from "./post.dto.js";
 import type { PostModel } from "./post.model.js";
 
@@ -11,18 +12,25 @@ export class PostService {
   private static instance: PostService | null = null;
   private postModel: PostModel;
   private categoryModel: CategoryModel;
+  private commentModel: CommentModel;
 
-  private constructor(post: typeof PostModel, category: typeof CategoryModel) {
+  private constructor(
+    post: typeof PostModel,
+    category: typeof CategoryModel,
+    comment: typeof CommentModel
+  ) {
     this.postModel = post.getInstance();
     this.categoryModel = category.getInstance();
+    this.commentModel = comment.getInstance();
   }
 
   public static getInstance(
     post: typeof PostModel,
-    category: typeof CategoryModel
+    category: typeof CategoryModel,
+    comment: typeof CommentModel
   ) {
     if (!this.instance) {
-      this.instance = new PostService(post, category);
+      this.instance = new PostService(post, category, comment);
     }
     return this.instance;
   }
