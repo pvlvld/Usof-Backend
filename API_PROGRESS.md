@@ -2,7 +2,7 @@
 
 This document provides an overview of the API development process, listing required, optional, and additional features along with their implementation status. It serves as a reference for tracking progress and planning next steps throughout the project. Features are grouped by area, and notes are included for clarity where needed.
 
-Endpoints 39/41
+Endpoints 41/41
 
 **Legend:**
 
@@ -20,8 +20,8 @@ Endpoints 39/41
 - [x]  POST - /api/auth/register - registration of a new user, required parameters are [login, password, password confirmation, email]
 - [x]  POST - /api/auth/login - log in user, required parameters are [login, email, password]. Only users with a confirmed email can sign in
 - [x]  POST - /api/auth/logout - log out authorized user
-- [ ]  POST - /api/auth/password-reset - send a reset link to user email, required parameter is [email]
-- [ ]  POST - /api/auth/password-reset/:confirm_token - confirm new password with a token from email, required parameter is a [new password]
+- [x]  POST - /api/auth/password-reset - send a reset link to user email, required parameter is [email]
+- [x]  POST - /api/auth/password-reset/:confirm_token - confirm new password with a token from email, required parameter is a [new password]
 
 Additional:
 - [x]  POST - /token/refresh - refresh tokens using refreshToken
