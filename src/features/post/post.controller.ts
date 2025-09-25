@@ -43,12 +43,12 @@ class PostController {
   }
 
   public async updatePost(req: Request, res: Response, next: NextFunction) {
-    const dto = plainToInstance(PostIdDTO, req.params);
+    const idDto = plainToInstance(PostIdDTO, req.params);
     const bodyDto = plainToInstance(PostUpdateDTO, req.body);
-    const errors = await validate(dto);
+    const idErrors = await validate(idDto);
     const bodyErrors = await validate(bodyDto);
-    if (errors.length > 0 || bodyErrors.length > 0) {
-      return res.status(400).json({ errors: [...errors, ...bodyErrors] });
+    if (idErrors.length > 0 || bodyErrors.length > 0) {
+      return res.status(400).json({ errors: [...idErrors, ...bodyErrors] });
     }
 
     if (!req.user) {
@@ -59,10 +59,7 @@ class PostController {
     }
 
     try {
-      const post = await this.postService.updatePost(
-        { post_id: dto.post_id, ...bodyDto },
-        req.user
-      );
+      const post = await this.postService.updatePost(idDto, bodyDto, req.user);
       return res.status(200).json(post);
     } catch (error) {
       return next(error);
