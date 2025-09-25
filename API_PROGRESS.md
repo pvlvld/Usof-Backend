@@ -2,7 +2,7 @@
 
 This document provides an overview of the API development process, listing required, optional, and additional features along with their implementation status. It serves as a reference for tracking progress and planning next steps throughout the project. Features are grouped by area, and notes are included for clarity where needed.
 
-Endpoints 37/41
+Endpoints 38/41
 
 **Legend:**
 
@@ -74,8 +74,8 @@ public.
 - [x]  POST /api/posts/ create a new post, required parameters are [title, content, categories]
 - [x]  POST /api/posts/:post_id/like create a new like under a post
 - [x]  Additional: POST /api/posts/:post_id/dislike create a new dislike under a post
-- [ ]  PATCH /api/posts/:post_id update the specified post (its title, body or category).
-- - [ ]  It's accessible only for the creator of the post
+- [x]  PATCH /api/posts/:post_id update the specified post (its title, body or category).
+- - [x]  It's accessible only for the creator of the post
 - [x]  DELETE /api/posts/:post_id delete a post
 - - [x] Additional: Soft delete
 - - [x] Additional: Users can delete only their own posts

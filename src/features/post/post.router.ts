@@ -53,8 +53,9 @@ postRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
 // POST CREATOR ONLY
 postRouter.patch(
   "/:post_id",
+  authenticateMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
-    res.send(`Updated post ${req.params.post_id}`);
+    postController.updatePost(req, res, next);
   }
 );
 
