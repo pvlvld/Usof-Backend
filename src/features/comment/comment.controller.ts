@@ -20,8 +20,14 @@ class CommentController {
     this.commentService = CommentService.getInstance(CommentModel);
   }
 
-  public async getCommentById(id: number) {
-    return this.commentService.getCommentById(id);
+  public async getCommentById(req: Request, res: Response, next: NextFunction) {
+    const dto = plainToInstance(CommentIdDTO, req.params);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    return await this.commentService.getCommentById(dto.comment_id);
   }
 
   public async createComment(req: Request, res: Response, next: NextFunction) {
