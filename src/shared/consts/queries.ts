@@ -65,6 +65,8 @@ export const QUERIES = Object.freeze({
     READ: "SELECT * FROM comment WHERE id = ?",
     /** post_id */
     READ_POST_COMMENTS: "SELECT * FROM comment WHERE post_id = ?",
+    /** user_id */
+    READ_USER_COMMENTS: "SELECT * FROM comment WHERE user_id = ?",
     /** content, id */
     UPDATE: "UPDATE comment SET content = ? WHERE id = ?",
     /** id */

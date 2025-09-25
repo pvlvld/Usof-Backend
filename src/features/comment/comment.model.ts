@@ -57,6 +57,19 @@ export class CommentModel {
     }
   }
 
+  public async getCommentsByPostId(post_id: number) {
+    try {
+      const [rows] = await this.db.query<RowDataPacket[]>(
+        QUERIES.COMMENT.READ_POST_COMMENTS,
+        [post_id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error fetching comments by post ID:", error);
+      return [];
+    }
+  }
+
   public async createComment(
     post_id: number,
     user_id: number,
