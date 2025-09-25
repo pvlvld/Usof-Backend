@@ -2,6 +2,7 @@ import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { QUERIES } from "../../shared/consts/queries.js";
 import Database from "../../shared/database/index.js";
 import type { CreateCategoryDto, UpdateCategoryDto } from "./category.dto.js";
+import type { IPostModel } from "../post/post.model.js";
 
 type ICategory = {
   id: number;
@@ -81,5 +82,13 @@ export class CategoryModel {
       [post_id]
     );
     return rows as ICategory[];
+  }
+
+  public async getPostsByCategoryId(category_id: number) {
+    const [rows] = await this.db.query<RowDataPacket[]>(
+      QUERIES.CATEGORY.GET_CATEGORY_POSTS,
+      [category_id]
+    );
+    return rows as IPostModel[];
   }
 }
