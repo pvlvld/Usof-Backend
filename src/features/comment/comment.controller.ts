@@ -4,7 +4,7 @@ import { CommentService } from "./comment.service.js";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import {
-  CommentIdDTO,
+  CommentIdParamDTO,
   CreateCommentBodyDTO,
   UpdateCommentDTO
 } from "./comment.dto.js";
@@ -22,7 +22,7 @@ class CommentController {
   }
 
   public async getCommentById(req: Request, res: Response, next: NextFunction) {
-    const dto = plainToInstance(CommentIdDTO, req.params);
+    const dto = plainToInstance(CommentIdParamDTO, req.params);
     const errors = await validate(dto);
     if (errors.length > 0) {
       return res.status(400).json({ errors });
@@ -40,7 +40,7 @@ class CommentController {
   }
 
   public async createComment(req: Request, res: Response, next: NextFunction) {
-    const idDto = plainToInstance(CommentIdDTO, req.params);
+    const idDto = plainToInstance(CommentIdParamDTO, req.params);
     const contentDto = plainToInstance(CreateCommentBodyDTO, req.body);
     const idErrors = await validate(idDto);
     const contentErrors = await validate(contentDto);
@@ -63,7 +63,7 @@ class CommentController {
   }
 
   public async updateComment(req: Request, res: Response, next: NextFunction) {
-    const idDto = plainToInstance(CommentIdDTO, req.params);
+    const idDto = plainToInstance(CommentIdParamDTO, req.params);
     const contentDto = plainToInstance(UpdateCommentDTO, req.body);
     const idErrors = await validate(idDto);
     const contentErrors = await validate(contentDto);
@@ -92,7 +92,7 @@ class CommentController {
   }
 
   public async deleteComment(req: Request, res: Response, next: NextFunction) {
-    const dto = plainToInstance(CommentIdDTO, req.params);
+    const dto = plainToInstance(CommentIdParamDTO, req.params);
     const errors = await validate(dto);
     if (errors.length > 0) {
       return res.status(400).json({ errors });
@@ -115,7 +115,7 @@ class CommentController {
     return await this.commentService.deleteComment(target_id);
   }
 
-  private resolveTargetId(dto: CommentIdDTO): number {
+  private resolveTargetId(dto: CommentIdParamDTO): number {
     const target_id = dto.comment_id || dto.post_id;
     if (!target_id) {
       throw new BadRequestError("comment_id or post_id is required");

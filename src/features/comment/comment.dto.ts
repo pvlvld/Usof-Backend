@@ -2,7 +2,7 @@ import { IsInt, IsOptional, Length, Min, MinLength } from "class-validator";
 import type { ICommentModel } from "./comment.model.js";
 import { Type } from "class-transformer";
 
-export class CommentIdDTO {
+export class CommentIdParamDTO {
   @Min(1)
   @Type(() => Number)
   @IsInt()
