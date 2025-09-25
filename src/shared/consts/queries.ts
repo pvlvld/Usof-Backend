@@ -60,8 +60,8 @@ export const QUERIES = Object.freeze({
     /** post_id, user_id, parent_id, content */
     CREATE:
       "INSERT INTO comment (post_id, user_id, parent_id, content) VALUES (?, ?, ?, ?)",
-    /** post_id */
-    READ: "SELECT * FROM comment WHERE post_id = ?",
+    /** comment_id */
+    READ: "SELECT * FROM comment WHERE id = ?",
     /** content, id */
     UPDATE: "UPDATE comment SET content = ? WHERE id = ?",
     /** id */
