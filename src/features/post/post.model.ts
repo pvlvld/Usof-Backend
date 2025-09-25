@@ -3,6 +3,7 @@ import Database from "../../shared/database/index.js";
 import type { CreatePostDTO, GetPostsDto, PostUpdateDTO } from "./post.dto.js";
 import { QUERIES } from "../../shared/consts/queries.js";
 import { UnsafeQueryError } from "../../shared/consts/errors.js";
+import type { UpdateCategoryDto } from "../category/category.dto.js";
 
 type IPostStatus = "active" | "inactive";
 
@@ -113,7 +114,11 @@ export class PostModel {
     return { post_id: result.insertId, ...dto };
   }
 
-  public async updatePost(postId: number, userId: number, dto: CreatePostDTO) {
+  public async updatePost(
+    postId: number,
+    userId: number,
+    dto: { title: string; content: string; categories: string[] | null }
+  ) {
     try {
       const [result] = await this.db.query<ResultSetHeader>(
         QUERIES.POST.UPDATE,
@@ -122,6 +127,15 @@ export class PostModel {
       if (result.affectedRows === 0) {
         return null;
       }
+
+      if (dto.categories) {
+        await this.db.query(QUERIES.POST.REMOVE_ALL_CATEGORIES, [postId]);
+        const categories = dto.categories.map((category) => [postId, category]);
+        if (categories.length > 0) {
+          await this.db.query(QUERIES.POST.ADD_CATEGORIES, [categories]);
+        }
+      }
+
       return { ...dto };
     } catch (error) {
       console.error("Error updating post:", error);
