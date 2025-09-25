@@ -9,7 +9,7 @@ In progress...
 
 ## Table of Contents
 - [Task PDF](https://github.com/pvlvld/Usof-Backend/blob/main/Task.pdf)
-- [Progress Tracker / TODO](./API_PROGRESS.md)
+- [API documentation](./docs/API.md)
 - [Requirements](#requirements)
 - [Stack & Technologies](#stack--used-technologies)
 - [Key Features](#key-features)
