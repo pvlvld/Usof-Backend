@@ -2,7 +2,7 @@
 
 This document provides an overview of the API development process, listing required, optional, and additional features along with their implementation status. It serves as a reference for tracking progress and planning next steps throughout the project. Features are grouped by area, and notes are included for clarity where needed.
 
-Endpoints 34/40
+Endpoints 36/41
 
 **Legend:**
 
@@ -67,7 +67,7 @@ Aditional:
 - - [x]  Additional: Admins can view deleted posts
 - [x]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
 public.
-- [ ]  POST /api/posts/:post_id/comments create a new comment, required parameter is
+- [x]  POST /api/posts/:post_id/comments create a new comment, required parameter is
 [content]
 - [x]  GET /api/posts/:post_id/categories get all categories associated with the specified post
 - [x]  GET /api/posts/:post_id/like get all likes under the specified post
@@ -118,3 +118,4 @@ Additional:
 - [x]  POST /api/comments/:comment_id/like create a new like under a comment
 - [x]  Additional: POST /api/comments/:comment_id/dislike create a new dislike under a comment
 - [x]  DELETE /api/comments/:comment_id/like delete a like under a comment
+- [x]  Additional: POST /api/comments/:comment_id create nested comment
