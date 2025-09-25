@@ -55,6 +55,10 @@ class CategoryService {
     }
     return isDeleted;
   }
+
+  public async getPostsByCategoryId(category_id: number) {
+    return await this.categoryModel.getPostsByCategoryId(category_id);
+  }
 }
 
 export { CategoryService };
