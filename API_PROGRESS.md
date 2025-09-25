@@ -54,15 +54,15 @@ Aditional:
 
 # Post
 - [x]  GET /api/posts get all posts. This endpoint doesn't require any role, it is public. If there are too many posts, you must implement pagination. Page size is up to you.
-- - [x]  Additional: ?page=
-- - [x]  Additional: ?limit=
-- - [x]  Additional: ?sort=
-- - [x]  Additional: ?order=
-- - [x]  Additional: ?categories=
-- - [x]  Additional: ?status=
-- - [x]  Additional: ?user=
-- - [x]  Additional: ?from_date=
-- - [x]  Additional: ?to_date=
+- - [x]  Additional: ?page=INT
+- - [x]  Additional: ?limit=INT
+- - [x]  Additional: ?sort="rating" | "id" | "created_at" | "updated_at"
+- - [x]  Additional: ?order="ASC" | "DESC"
+- - [x]  Additional: ?categories="category1,category2"
+- - [x]  Additional: ?status="active" | "inactive"
+- - [x]  Additional: ?user=INT
+- - [x]  Additional: ?from_date=YYYY-MM-DD-hh-mm-ss
+- - [x]  Additional: ?to_date=YYYY-MM-DD-hh-mm-ss
 - [x]  GET /api/posts/:post_id get specified post data. Endpoint is public.
 - - [x]  Additional: Admins can view deleted posts
 - [ ]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
