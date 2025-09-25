@@ -63,6 +63,9 @@ export class CommentModel {
         QUERIES.COMMENT.READ_POST_COMMENTS,
         [post_id]
       );
+
+      this.replaceDeletedCommentContent(<ICommentModel[]>rows);
+
       return rows;
     } catch (error) {
       console.error("Error fetching comments by post ID:", error);
@@ -76,6 +79,9 @@ export class CommentModel {
         QUERIES.COMMENT.READ_USER_COMMENTS,
         [user_id]
       );
+
+      this.replaceDeletedCommentContent(<ICommentModel[]>rows);
+
       return rows;
     } catch (error) {
       console.error("Error fetching comments by user ID:", error);
@@ -89,6 +95,9 @@ export class CommentModel {
         QUERIES.COMMENT.READ_PARENT_COMMENTS,
         [parent_id]
       );
+
+      this.replaceDeletedCommentContent(<ICommentModel[]>rows);
+
       return rows;
     } catch (error) {
       console.error("Error fetching comments by parent ID:", error);
@@ -138,5 +147,19 @@ export class CommentModel {
       console.error("Error deleting comment:", error);
       return false;
     }
+  }
+
+  /** Replaces content of a deleted comments with a placeholder */
+  public async replaceDeletedCommentContent(
+    comments: ICommentModel[]
+  ): Promise<ICommentModel[]> {
+    comments.forEach((comment) => {
+      if (comment.deleted_at) {
+        Object.assign(comment, this.deletedCommentTemplate);
+      }
+      return comment;
+    });
+
+    return comments;
   }
 }
