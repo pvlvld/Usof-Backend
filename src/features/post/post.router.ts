@@ -9,16 +9,6 @@ import { likeRouter } from "../like/like.router.js";
 
 const postRouter = express.Router();
 
-//TODO:
-// - post locking / unlocking
-// - post sorting
-// - - Default: by likes count
-// - - by date
-// - post filtering
-// - - by category
-// - - by date interval
-// - - by status (inactive?)
-
 postRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
   postController.getPostMany(req, res, next);
 });
