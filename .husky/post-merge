@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+echo "Updating submodules..."
+git submodule update --init --recursive --remote
+echo "Finished updating submodules."
+echo "Installing dependencies..."
+npm install --no-audit --no-fund
