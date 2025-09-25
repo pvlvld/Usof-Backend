@@ -7,7 +7,7 @@ import type { UpdateCategoryDto } from "../category/category.dto.js";
 
 type IPostStatus = "active" | "inactive";
 
-type IPostModel = {
+export type IPostModel = {
   id: number;
   user_id: number;
   title: string;
