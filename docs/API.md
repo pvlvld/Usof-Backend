@@ -49,6 +49,7 @@ Most endpoints require authentication via HTTP-only cookies containing JWT token
 - [ ] Implement rate limiting
 - [ ] Implement per day action limits dependent on the user role
 - [ ] Create config service
+- [ ] Revise the list of allowed HTML tags for user input sanitization
 
 ## 🔐 Authentication Endpoints
 
