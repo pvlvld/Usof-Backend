@@ -210,7 +210,13 @@ class AuthService {
     userLoginInfo: IUserLoginInfo
   ) {
     // TODO: refactor to avoid code duplication with issueTokensForUser
-    const payload = this.jwtService.verifyRefreshToken(refreshToken);
+    let payload: IJwtPayloadAuth | null = null;
+    try {
+      payload = this.jwtService.verifyRefreshToken(
+        refreshToken
+      ) as IJwtPayloadAuth | null;
+    } catch (e) {}
+
     if (!payload || !payload.sub) {
       throw new UnauthorizedError("Invalid refresh token");
     }
