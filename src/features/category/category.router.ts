@@ -28,7 +28,7 @@ categoryRouter.get(
 categoryRouter.get(
   "/:category_id/posts",
   async (req: Request, res: Response, next: NextFunction) => {
-    // await categoryController.getPostsByCategoryId(req, res, next);
+    await categoryController.getPostsByCategoryId(req, res, next);
   }
 );
 
