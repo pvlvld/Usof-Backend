@@ -198,8 +198,8 @@ Uploads and processes a user avatar image.
   "file": {
     "fieldname": "avatar",
     "originalname": "profile.jpg",
-    "filename": "processed_avatar.webp",
-    "path": "/uploads/avatars/processed_avatar.webp",
+    "filename": "avatar_*user_id*.webp",
+    "path": "/uploads/avatars/avatar_*user_id*.webp",
     "size": 45678
   }
 }
