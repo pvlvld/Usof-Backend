@@ -77,4 +77,13 @@ export class PostService {
 
     return await this.categoryModel.getPostCategories(dto.post_id);
   }
+
+  public async getPostComments(dto: PostIdDTO) {
+    const post = await this.postModel.getPostById(dto.post_id);
+    if (!post) {
+      throw new NotFoundError("Post not found");
+    }
+
+    return await this.commentModel.getCommentsByPostId(dto.post_id);
+  }
 }
