@@ -6,7 +6,7 @@ export class CommentIdDTO {
   @Min(1)
   @Type(() => Number)
   @IsInt()
-  id!: number;
+  comment_id!: number;
 }
 
 export class CreateCommentDTO
