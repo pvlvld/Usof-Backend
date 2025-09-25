@@ -3,7 +3,7 @@
 In progress...
 > A simplified Stack Overflow API clone. Implements authentication, user management, posts, cascading comments, and more.
 
-**Status:** 41 endpoints implemented. (all)
+**Status:** 49 endpoints implemented. (all)
 
 ---
 
@@ -100,6 +100,7 @@ In progress...
 - This project is for educational purposes and does not use an ORM.
 - If some choices or solutions seem unusual, please check if that's not a requirement from the PDF assignment.
 - You might encounter issues when deleting the ./mysql_data folder. If so, use sudo.
+- Post images are not finished, but all the logic is ready. It just requires to pick the request structure. Check the [uploadImage.middleware.ts](./src/shared/middlewares/uploadImage.middleware.ts)
 
 ---
 
