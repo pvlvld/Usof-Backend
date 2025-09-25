@@ -16,6 +16,7 @@ commentRouter.get(
 );
 
 commentRouter.use("/:comment_id/like", likeRouter);
+commentRouter.use("/:comment_id/dislike", likeRouter);
 
 commentRouter.patch(
   "/:comment_id",
