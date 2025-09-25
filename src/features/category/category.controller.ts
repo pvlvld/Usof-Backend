@@ -125,6 +125,30 @@ class CategoryController {
       next(err);
     }
   }
+
+  public async getPostsByCategoryId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const categoryIdDto: CategoryIdDto = plainToInstance(
+      CategoryIdDto,
+      req.params
+    );
+    const idErrors = await validate(categoryIdDto);
+    if (idErrors.length > 0) {
+      return res.status(400).json({ errors: idErrors });
+    }
+
+    try {
+      const posts = await this.categoryService.getPostsByCategoryId(
+        categoryIdDto.category_id
+      );
+      return res.status(200).json(posts);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 export const categoryController = new CategoryController();
