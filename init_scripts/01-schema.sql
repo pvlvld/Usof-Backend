@@ -126,3 +126,29 @@ CREATE TABLE email_verifications (
     token VARCHAR(64) NOT NULL UNIQUE,
     FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 );
+
+CREATE TABLE collection (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description VARCHAR(255) DEFAULT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_collection_name (user_id, name)
+);
+CREATE INDEX idx_collection_user_id ON collection (user_id);
+CREATE INDEX idx_collection_name ON collection (name);
+
+CREATE TABLE collection_posts (
+    collection_id INT NOT NULL,
+    post_id INT NOT NULL,
+    added_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (collection_id, post_id),
+    FOREIGN KEY (collection_id) REFERENCES collection(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE
+);
+CREATE INDEX idx_collection_posts_collection_id ON collection_posts (collection_id);
+CREATE INDEX idx_collection_posts_post_id ON collection_posts (post_id);
