@@ -6,10 +6,17 @@ export class CommentIdDTO {
   @Min(1)
   @Type(() => Number)
   @IsInt()
-  comment_id!: number;
+  @IsOptional()
+  comment_id: number | null = null;
+
+  @Min(1)
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  post_id: number | null = null;
 }
 
-export class CreateCommentDTO
+export class CreateCommentBodyDTO
   implements Pick<ICommentModel, "parent_id" | "content">
 {
   @Min(1)
