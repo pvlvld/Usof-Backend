@@ -44,8 +44,12 @@ export class PostService {
     return await this.postModel.createPost(user_id, dto);
   }
 
-  public async updatePost(dto: PostUpdateDTO, user: Express.UserInfo) {
-    const post = await this.postModel.getPostById(dto.post_id);
+  public async updatePost(
+    idDto: PostIdDTO,
+    updateDto: PostUpdateDTO,
+    user: Express.UserInfo
+  ) {
+    const post = await this.postModel.getPostById(idDto.post_id);
     if (!post) {
       throw new NotFoundError("Post not found");
     }
@@ -54,8 +58,8 @@ export class PostService {
     if (post.user_id !== user.id) {
       throw new ForbiddenError("You can only update your own posts");
     }
-    const postData = <CreatePostDTO>Object.assign({}, post, dto);
-    return await this.postModel.updatePost(dto.post_id, user.id, postData);
+    const postData = <CreatePostDTO>Object.assign({}, post, updateDto);
+    return await this.postModel.updatePost(idDto.post_id, user.id, postData);
   }
 
   public async getPostMany(dto: GetPostsDto) {
