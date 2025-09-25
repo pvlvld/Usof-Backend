@@ -24,7 +24,7 @@
     "@types/jsdom": "^21.1.7",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
-    "@types/node": "^24.3.1",
+    "@types/node": "^24.5.2",
     "@types/nodemailer": "^7.0.1",
     "@types/sharp": "^0.32.0",
     "git-format-staged": "^3.1.1",
@@ -46,10 +46,10 @@
     "jsdom": "^27.0.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
-    "mysql2": "^3.14.5",
+    "mysql2": "^3.15.1",
     "nodemailer": "^7.0.6",
     "pm2": "^6.0.13",
     "reflect-metadata": "^0.2.2",
-    "sharp": "^0.34.3"
+    "sharp": "^0.34.4"
   }
 }
