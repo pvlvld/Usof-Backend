@@ -118,15 +118,15 @@ export class PostUpdateDTO extends PostIdDTO {
   @MaxLength(200)
   @IsString()
   @IsOptional()
-  title!: string;
+  title: string | null = null;
 
   @MinLength(1)
   @MaxLength(5000)
   @IsString()
   @IsOptional()
-  content!: string;
+  content: string | null = null;
 
   @IsInt({ each: true })
   @IsOptional()
-  categories!: number[];
+  categories: number[] | null = null;
 }
