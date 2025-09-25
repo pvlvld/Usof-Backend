@@ -5,17 +5,19 @@ import { InternalServerError } from "../consts/errors.js";
 class EmailService {
   private static instance: EmailService | null = null;
   private transporter: nodemailer.Transporter;
-  private senderEmail: string;
+  private sender: string;
   private constructor() {
-    this.senderEmail = process.env.SMTP_USER || "user@example.com";
+    const senderEmail = process.env.SMTP_USER || "user@example.com";
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || "smtp.example.com",
       port: parseInt(process.env.SMTP_PORT || "587"),
       auth: {
-        user: this.senderEmail,
+        user: senderEmail,
         pass: process.env.SMTP_PASS || "password"
       }
     });
+
+    this.sender = `"Usof" <${senderEmail}>`;
   }
 
   public static getInstance() {
@@ -27,7 +29,7 @@ class EmailService {
 
   public async sendPasswordResetEmail(email: string, token: string) {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: this.senderEmail,
+      from: this.sender,
       to: email,
       subject: "Password Reset",
       html: EMAIL_TEMPLATES.resetPassword(this.getEmailResetLink(token))
@@ -42,7 +44,7 @@ class EmailService {
 
   public async sendEmailVerification(email: string, token: string) {
     const mailOptions: nodemailer.SendMailOptions = {
-      from: this.senderEmail,
+      from: this.sender,
       to: email,
       subject: "Email Verification",
       html: EMAIL_TEMPLATES.emailConfirmation(
