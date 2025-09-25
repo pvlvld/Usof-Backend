@@ -1,132 +1,174 @@
-# API Development Progress Tracker
+# API Documentation
 
-This document provides an overview of the API development process, listing required, optional, and additional features along with their implementation status. It serves as a reference for tracking progress and planning next steps throughout the project. Features are grouped by area, and notes are included for clarity where needed.
+This document provides a comprehensive overview of the API endpoints and their implementation status. The API is organized into feature modules, each with detailed documentation available in separate files.
 
-Endpoints finished:
-- Required by the task: 34/34
-- Additional: 15/15
-- In total: 49/49
+## 📊 Implementation Status
 
-**Legend:**
+- **Required by the task**: 34/34 [x]
+- **Additional features**: 15/15 [x]
+- **Total endpoints**: 49/49 [x]
 
-- - [ ] — Feature not yet implemented
-- - [x] — Feature completed
-- **Additional** — Feature proposed by me
+## 📚 Feature Documentation
+
+- **[Authentication API](AUTH_API.md)** - User registration, login, logout, password reset, email verification, and token refresh
+- **[User Management API](USER_API.md)** - User profiles, avatars, administrative functions, and user management
+- **[Post API](POST_API.md)** - Blog posts with advanced filtering, sorting, categories, and comments
+- **[Category API](CATEGORY_API.md)** - Post categories for content organization
+- **[Comment API](COMMENT_API.md)** - Nested comments and replies with like/dislike functionality
+- **[Like API](LIKE_API.md)** - Like and dislike system for posts and comments
+- **[Collections API](COLLECTIONS_API.md)** - User collections for organizing and bookmarking posts
+
+## 🏗️ Architecture Overview
+
+The API is built with a modular architecture where each feature is self-contained with its own:
+
+- Controller (business logic)
+- Service (data operations)
+- Model (database schema)
+- DTO (data transfer objects)
+- Router (endpoint definitions)
+
+## 🔐 Authentication
+
+Most endpoints require authentication via HTTP-only cookies containing JWT tokens:
+
+- `accessToken`: Short-lived token (15 minutes)
+- `refreshToken`: Long-lived token for refreshing access
+
+## 📝 Legend
+
+- [x] — Feature completed
+- [ ] — Feature not yet implemented
 - **Optional** — Recommended extra feature
-- All other items are from the main requirements
+- **Additional** — Feature proposed beyond requirements by me
 
-# TODO
-- [ ]  Remove target from validation errors
-- [ ]  Unsigned int for the AUTO_INCREMENT DB columns?
+## 🚧 TODO Items
 
-# Auth
-- [x]  POST - /api/auth/register - registration of a new user, required parameters are [login, password, password confirmation, email]
-- [x]  POST - /api/auth/login - log in user, required parameters are [login, email, password]. Only users with a confirmed email can sign in
-- [x]  POST - /api/auth/logout - log out authorized user
-- [x]  POST - /api/auth/password-reset - send a reset link to user email, required parameter is [email]
-- [x]  POST - /api/auth/password-reset/:confirm_token - confirm new password with a token from email, required parameter is a [new password]
+- [ ] Remove target from validation errors
+- [ ] Use unsigned int for AUTO_INCREMENT DB columns
 
-Additional:
-- [x]  POST - /token/refresh - refresh tokens using refreshToken
+## 🔐 Authentication Endpoints
 
+| Method | Endpoint                                  | Description                               | Status |
+| ------ | ----------------------------------------- | ----------------------------------------- | ------ |
+| POST   | `/api/auth/register`                      | Register new user with email verification | [x]    |
+| POST   | `/api/auth/login`                         | Login user (verified email required)      | [x]    |
+| POST   | `/api/auth/logout`                        | Logout authorized user                    | [x]    |
+| POST   | `/api/auth/password-reset`                | Send password reset link to email         | [x]    |
+| POST   | `/api/auth/password-reset/:confirm_token` | Reset password with token                 | [x]    |
+| POST   | `/api/auth/verify-email/:confirm_token`   | Verify user email address                 | [x]    |
+| POST   | `/api/auth/token/refresh`                 | **Additional**: Refresh access tokens     | [x]    |
 
-# User
-- [x]  GET - /api/users get all users (page)
-- - [x]  Additional: ?page=
-- - [x]  Additional: ?limit=
-- - [x]  Additional: ?sort=
-- - [x]  Additional: ?order=
-- - [x]  Additional: exclude soft deleted users
-- [x]  GET - /api/users/:user_id get specified user data
-- [x]  POST - /api/users create a new user, required parameters are [login, password, password confirmation, email, role].
-- - [x]  Admins only
-- [x]  PATCH - /api/users/avatar upload user avatar
-- - [x]  Additional: Resize & compress
-- - [x]  Additional: Convert all to webp
-- - [x]  Additional: Allow animated avatars for donators
-- [x]  PATCH /api/users/:user_id update user data
-- - [x]  Additional: Partial update?
-- [x]  DELETE - /api/users/:user_id delete user
-- - [x] Additional: soft delete
+## 👤 User Management Endpoints
 
-Aditional:
-- [x]  GET /api/users/:user_id/avatar
-- - [x]  Serve a default pfp if the user does not have one
-- [x]  POST - /api/users/:user_id/ban ban user untill / permanent (epoch)
-- [x]  POST - /api/users/:user_id/unban unban user
+| Method | Endpoint                     | Description                               | Status |
+| ------ | ---------------------------- | ----------------------------------------- | ------ |
+| GET    | `/api/users`                 | Get all users with pagination & filtering | [x]    |
+| GET    | `/api/users/:user_id`        | Get specific user data                    | [x]    |
+| POST   | `/api/users`                 | Create new user (admin only)              | [x]    |
+| PATCH  | `/api/users/avatar`          | Upload user avatar with processing        | [x]    |
+| PATCH  | `/api/users/:user_id`        | Update user data (owner/admin)            | [x]    |
+| DELETE | `/api/users/:user_id`        | Soft delete user                          | [x]    |
+| GET    | `/api/users/:user_id/avatar` | **Additional**: Get user avatar           | [x]    |
+| POST   | `/api/users/:user_id/ban`    | **Additional**: Ban user                  | [x]    |
+| POST   | `/api/users/:user_id/unban`  | **Additional**: Unban user                | [x]    |
 
-# Post
-- [x]  GET /api/posts get all posts. This endpoint doesn't require any role, it is public. If there are too many posts, you must implement pagination. Page size is up to you.
-- - [x]  Additional: ?page=INT
-- - [x]  Additional: ?limit=INT
-- - [x]  Additional: ?sort="rating" | "id" | "created_at" | "updated_at"
-- - [x]  Additional: ?order="ASC" | "DESC"
-- - [x]  Additional: ?categories="category1,category2"
-- - [x]  Additional: ?status="active" | "inactive"
-- - [x]  Additional: ?user=INT
-- - [x]  Additional: ?from_date=YYYY-MM-DD-hh-mm-ss
-- - [x]  Additional: ?to_date=YYYY-MM-DD-hh-mm-ss
-- [x]  GET /api/posts/:post_id get specified post data. Endpoint is public.
-- - [x]  Additional: Admins can view deleted posts
-- [x]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
-public.
-- [x]  POST /api/posts/:post_id/comments create a new comment, required parameter is
-[content]
-- [x]  GET /api/posts/:post_id/categories get all categories associated with the specified post
-- [x]  GET /api/posts/:post_id/like get all likes under the specified post
-- [x]  POST /api/posts/ create a new post, required parameters are [title, content, categories]
-- [x]  POST /api/posts/:post_id/like create a new like under a post
-- [x]  Additional: POST /api/posts/:post_id/dislike create a new dislike under a post
-- [x]  PATCH /api/posts/:post_id update the specified post (its title, body or category).
-- - [x]  It's accessible only for the creator of the post
-- [x]  DELETE /api/posts/:post_id delete a post
-- - [x] Additional: Soft delete
-- - [x] Additional: Users can delete only their own posts
-- - [x] Additional: Admins can delete any post
-- [x]  DELETE /api/posts/:post_id/like delete a like under a post
+**Additional Features:**
 
-Don't forget about a feature that allows locking posts/comments. Think about how you will implement it.
-You also must implement post sorting and filtering.
+- [x] Pagination with `page`, `limit`, `sort`, `order` parameters
+- [x] Exclude soft deleted users
+- [x] Avatar resizing, compression, and WebP conversion
+- [x] Animated avatars for donators
+- [x] Partial updates supported
+- [x] Default avatar fallback
 
-Every user must have the opportunity to sort all viewable posts:
-- [x]  by number of likes by default
-- [x]  by date
+## 📝 Post Management Endpoints
 
-The user must have the opportunity to filter all viewable posts as well:
-- [x]  by categories
-- [x]  by date interval
-- [x]  by status
+| Method | Endpoint                         | Description                                        | Status |
+| ------ | -------------------------------- | -------------------------------------------------- | ------ |
+| GET    | `/api/posts`                     | Get all posts with advanced filtering & pagination | [x]    |
+| GET    | `/api/posts/:post_id`            | Get specific post data (public)                    | [x]    |
+| POST   | `/api/posts`                     | Create new post (authenticated)                    | [x]    |
+| PATCH  | `/api/posts/:post_id`            | Update post (owner only)                           | [x]    |
+| DELETE | `/api/posts/:post_id`            | Delete post (owner/admin)                          | [x]    |
+| GET    | `/api/posts/:post_id/comments`   | Get post comments (public)                         | [x]    |
+| POST   | `/api/posts/:post_id/comments`   | Create comment on post                             | [x]    |
+| GET    | `/api/posts/:post_id/categories` | Get post categories                                | [x]    |
+| GET    | `/api/posts/:post_id/like`       | Get post likes                                     | [x]    |
+| POST   | `/api/posts/:post_id/like`       | Like post                                          | [x]    |
+| POST   | `/api/posts/:post_id/dislike`    | **Additional**: Dislike post                       | [x]    |
+| DELETE | `/api/posts/:post_id/like`       | Remove like/dislike from post                      | [x]    |
 
-Optional:
-- [x]  implement an opportunity to add posts to the Favorites category (collections*), so that the user can quickly view all marked posts by going on the appropriate endpoint
-- [ ]  allow users to subscribe to some posts that they want to follow and send them notifications when some kind of activity was made with the post (it was changed somehow or it was commented by somebody)
+**Advanced Features:**
 
-# Categories
-- [x]  GET /api/categories get all categories
-- [x]  GET /api/categories/:category_id get specified category data
-- [x]  GET /api/categories/:category_id/posts get all posts associated with the specified category
-- [x]  POST /api/categories create a new category, required parameter is [title]
-- [x]  PATCH /api/categories/:category_id update specified category data
-- [x]  DELETE /api/categories/:category_id delete a category
-Additional:
-- [x]  Require admin auth for the creation, update, and delete.
+- [x] **Pagination**: `page`, `limit` parameters
+- [x] **Sorting**: `sort` (rating, id, created_at, updated_at), `order` (ASC/DESC)
+- [x] **Filtering**: `categories`, `status`, `user`, `from_date`, `to_date`
+- [x] **Soft Delete**: Users can delete own posts, admins can delete any
+- [x] **Admin Access**: Admins can view deleted posts
+- [x] **Collections**: Posts can be added to user collections
 
-# Collections (additional)
-- [x]  GET /api/collections Returns a list of all collections created by the authenticated user.
-- [x]  POST /api/collections Creates a new collection for the authenticated user.
-- [x]  GET /api/collections/:collection_name Returns details about a specific collection.
-- [x]  GET /api/collections/:collection_name/posts Returns all posts in a specific collection with their details.
-- [x]  PATCH /api/collections/:collection_name Updates a collection's name and/or description.
-- [x]  DELETE /api/collections/:collection_name Deletes a collection and removes all posts from it.
-- [x]  POST /api/collections/:collection_name/posts Adds a post to a collection.
-- [x]  DELETE /api/collections/:collection_name/posts/:post_id Removes a post from a collection.
+**Sorting Options:**
 
-# Comments
-- [x]  GET /api/comments/:comment_id get specified comment data
-- [x]  PATCH /api/comments/:comment_id update specified comment data
-- [x]  DELETE /api/comments/:comment_id delete a comment
-- [x]  GET /api/comments/:comment_id/like get all likes under the specified comment
-- [x]  POST /api/comments/:comment_id/like create a new like under a comment
-- [x]  Additional: POST /api/comments/:comment_id/dislike create a new dislike under a comment
-- [x]  DELETE /api/comments/:comment_id/like delete a like under a comment
-- [x]  Additional: POST /api/comments/:comment_id create nested comment
+- [x] By rating (default)
+- [x] By creation date
+- [x] By update date
+- [x] By ID
+
+**Filtering Options:**
+
+- [x] By categories (comma-separated)
+- [x] By date interval
+- [x] By status (active/inactive)
+- [x] By user ID
+
+**Optional Features:**
+
+- [x] Collections system for favorites
+- [ ] Post subscription notifications
+
+## 🏷️ Category Management Endpoints
+
+| Method | Endpoint                             | Description                         | Status |
+| ------ | ------------------------------------ | ----------------------------------- | ------ |
+| GET    | `/api/categories`                    | Get all categories (public)         | [x]    |
+| GET    | `/api/categories/:category_id`       | Get specific category data (public) | [x]    |
+| GET    | `/api/categories/:category_id/posts` | Get posts in category (public)      | [x]    |
+| POST   | `/api/categories`                    | Create new category (admin only)    | [x]    |
+| PATCH  | `/api/categories/:category_id`       | Update category (admin only)        | [x]    |
+| DELETE | `/api/categories/:category_id`       | Delete category (admin only)        | [x]    |
+
+**Additional Features:**
+
+- [x] Admin authentication required for CUD operations
+
+## 📚 Collections Management Endpoints
+
+| Method | Endpoint                                           | Description                 | Status |
+| ------ | -------------------------------------------------- | --------------------------- | ------ |
+| GET    | `/api/collections`                                 | Get user's collections      | [x]    |
+| POST   | `/api/collections`                                 | Create new collection       | [x]    |
+| GET    | `/api/collections/:collection_name`                | Get collection details      | [x]    |
+| GET    | `/api/collections/:collection_name/posts`          | Get posts in collection     | [x]    |
+| PATCH  | `/api/collections/:collection_name`                | Update collection           | [x]    |
+| DELETE | `/api/collections/:collection_name`                | Delete collection           | [x]    |
+| POST   | `/api/collections/:collection_name/posts`          | Add post to collection      | [x]    |
+| DELETE | `/api/collections/:collection_name/posts/:post_id` | Remove post from collection | [x]    |
+
+## 💬 Comment Management Endpoints
+
+| Method | Endpoint                            | Description                      | Status |
+| ------ | ----------------------------------- | -------------------------------- | ------ |
+| GET    | `/api/comments/:comment_id`         | Get specific comment data        | [x]    |
+| POST   | `/api/comments`                     | Create new comment or reply      | [x]    |
+| PATCH  | `/api/comments/:comment_id`         | Update comment (owner only)      | [x]    |
+| DELETE | `/api/comments/:comment_id`         | Delete comment (owner only)      | [x]    |
+| GET    | `/api/comments/:comment_id/like`    | Get comment likes                | [x]    |
+| POST   | `/api/comments/:comment_id/like`    | Like comment                     | [x]    |
+| POST   | `/api/comments/:comment_id/dislike` | **Additional**: Dislike comment  | [x]    |
+| DELETE | `/api/comments/:comment_id/like`    | Remove like/dislike from comment | [x]    |
+
+**Additional Features:**
+
+- [x] Nested comments (replies) support
+- [x] Comment threading with parent-child relationships
