@@ -230,5 +230,45 @@ export const QUERIES = Object.freeze({
     ACTIVATE: "UPDATE post SET status = 'active' WHERE id = ?",
     /** id */
     INACTIVATE: "UPDATE post SET status = 'inactive' WHERE id = ?"
+  },
+  COLLECTION: {
+    /** user_id, name, description */
+    CREATE:
+      "INSERT INTO collection (user_id, name, description) VALUES (?, ?, ?)",
+    /** user_id */
+    GET_BY_USER_ID:
+      "SELECT * FROM collection WHERE user_id = ? ORDER BY created_at DESC",
+    /** user_id, name */
+    GET_BY_NAME: "SELECT * FROM collection WHERE user_id = ? AND name = ?",
+    /** user_id, name */
+    GET_WITH_POSTS: `
+      SELECT 
+        c.*,
+        p.id as post_id,
+        p.title,
+        p.content,
+        p.rating,
+        p.created_at as post_created_at,
+        cp.added_at
+      FROM collection c
+      LEFT JOIN collection_posts cp ON c.id = cp.collection_id
+      LEFT JOIN post p ON cp.post_id = p.id AND p.deleted_at IS NULL
+      WHERE c.user_id = ? AND c.name = ?
+      ORDER BY cp.added_at DESC
+    `,
+    /** dynamic setClause, then user_id, name */
+    UPDATE: (setClause: string) =>
+      `UPDATE collection SET ${setClause}, updated_at = CURRENT_TIMESTAMP WHERE user_id = ? AND name = ?`,
+    /** user_id, name */
+    DELETE: "DELETE FROM collection WHERE user_id = ? AND name = ?",
+    /** post_id */
+    CHECK_POST_EXISTS:
+      "SELECT id FROM post WHERE id = ? AND deleted_at IS NULL",
+    /** collection_id, post_id */
+    ADD_POST:
+      "INSERT IGNORE INTO collection_posts (collection_id, post_id) VALUES (?, ?)",
+    /** collection_id, post_id */
+    REMOVE_POST:
+      "DELETE FROM collection_posts WHERE collection_id = ? AND post_id = ?"
   }
 });
