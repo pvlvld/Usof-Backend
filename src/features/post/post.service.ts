@@ -5,7 +5,12 @@ import {
 } from "../../shared/consts/errors.js";
 import type { CategoryModel } from "../category/category.model.js";
 import type { CommentModel } from "../comment/comment.model.js";
-import type { CreatePostDTO, GetPostsDto, PostIdDTO } from "./post.dto.js";
+import type {
+  CreatePostDTO,
+  GetPostsDto,
+  PostIdDTO,
+  PostUpdateDTO
+} from "./post.dto.js";
 import type { PostModel } from "./post.model.js";
 
 export class PostService {
@@ -37,6 +42,20 @@ export class PostService {
 
   public async createPost(dto: CreatePostDTO, user_id: number) {
     return await this.postModel.createPost(user_id, dto);
+  }
+
+  public async updatePost(dto: PostUpdateDTO, user: Express.UserInfo) {
+    const post = await this.postModel.getPostById(dto.post_id);
+    if (!post) {
+      throw new NotFoundError("Post not found");
+    }
+
+    // Not even admin can update someone else's post. As per requirements.
+    if (post.user_id !== user.id) {
+      throw new ForbiddenError("You can only update your own posts");
+    }
+    const postData = <CreatePostDTO>Object.assign({}, post, dto);
+    return await this.postModel.updatePost(dto.post_id, user.id, postData);
   }
 
   public async getPostMany(dto: GetPostsDto) {

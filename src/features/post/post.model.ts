@@ -117,7 +117,7 @@ export class PostModel {
   public async updatePost(
     postId: number,
     userId: number,
-    dto: { title: string; content: string; categories: string[] | null }
+    dto: { title: string; content: string; categories: number[] | null }
   ) {
     try {
       const [result] = await this.db.query<ResultSetHeader>(
