@@ -22,7 +22,7 @@ export const QUERIES = Object.freeze({
     FIND_BY_EMAIL: "SELECT * FROM user WHERE email = ? LIMIT 1",
     /** login */
     FIND_BY_LOGIN: "SELECT * FROM user WHERE login = ? LIMIT 1",
-    /** password_hash, password_salt, id */
+    /** password_hash, password_salt, user_id */
     RESET_PASSWORD:
       "UPDATE user SET password_hash = ?, password_salt = ? WHERE id = ?",
     /** id */
