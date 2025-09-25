@@ -83,6 +83,19 @@ export class CommentModel {
     }
   }
 
+  public async getCommentsByParentId(parent_id: number) {
+    try {
+      const [rows] = await this.db.query<RowDataPacket[]>(
+        QUERIES.COMMENT.READ_PARENT_COMMENTS,
+        [parent_id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error fetching comments by parent ID:", error);
+      return [];
+    }
+  }
+
   public async createComment(
     post_id: number,
     user_id: number,
