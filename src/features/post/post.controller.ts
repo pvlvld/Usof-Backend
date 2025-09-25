@@ -2,10 +2,11 @@ import type { NextFunction, Request, Response } from "express";
 import { PostModel } from "./post.model.js";
 import { PostService } from "./post.service.js";
 import { plainToInstance } from "class-transformer";
-import { GetPostsDto, PostIdDTO } from "./post.dto.js";
+import { CreatePostDTO, GetPostsDto, PostIdDTO } from "./post.dto.js";
 import { validate } from "class-validator";
 import { CategoryModel } from "../category/category.model.js";
 import { CommentModel } from "../comment/comment.model.js";
+import { UnauthorizedError } from "../../shared/consts/errors.js";
 
 class PostController {
   private postService: PostService;
@@ -15,6 +16,25 @@ class PostController {
       CategoryModel,
       CommentModel
     );
+  }
+
+  public async createPost(req: Request, res: Response, next: NextFunction) {
+    const dto = plainToInstance(CreatePostDTO, req.body);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    if (!req.user) {
+      return next(new UnauthorizedError());
+    }
+
+    try {
+      const post = await this.postService.createPost(dto, req.user.id);
+      return res.status(201).json(post);
+    } catch (error) {
+      return next(error);
+    }
   }
 
   public async getPostMany(req: Request, res: Response, next: NextFunction) {

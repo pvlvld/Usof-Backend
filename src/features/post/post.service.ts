@@ -5,7 +5,7 @@ import {
 } from "../../shared/consts/errors.js";
 import type { CategoryModel } from "../category/category.model.js";
 import type { CommentModel } from "../comment/comment.model.js";
-import type { GetPostsDto, PostIdDTO } from "./post.dto.js";
+import type { CreatePostDTO, GetPostsDto, PostIdDTO } from "./post.dto.js";
 import type { PostModel } from "./post.model.js";
 
 export class PostService {
@@ -33,6 +33,10 @@ export class PostService {
       this.instance = new PostService(post, category, comment);
     }
     return this.instance;
+  }
+
+  public async createPost(dto: CreatePostDTO, user_id: number) {
+    return await this.postModel.createPost(user_id, dto);
   }
 
   public async getPostMany(dto: GetPostsDto) {
