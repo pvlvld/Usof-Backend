@@ -215,6 +215,8 @@ export const QUERIES = Object.freeze({
     /** post_id, category_id */
     REMOVE_CATEGORY:
       "DELETE FROM post_categories WHERE post_id = ? AND category_id = ?",
+    /** post_id */
+    REMOVE_ALL_CATEGORIES: "DELETE FROM post_categories WHERE post_id = ?",
     /** id */
     ACTIVATE: "UPDATE post SET status = 'active' WHERE id = ?",
     /** id */
