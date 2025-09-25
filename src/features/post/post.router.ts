@@ -6,6 +6,7 @@ import express, {
 import { postController } from "./post.controller.js";
 import { authenticateMiddleware } from "../../shared/middlewares/auth.middleware.js";
 import { likeRouter } from "../like/like.router.js";
+import { commentController } from "../comment/comment.controller.js";
 
 const postRouter = express.Router();
 
@@ -31,10 +32,7 @@ postRouter.get(
 postRouter.post(
   "/:post_id/comments",
   (req: Request, res: Response, next: NextFunction) => {
-    const { content } = req.body;
-    res.send(
-      `Created comment for post ${req.params.post_id} with content: ${content}`
-    );
+    commentController.createComment(req, res, next);
   }
 );
 
