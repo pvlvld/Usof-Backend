@@ -43,7 +43,7 @@ class CommentController {
       return next(new UnauthorizedError());
     }
 
-    return this.commentService.createComment(
+    return await this.commentService.createComment(
       idDto.comment_id,
       req.user.id,
       contentDto.parent_id,
