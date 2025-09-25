@@ -55,6 +55,15 @@ export const QUERIES = Object.freeze({
       FROM post_categories pc
       JOIN category c ON pc.category_id = c.id
       WHERE pc.post_id = ?
+    `,
+    /** category_id */
+    GET_CATEGORY_POSTS: `
+      SELECT
+        p.*
+      FROM post_categories pc
+      JOIN post p ON pc.post_id = p.id
+      WHERE pc.category_id = ? AND p.deleted_at IS NULL
+      ORDER BY p.created_at DESC
     `
   },
   COMMENT: {
