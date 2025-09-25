@@ -2,7 +2,7 @@
 
 This document provides an overview of the API development process, listing required, optional, and additional features along with their implementation status. It serves as a reference for tracking progress and planning next steps throughout the project. Features are grouped by area, and notes are included for clarity where needed.
 
-Endpoints 38/41
+Endpoints 39/41
 
 **Legend:**
 
@@ -101,7 +101,7 @@ Optional:
 # Categories
 - [x]  GET /api/categories get all categories
 - [x]  GET /api/categories/:category_id get specified category data
-- [ ]  GET /api/categories/:category_id/posts get all posts associated with the specified category
+- [x]  GET /api/categories/:category_id/posts get all posts associated with the specified category
 - [x]  POST /api/categories create a new category, required parameter is [title]
 - [x]  PATCH /api/categories/:category_id update specified category data
 - [x]  DELETE /api/categories/:category_id delete a category
