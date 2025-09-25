@@ -4,14 +4,15 @@ import express, {
   type Response
 } from "express";
 import { likeRouter } from "../like/like.router.js";
+import { commentController } from "./comment.controller.js";
+import { authenticateMiddleware } from "../../shared/middlewares/auth.middleware.js";
 
 const commentRouter = express.Router();
 
 commentRouter.get(
   "/:comment_id",
   (req: Request, res: Response, next: NextFunction) => {
-    const { comment_id } = req.params;
-    res.json({ message: `Comment ${comment_id}` });
+    commentController.getCommentById(req, res, next);
   }
 );
 
@@ -20,18 +21,17 @@ commentRouter.use("/:comment_id/dislike", likeRouter);
 
 commentRouter.patch(
   "/:comment_id",
+  authenticateMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
-    const { comment_id } = req.params;
-    // Extract updated comment data from request body
-    res.json({ message: `Comment ${comment_id} updated` });
+    commentController.updateComment(req, res, next);
   }
 );
 
 commentRouter.delete(
   "/:comment_id",
+  authenticateMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
-    const { comment_id } = req.params;
-    res.json({ message: `Comment ${comment_id} deleted` });
+    commentController.deleteComment(req, res, next);
   }
 );
 
