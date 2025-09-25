@@ -2,7 +2,7 @@
 
 This document provides an overview of the API development process, listing required, optional, and additional features along with their implementation status. It serves as a reference for tracking progress and planning next steps throughout the project. Features are grouped by area, and notes are included for clarity where needed.
 
-Endpoints 26/40
+Endpoints 34/40
 
 **Legend:**
 
