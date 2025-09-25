@@ -95,7 +95,7 @@ The user must have the opportunity to filter all viewable posts as well:
 - [x]  by status
 
 Optional:
-- [ ]  implement an opportunity to add posts to the Favorites category, so that the user can quickly view all marked posts by going on the appropriate endpoint
+- [x]  implement an opportunity to add posts to the Favorites category (collections*), so that the user can quickly view all marked posts by going on the appropriate endpoint
 - [ ]  allow users to subscribe to some posts that they want to follow and send them notifications when some kind of activity was made with the post (it was changed somehow or it was commented by somebody)
 
 # Categories
