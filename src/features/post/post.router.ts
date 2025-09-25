@@ -24,7 +24,7 @@ postRouter.get(
 postRouter.get(
   "/:post_id/comments",
   (req: Request, res: Response, next: NextFunction) => {
-    res.send(`All comments for post ${req.params.post_id}`);
+    postController.getPostComments(req, res, next);
   }
 );
 

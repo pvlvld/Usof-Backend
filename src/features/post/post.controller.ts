@@ -5,11 +5,16 @@ import { plainToInstance } from "class-transformer";
 import { GetPostsDto, PostIdDTO } from "./post.dto.js";
 import { validate } from "class-validator";
 import { CategoryModel } from "../category/category.model.js";
+import { CommentModel } from "../comment/comment.model.js";
 
 class PostController {
   private postService: PostService;
   constructor() {
-    this.postService = PostService.getInstance(PostModel, CategoryModel);
+    this.postService = PostService.getInstance(
+      PostModel,
+      CategoryModel,
+      CommentModel
+    );
   }
 
   public async getPostMany(req: Request, res: Response, next: NextFunction) {
@@ -86,6 +91,25 @@ class PostController {
     try {
       const categories = await this.postService.getPostCategories(dto);
       return res.status(200).json(categories);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  public async getPostComments(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const dto = plainToInstance(PostIdDTO, req.params);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    try {
+      const comments = await this.postService.getPostComments(dto);
+      return res.status(200).json(comments);
     } catch (error) {
       return next(error);
     }

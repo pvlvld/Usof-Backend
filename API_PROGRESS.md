@@ -65,7 +65,7 @@ Aditional:
 - - [x]  Additional: ?to_date=YYYY-MM-DD-hh-mm-ss
 - [x]  GET /api/posts/:post_id get specified post data. Endpoint is public.
 - - [x]  Additional: Admins can view deleted posts
-- [ ]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
+- [x]  GET /api/posts/:post_id/comments get all comments for the specified post. Endpoint is
 public.
 - [ ]  POST /api/posts/:post_id/comments create a new comment, required parameter is
 [content]
