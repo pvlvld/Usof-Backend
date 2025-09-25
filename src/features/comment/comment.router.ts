@@ -35,4 +35,12 @@ commentRouter.delete(
   }
 );
 
+commentRouter.post(
+  "/",
+  authenticateMiddleware,
+  (req: Request, res: Response, next: NextFunction) => {
+    commentController.createComment(req, res, next);
+  }
+);
+
 export { commentRouter };
