@@ -40,13 +40,15 @@ In progress...
 - No ORM
 
 ## Key Features
-- User authentication and registration
+- User authentication and registration, refresh tokens
 - Post creation, editing, and deletion
 - Cascade comments
-- Likes and categories
+- Likes and dislikes for posts and comments, which change author's profile rating  
+- Categories
 - Email verification and password reset
 - Admin panel (AdminJS)
 - File uploads (avatars, post images)
+- - Support for animated avatars
 - Input validation and sanitization
 
 ---
@@ -97,6 +99,7 @@ In progress...
 ## Notes
 - This project is for educational purposes and does not use an ORM.
 - If some choices or solutions seem unusual, please check if that's not a requirement from the PDF assignment.
+- You might encounter issues when deleting the ./mysql_data folder. If so, use sudo.
 
 ---
 
