@@ -48,6 +48,7 @@ Most endpoints require authentication via HTTP-only cookies containing JWT token
 - [ ] Use unsigned int for AUTO_INCREMENT DB columns
 - [ ] Implement rate limiting
 - [ ] Implement per day action limits dependent on the user role
+- [ ] Create config service
 
 ## 🔐 Authentication Endpoints
 
