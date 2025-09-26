@@ -20,6 +20,7 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",
     "@types/jsdom": "^21.1.7",
     "@types/jsonwebtoken": "^9.0.10",
@@ -35,7 +36,6 @@
   "dependencies": {
     "@adminjs/express": "^6.1.1",
     "@adminjs/sql": "^2.2.6",
-    "@types/cookie-parser": "^1.4.9",
     "adminjs": "^7.8.17",
     "bcryptjs": "^3.0.2",
     "class-transformer": "^0.5.1",
