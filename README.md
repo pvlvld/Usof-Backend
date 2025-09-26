@@ -1,6 +1,7 @@
-
 # Usof Backend
+
 In progress...
+
 > A simplified Stack Overflow API clone. Implements authentication, user management, posts, cascading comments, and more.
 
 **Status:** 49 endpoints implemented. (all)
@@ -8,6 +9,7 @@ In progress...
 ---
 
 ## Table of Contents
+
 - [Task PDF](https://github.com/pvlvld/Usof-Backend/blob/main/Task.pdf)
 - [API documentation](./docs/API.md)
 - [Requirements](#requirements)
@@ -18,6 +20,7 @@ In progress...
 ---
 
 ## Stack & Used Technologies
+
 - JavaScript / TypeScript
 - Node.js
 - Docker Compose
@@ -32,6 +35,7 @@ In progress...
 - [jsdom](https://github.com/jsdom/jsdom)
 
 ## Requirements
+
 - JavaScript / TypeScript
 - Node.js
 - Express.js
@@ -40,10 +44,11 @@ In progress...
 - No ORM
 
 ## Key Features
+
 - User authentication and registration, refresh tokens
 - Post creation, editing, and deletion
 - Cascade comments
-- Likes and dislikes for posts and comments, which change author's profile rating  
+- Likes and dislikes for posts and comments, which change author's profile rating
 - Categories
 - Email verification and password reset
 - Admin panel (AdminJS)
@@ -56,50 +61,54 @@ In progress...
 ## Installation & Usage
 
 ### Prerequisites
+
 - [Node.js v24 & npm](https://nodejs.org/en/download)
 - [Docker](https://www.docker.com/get-started/)
 
 ### Getting Started
+
 1. **Clone the repository:**
-	```sh
-	git clone https://github.com/pvlvld/Usof-Backend
-	cd Usof-Backend
-	```
+   ```sh
+   git clone https://github.com/pvlvld/Usof-Backend
+   cd Usof-Backend
+   ```
 2. **Install dependencies:**
-	```sh
-	npm install
-	```
+   ```sh
+   npm install
+   ```
 3. **Configure environment variables:**
-	- Copy `example.env` to `.env` and set up SMTP and other required variables.
-	```sh
-		cp example.env .env
-	```
+   - Copy `example.env` to `.env` and set up SMTP and other required variables.
+   ```sh
+   	cp example.env .env
+   ```
 4. **Start the database:**
-	(You can modify the schema or seed data in the `./init_scripts` folder.)
-	```sh
-	docker compose up -d
-	```
-	To verify the database is running, check that the `usof_mysql` container is present and has an "Up" status:
-	```sh
-	docker ps
-	```
+   (You can modify the schema or seed data in the `./init_scripts` folder.)
+   (Production: remove `./init_scripts/03-seed-example-data.sql` to avoid inserting example data.)
+   ```sh
+   docker compose up -d
+   ```
+   To verify the database is running, check that the `usof_mysql` container is present and has an "Up" status:
+   ```sh
+   docker ps
+   ```
 5. **Compile TypeScript:**
-	```sh
-	npm run build
-	```
+   ```sh
+   npm run build
+   ```
 6. **Run the application:**
-	- Development mode (with file watching):
-	  ```sh
-	  npm run start:dev
-	  ```
-	- Production mode (PM2 with logs & auto-restart):
-	  ```sh
-	  npm run start:pm2
-	  ```
+   - Development mode (with file watching):
+     ```sh
+     npm run start:dev
+     ```
+   - Production mode (PM2 with logs & auto-restart):
+     ```sh
+     npm run start:pm2
+     ```
 
 ---
 
 ## Notes
+
 - This project is for educational purposes and does not use an ORM.
 - If some choices or solutions seem unusual, please check if that's not a requirement from the PDF assignment.
 - You might encounter issues when deleting the ./mysql_data folder. If so, use sudo.
@@ -108,4 +117,5 @@ In progress...
 ---
 
 ## License
+
 This project is published under ISC license.
