@@ -130,6 +130,9 @@ Most endpoints require authentication via HTTP-only cookies containing JWT token
 
 - [x] Collections system for favorites
 - [ ] Post subscription notifications
+- [ ] Support for adding images
+- - [x] Image upload middleware
+- - [x] User content sanitization
 
 ## 🏷️ Category Management Endpoints
 
