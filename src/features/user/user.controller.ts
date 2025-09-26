@@ -134,9 +134,9 @@ class UserController {
       });
     }
 
-    const filePath = await this.userService.getAvatarPath(+user_id);
-    if (filePath) {
-      res.sendFile(filePath);
+    const avatarBuffer = await this.userService.getUserAvatar(+user_id);
+    if (avatarBuffer) {
+      res.type("image/webp").send(avatarBuffer);
     } else {
       res.status(404).json({ message: "Avatar not found" });
     }
