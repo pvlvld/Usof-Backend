@@ -24,15 +24,25 @@ class UserService {
   private encryptionService: EncryptionService;
   private avatarDir = path.join(process.cwd(), "public", "uploads", "avatars");
   private defaultAvatarPath = path.join(this.avatarDir, "default_avatar.webp");
+  private defaultAvatarBuffer: Buffer | null = null;
 
   private constructor(user: typeof UserModel) {
     this.userModel = user.getInstance();
     this.encryptionService = EncryptionService.getInstance();
   }
 
-  public static getInstance(user: typeof UserModel) {
+  public static getInstance(
+    user: typeof UserModel,
+    options?: { defaultAvatarPath: string }
+  ) {
     if (!this.instance) {
       this.instance = new UserService(user);
+      if (options?.defaultAvatarPath) {
+        this.instance.defaultAvatarPath = options.defaultAvatarPath;
+      }
+      this.instance.defaultAvatarBuffer = fs.readFileSync(
+        this.instance.defaultAvatarPath
+      );
     }
     return this.instance;
   }
@@ -142,7 +152,20 @@ class UserService {
     return this.userModel.findUserByLoginOrEmail(loginOrEmail);
   }
 
-  public async getAvatarPath(userId: number): Promise<string | null> {
+  public async getUserAvatar(userId: number): Promise<Buffer> {
+    const avatarPath = await this.getAvatarPath(userId);
+    if (!avatarPath) {
+      throw new NotFoundError("User avatar not found");
+    }
+
+    if (avatarPath === this.defaultAvatarPath && this.defaultAvatarBuffer) {
+      return this.defaultAvatarBuffer;
+    }
+
+    return await fs.promises.readFile(avatarPath);
+  }
+
+  private async getAvatarPath(userId: number): Promise<string | null> {
     const filename = `avatar_${userId}.webp`;
     const filePath = path.join(this.avatarDir, filename);
     try {
