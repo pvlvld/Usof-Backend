@@ -10,7 +10,7 @@ In progress...
 
 ## Table of Contents
 
-- [Task PDF](https://github.com/pvlvld/Usof-Backend/blob/main/Task.pdf)
+- [Task PDF](./docs/Task.pdf)
 - [API documentation](./docs/API.md)
 - [Requirements](#requirements)
 - [Stack & Technologies](#stack--used-technologies)
