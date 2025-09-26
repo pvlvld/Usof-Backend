@@ -69,7 +69,12 @@ In progress...
 	```sh
 	npm install
 	```
-3. **Start the database:**
+3. **Configure environment variables:**
+	- Copy `example.env` to `.env` and set up SMTP and other required variables.
+	```sh
+		cp example.env .env
+	```
+4. **Start the database:**
 	(You can modify the schema or seed data in the `./init_scripts` folder.)
 	```sh
 	docker compose up -d
@@ -78,8 +83,6 @@ In progress...
 	```sh
 	docker ps
 	```
-4. **Configure environment variables:**
-	- Copy `example.env` to `.env` and set up SMTP and other required variables.
 5. **Compile TypeScript:**
 	```sh
 	npm run build
