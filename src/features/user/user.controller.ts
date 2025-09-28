@@ -12,13 +12,16 @@ import { isRequestBody } from "../../shared/decorators/isRequestBody.js";
 import { UserService } from "./user.service.js";
 import { plainToInstance } from "class-transformer";
 import { UserModel } from "./user.model.js";
+import { AuthService } from "../auth/auth.service.js";
+import { RefreshTokenModel } from "../auth/refreshToken/refreshToken.model.js";
+import { EmailVerificationModel } from "../auth/emailVerification/emailVerifications.model.js";
 import { ForbiddenError } from "../../shared/consts/errors.js";
 
 class UserController {
   private userService: UserService;
 
   constructor() {
-    this.userService = UserService.getInstance(UserModel);
+    this.userService = UserService.getInstance(UserModel, AuthService);
   }
 
   public async getUsers(req: Request, res: Response, next: NextFunction) {

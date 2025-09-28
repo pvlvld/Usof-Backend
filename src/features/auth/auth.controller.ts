@@ -30,7 +30,7 @@ class AuthController {
       UserModel,
       EmailVerificationModel
     );
-    this.userService = UserService.getInstance(UserModel);
+    this.userService = UserService.getInstance(UserModel, AuthService);
     this.emailService = EmailService.getInstance();
     this.passwordResetsService = PasswordResetsService.getInstance(
       PasswordResetsModel,

@@ -14,29 +14,39 @@ import {
   InternalServerError,
   NotFoundError
 } from "../../shared/consts/errors.js";
-import type { IUserModel, UserModel } from "./user.model.js";
+import { UserModel, type IUserModel } from "./user.model.js";
+import type { AuthService } from "../auth/auth.service.js";
 import path from "node:path";
 import fs from "node:fs";
+import { RefreshTokenModel } from "../auth/refreshToken/refreshToken.model.js";
+import { EmailVerificationModel } from "../auth/emailVerification/emailVerifications.model.js";
 
 class UserService {
   private static instance: UserService | null = null;
   private userModel: UserModel;
   private encryptionService: EncryptionService;
+  private authService: AuthService;
   private avatarDir = path.join(process.cwd(), "public", "uploads", "avatars");
   private defaultAvatarPath = path.join(this.avatarDir, "default_avatar.webp");
   private defaultAvatarBuffer: Buffer | null = null;
 
-  private constructor(user: typeof UserModel) {
+  private constructor(user: typeof UserModel, authService: typeof AuthService) {
     this.userModel = user.getInstance();
     this.encryptionService = EncryptionService.getInstance();
+    this.authService = authService.getInstance(
+      RefreshTokenModel,
+      UserModel,
+      EmailVerificationModel
+    );
   }
 
   public static getInstance(
     user: typeof UserModel,
+    authService: typeof AuthService,
     options?: { defaultAvatarPath: string }
   ) {
     if (!this.instance) {
-      this.instance = new UserService(user);
+      this.instance = new UserService(user, authService);
       if (options?.defaultAvatarPath) {
         this.instance.defaultAvatarPath = options.defaultAvatarPath;
       }
@@ -141,6 +151,7 @@ class UserService {
   }
 
   public banUser(dto: BanUserDTO) {
+    this.authService.logoutAllSessions(dto.user_id);
     return this.userModel.banUser(dto);
   }
 
