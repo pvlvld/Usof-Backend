@@ -132,9 +132,8 @@ class AuthService {
     if (refreshToken) {
       const payload = this.jwtService.verifyRefreshToken(refreshToken);
       if (payload && payload.sub && String(user.sub) === String(payload.sub)) {
-        const storedToken = await this.refreshTokenModel.findRefreshToken(
-          refreshToken
-        );
+        const storedToken =
+          await this.refreshTokenModel.findRefreshToken(refreshToken);
         if (!storedToken) {
           throw new UnauthorizedError("Refresh token not found");
         }
@@ -187,6 +186,15 @@ class AuthService {
 
   public async logout(dto: LogoutDTO) {
     await this.refreshTokenModel.removeRefreshToken(dto.refreshToken);
+  }
+
+  public async logoutAllSessions(user_id: number) {
+    try {
+      await this.refreshTokenModel.removeAllTokensForUser(user_id);
+    } catch (error) {
+      console.error("Error removing all refresh tokens for user:", error);
+      throw new InternalServerError("Database error occurred");
+    }
   }
 
   public async verifyEmail(dto: EmailVerificationDto) {

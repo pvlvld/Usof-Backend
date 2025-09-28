@@ -46,6 +46,10 @@ export class RefreshTokenModel {
     await this.db.query(QUERIES.REFRESH_TOKEN.DELETE, [refreshToken]);
   }
 
+  public async removeAllTokensForUser(user_id: number) {
+    await this.db.query(QUERIES.REFRESH_TOKEN.DELETE_BY_USER_ID, [user_id]);
+  }
+
   public async findRefreshToken(refreshToken: string) {
     const [rows] = await this.db.query<(RowDataPacket & IRefreshTokenData)[]>(
       "SELECT * FROM refresh_token WHERE token = ?",
