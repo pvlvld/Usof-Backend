@@ -223,6 +223,37 @@ Refreshes the access token using a valid refresh token.
 }
 ```
 
+### 403 Forbidden
+
+#### User Banned Error
+
+When a user account is banned, the API returns a specialized `UserBannedError` with detailed ban information.
+
+**Temporary Ban:**
+```json
+{
+  "name": "UserBannedError",
+  "message": "Your account is temporarily banned until 12/31/2024, 11:59:59 PM. Please try again after this time.",
+  "statusCode": 403,
+  "isPermanent": false,
+  "expiresAt": "2024-12-31T23:59:59.000Z",
+  "bannedAt": "2024-01-15T10:30:00.000Z"
+}
+```
+
+**Permanent Ban:**
+```json
+{
+  "name": "UserBannedError",
+  "message": "Your account has been permanently banned. Please contact support for assistance.",
+  "statusCode": 403,
+  "isPermanent": true,
+  "expiresAt": null,
+  "bannedAt": "2024-01-15T10:30:00.000Z"
+}
+```
+
+
 ### 404 Not Found
 
 ```json
