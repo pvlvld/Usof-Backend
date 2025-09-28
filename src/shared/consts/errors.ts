@@ -58,3 +58,39 @@ export class UnsafeQueryError extends CustomError {
     this._query = query;
   }
 }
+
+export class UserBannedError extends ForbiddenError {
+  public readonly isPermanent: boolean;
+  public readonly expiresAt: Date | undefined;
+  public readonly bannedAt: Date | undefined;
+
+  constructor(
+    message: string,
+    options: {
+      isPermanent: boolean;
+      expiresAt?: Date;
+      bannedAt?: Date;
+    }
+  ) {
+    super(message);
+    this.name = "UserBannedError";
+    this.isPermanent = options.isPermanent;
+    this.expiresAt = options.expiresAt;
+    this.bannedAt = options.bannedAt;
+  }
+
+  static permanent(): UserBannedError {
+    return new UserBannedError(
+      "Your account has been permanently banned. Please contact support for assistance.",
+      { isPermanent: true }
+    );
+  }
+
+  static temporary(expiresAt: Date): UserBannedError {
+    const expirationText = expiresAt.toLocaleString();
+    return new UserBannedError(
+      `Your account is temporarily banned until ${expirationText}. Please try again after this time.`,
+      { isPermanent: false, expiresAt }
+    );
+  }
+}
