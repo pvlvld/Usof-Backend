@@ -51,7 +51,6 @@ Most endpoints require authentication via HTTP-only cookies containing JWT token
 - [ ] Create config service
 - [ ] Revise the list of allowed HTML tags for user input sanitization
 - [ ] Allow to buy "donator" user group. Stripe?
-- [ ] Logout and prevent logging in of banned users
 - [ ] Extract all hardcoded env (e.g JWT_SECRET)
 
 ## 🔐 Authentication Endpoints
