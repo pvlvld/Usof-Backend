@@ -1,6 +1,7 @@
 import {
   BadRequestError,
   ConflictError,
+  ForbiddenError,
   InternalServerError,
   NotFoundError,
   UnauthorizedError
@@ -18,7 +19,8 @@ import {
   JwtService,
   type IJwtPayloadAuth
 } from "../../shared/services/jwt.service.js";
-import type { UserModel } from "../user/user.model.js";
+import { UserModel } from "../user/user.model.js";
+import { BanValidationService } from "../../shared/services/banValidation.service.js";
 
 export type IUserLoginInfo = {
   ip: string;
@@ -40,6 +42,7 @@ class AuthService {
   private jwtService: JwtService;
   private encryptionService: EncryptionService;
   private emailVerificationModel: EmailVerificationModel;
+  private banValidationService: BanValidationService;
 
   private constructor(
     auth: typeof RefreshTokenModel,
@@ -51,6 +54,7 @@ class AuthService {
     this.jwtService = JwtService.getInstance();
     this.encryptionService = EncryptionService.getInstance();
     this.emailVerificationModel = emailVerification.getInstance();
+    this.banValidationService = BanValidationService.getInstance(UserModel);
   }
 
   public static getInstance(
@@ -178,6 +182,9 @@ class AuthService {
       throw new UnauthorizedError("Invalid credentials");
     }
 
+    // Validate user is not banned (auto-unbans expired bans)
+    await this.banValidationService.validateUserNotBanned(user);
+
     return this.issueTokensForUser(
       { sub: String(user.id), role: user.role },
       userLoginInfo
@@ -235,6 +242,9 @@ class AuthService {
     if (!user) {
       throw new NotFoundError("User not found");
     }
+
+    // Validate user is not banned (auto-unbans expired bans)
+    await this.banValidationService.validateUserNotBanned(user);
 
     return this.issueTokensForUser(
       { sub: String(user.id), role: user.role },
