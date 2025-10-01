@@ -13,7 +13,7 @@ class EmailService {
       port: parseInt(process.env.SMTP_PORT || "587"),
       auth: {
         user: senderEmail,
-        pass: process.env.SMTP_PASS || "password"
+        pass: process.env.SMTP_PASSWORD || "password"
       }
     });
 

@@ -3,7 +3,7 @@ import { createApp } from "./app.js";
 
 async function start() {
   const app = await createApp();
-  const PORT = process.env.PORT ? +process.env.PORT : 3000;
+  const PORT = process.env.API_PORT ? +process.env.API_PORT : 3000;
 
   app.listen(PORT, () => {
     console.log(

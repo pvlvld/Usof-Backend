@@ -9,11 +9,11 @@ async function initializeAdminJs() {
   });
 
   const db = await new Adapter("mysql2", {
-    database: process.env.DB_NAME || "usof",
-    host: process.env.DB_HOST || "127.0.0.1",
-    port: process.env.DB_PORT ? +process.env.DB_PORT : 3306,
-    user: process.env.DB_USER || "usof",
-    password: process.env.DB_PASSWORD || "usofpassword"
+    database: process.env.MYSQL_DATABASE || "usof",
+    host: process.env.MYSQL_HOST || "127.0.0.1",
+    port: process.env.MYSQL_PORT ? +process.env.MYSQL_PORT : 3306,
+    user: process.env.MYSQL_USER || "usof",
+    password: process.env.MYSQL_PASSWORD || "usofpassword"
   }).init();
 
   const admin = new AdminJS({

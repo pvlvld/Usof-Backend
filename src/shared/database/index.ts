@@ -12,10 +12,11 @@ class Database {
     }
 
     this.pool = mysql.createPool({
-      host: process.env.DB_HOST || "127.0.0.1",
-      user: process.env.DB_USER || "usof",
-      password: process.env.DB_PASSWORD || "usofpassword",
-      database: process.env.DB_NAME || "usof",
+      host: process.env.MYSQL_HOST || "127.0.0.1",
+      user: process.env.MYSQL_USER || "usof",
+      password: process.env.MYSQL_PASSWORD || "usofpassword",
+      database: process.env.MYSQL_DATABASE || "usof",
+      port: process.env.MYSQL_PORT ? Number(process.env.MYSQL_PORT) : 3306,
       typeCast: true
     });
 
