@@ -91,7 +91,6 @@ Creates a new user account. Requires admin authentication.
 {
   "login": "newuser",
   "password": "securePassword123",
-  "passwordConfirmation": "securePassword123",
   "email": "newuser@example.com",
   "role": "user"
 }
@@ -101,7 +100,6 @@ Creates a new user account. Requires admin authentication.
 
 - `login`: 2-100 characters
 - `password`: 6-100 characters
-- `passwordConfirmation`: Must match password exactly
 - `email`: Valid email format
 - `role`: "user", "admin", or "donator"
 
@@ -145,7 +143,6 @@ Updates user information. Users can only update their own profiles unless they a
   "login": "updated_login",
   "email": "updated@example.com",
   "password": "newPassword123",
-  "passwordConfirmation": "newPassword123",
   "role": "donator",
   "avatar": "new_avatar.jpg",
   "rating": 200,
@@ -161,7 +158,6 @@ Updates user information. Users can only update their own profiles unless they a
 - `login`: 2-100 characters
 - `email`: Valid email format
 - `password`: 6-100 characters (if provided)
-- `passwordConfirmation`: Must match password (if password provided)
 - `role`: "user", "admin", or "donator"
 - `avatar`: Max 100 characters
 - `rating`: Integer

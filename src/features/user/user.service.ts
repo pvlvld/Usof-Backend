@@ -133,10 +133,6 @@ class UserService {
   }
 
   public async updatePassword(dto: PasswordResetDto & { userId: number }) {
-    if (dto.password !== dto.passwordConfirmation) {
-      throw new BadRequestError("Passwords do not match");
-    }
-
     const password_salt = this.encryptionService.genSalt(10);
     const password_hash = this.encryptionService.hash(
       dto.password,

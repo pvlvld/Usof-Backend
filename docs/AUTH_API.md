@@ -22,7 +22,6 @@ Creates a new user account with email verification required before login.
 {
   "login": "john_doe",
   "password": "securePassword123",
-  "passwordConfirmation": "securePassword123",
   "email": "john@example.com"
 }
 ```
@@ -31,7 +30,6 @@ Creates a new user account with email verification required before login.
 
 - `login`: 6-50 characters
 - `password`: 6-100 characters
-- `passwordConfirmation`: Must match password exactly
 - `email`: Valid email format
 
 **Response:**
@@ -136,14 +134,12 @@ Resets the user's password using a token from the email.
 ```json
 {
   "password": "newSecurePassword123",
-  "passwordConfirmation": "newSecurePassword123"
 }
 ```
 
 **Validation Rules:**
 
 - `password`: 6-100 characters
-- `passwordConfirmation`: Must match password exactly
 
 **Response:**
 
@@ -330,7 +326,7 @@ The authentication system utilizes several tables:
 # Register user
 curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"login": "testuser", "password": "password123", "passwordConfirmation": "password123", "email": "test@example.com"}'
+  -d '{"login": "testuser", "password": "password123", "email": "test@example.com"}'
 
 # Verify email (using token from email)
 curl -X POST http://localhost:3000/api/auth/verify-email/your-verification-token
@@ -352,5 +348,5 @@ curl -X POST http://localhost:3000/api/auth/password-reset \
 # Reset password (using token from email)
 curl -X POST http://localhost:3000/api/auth/password-reset/your-reset-token \
   -H "Content-Type: application/json" \
-  -d '{"password": "newpassword123", "passwordConfirmation": "newpassword123"}'
+  -d '{"password": "newpassword123"}'
 ```

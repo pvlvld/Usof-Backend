@@ -20,11 +20,12 @@ export class RegisterDto {
   @IsString()
   password!: string;
 
-  // https://github.com/typestack/class-validator/issues/486
-  @ValidateIf((o) => o.password !== o.passwordConfirmation)
-  @IsNotEmpty()
-  @IsEmpty({ message: "passwordConfirmation must match password" })
-  passwordConfirmation!: string;
+  // Removed since it's purely UX and frontend should handle it.
+  // // https://github.com/typestack/class-validator/issues/486
+  // @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  // @IsNotEmpty()
+  // @IsEmpty({ message: "passwordConfirmation must match password" })
+  // passwordConfirmation!: string;
 
   @IsEmail()
   email!: string;
@@ -58,11 +59,12 @@ export class PasswordResetDto {
   @IsString()
   password!: string;
 
-  // https://github.com/typestack/class-validator/issues/486
-  @ValidateIf((o) => o.password !== o.passwordConfirmation)
-  @IsNotEmpty()
-  @IsEmpty({ message: "passwordConfirmation must match password" })
-  passwordConfirmation!: string;
+  // Removed since it's purely UX and frontend should handle it.
+  // // https://github.com/typestack/class-validator/issues/486
+  // @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  // @IsNotEmpty()
+  // @IsEmpty({ message: "passwordConfirmation must match password" })
+  // passwordConfirmation!: string;
 }
 
 export class LogoutDTO {

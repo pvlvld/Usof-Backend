@@ -73,11 +73,12 @@ export class CreateUserDTO {
   @IsString()
   password!: string;
 
-  // https://github.com/typestack/class-validator/issues/486
-  @ValidateIf((o) => o.password !== o.passwordConfirmation)
-  @IsNotEmpty()
-  @IsEmpty({ message: "passwordConfirmation must match password" })
-  passwordConfirmation!: string;
+  // Removed since it's purely UX and frontend should handle it.
+  // // https://github.com/typestack/class-validator/issues/486
+  // @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  // @IsNotEmpty()
+  // @IsEmpty({ message: "passwordConfirmation must match password" })
+  // passwordConfirmation!: string;
 
   @IsEmail()
   email!: string;
@@ -140,11 +141,12 @@ export class UpdateUserDataDTO {
   @IsOptional()
   password!: string;
 
-  // https://github.com/typestack/class-validator/issues/486
-  @ValidateIf((o) => o.password !== o.passwordConfirmation)
-  @IsNotEmpty()
-  @IsEmpty({ message: "passwordConfirmation must match password" })
-  passwordConfirmation!: string;
+  // Removed since it's purely UX and frontend should handle it.
+  // // https://github.com/typestack/class-validator/issues/486
+  // @ValidateIf((o) => o.password !== o.passwordConfirmation)
+  // @IsNotEmpty()
+  // @IsEmpty({ message: "passwordConfirmation must match password" })
+  // passwordConfirmation!: string;
 
   @IsIn(["user", "admin", "donator"], {
     message: "role must be either 'user', 'admin' or 'donator'"
