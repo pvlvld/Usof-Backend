@@ -53,6 +53,7 @@ Most endpoints require authentication via HTTP-only cookies containing JWT token
 - [ ] Allow to buy "donator" user group. Stripe?
 - [ ] Extract all hardcoded env (e.g JWT_SECRET)
 - [ ] Revoke refreshToken by blacklisting untill expires? Should take less space and simplify code.
+- [ ] Check passwords via haveibeenpwned.com API
 
 ## 🔐 Authentication Endpoints
 
