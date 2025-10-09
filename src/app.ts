@@ -7,9 +7,12 @@ import {
   requireAdminMiddleware
 } from "./shared/middlewares/auth.middleware.js";
 import { errorHandler } from "./shared/middlewares/errorHandler.middleware.js";
+import { corsMiddleware } from "./shared/middlewares/cors.middleware.js";
 
 export async function createApp() {
   const app = express();
+
+  app.use(corsMiddleware);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
