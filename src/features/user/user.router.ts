@@ -13,6 +13,14 @@ import { uploadAvatarMiddleware } from "../../shared/middlewares/uploadImage.mid
 const userRouter = express.Router();
 
 userRouter.get(
+  "/me",
+  authenticateMiddleware,
+  async (req: Request, res: Response) => {
+    await userController.getMe(req, res);
+  }
+);
+
+userRouter.get(
   "/:user_id/avatar",
   async (req: Request, res: Response, next: NextFunction) => {
     userController.getAvatar(req, res, next);

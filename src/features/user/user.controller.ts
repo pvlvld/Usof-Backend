@@ -2,7 +2,6 @@ import { validate } from "class-validator";
 import {
   GetUsersDto,
   CreateUserDTO,
-  DeleteUserDTO,
   GetUserByIdDTO,
   UpdateUserDataDTO,
   UserResponseDTO
@@ -13,15 +12,25 @@ import { UserService } from "./user.service.js";
 import { plainToInstance } from "class-transformer";
 import { UserModel } from "./user.model.js";
 import { AuthService } from "../auth/auth.service.js";
-import { RefreshTokenModel } from "../auth/refreshToken/refreshToken.model.js";
-import { EmailVerificationModel } from "../auth/emailVerification/emailVerifications.model.js";
-import { ForbiddenError } from "../../shared/consts/errors.js";
+import {
+  ForbiddenError,
+  UnauthorizedError
+} from "../../shared/consts/errors.js";
 
 class UserController {
   private userService: UserService;
 
   constructor() {
     this.userService = UserService.getInstance(UserModel, AuthService);
+  }
+
+  public async getMe(req: Request, res: Response) {
+    if (!req.user) {
+      throw new UnauthorizedError();
+    }
+
+    const user = await this.userService.getUserById({ user_id: req.user.id });
+    res.status(200).json(UserResponseDTO.fromUserModel(user));
   }
 
   public async getUsers(req: Request, res: Response, next: NextFunction) {
