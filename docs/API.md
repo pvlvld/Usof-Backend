@@ -5,8 +5,8 @@ This document provides a comprehensive overview of the API endpoints and their i
 ## 📊 Implementation Status
 
 - **Required by the task**: 34/34 [x]
-- **Additional features**: 15/15 [x]
-- **Total endpoints**: 49/49 [x]
+- **Additional features**: 16/16 [x]
+- **Total endpoints**: 50/50 [x]
 
 ## 📚 Feature Documentation
 
@@ -82,6 +82,8 @@ Most endpoints require authentication via HTTP-only cookies containing JWT token
 | GET    | `/api/users/:user_id/avatar` | **Additional**: Get user avatar           | [x]    |
 | POST   | `/api/users/:user_id/ban`    | **Additional**: Ban user                  | [x]    |
 | POST   | `/api/users/:user_id/unban`  | **Additional**: Unban user                | [x]    |
+| GET    | `/api/users/me`              | **Additional**: Get current user          | [x]    |
+
 
 **Additional Features:**
 

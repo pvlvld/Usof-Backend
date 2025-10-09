@@ -300,6 +300,33 @@ Soft deletes a user account.
 }
 ```
 
+### 10. Get current user info (me)
+
+```
+GET /api/users/me
+```
+
+Returns detailed information about current user.
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "login": "john_doe",
+  "email": "john@example.com",
+  "role": "user",
+  "rating": 150,
+  "avatar": "avatar.jpg",
+  "email_verified": true,
+  "created_at": "2024-01-15T10:30:00.000Z",
+  "updated_at": "2024-01-15T10:30:00.000Z",
+  "banned_until": null,
+  "ban_reason": null,
+  "deleted_at": null
+}
+```
+
 ## Error Responses
 
 ### 400 Bad Request
