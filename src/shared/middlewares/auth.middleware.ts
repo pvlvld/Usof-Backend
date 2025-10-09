@@ -1,5 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
-import { UnauthorizedError, ForbiddenError } from "../consts/errors.js";
+import {
+  UnauthorizedError,
+  ForbiddenError,
+  CustomError
+} from "../consts/errors.js";
 import { JwtService } from "../services/jwt.service.js";
 
 // Extend Express Request to include user
@@ -48,7 +52,11 @@ export function authenticateMiddleware(
   } catch (err) {
     if (isOptional) {
       return next();
+    }
+    if (err instanceof CustomError) {
+      next(err);
     } else {
+      console.error("Authentication error:", err);
       next(new UnauthorizedError("Invalid or expired access token"));
     }
   }
