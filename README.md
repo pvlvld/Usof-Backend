@@ -4,7 +4,7 @@ In progress...
 
 > A simplified Stack Overflow API clone. Implements authentication, user management, posts, cascading comments, and more.
 
-**Status:** 49 endpoints implemented. (all)
+**Status:** 50 endpoints implemented. (all)
 
 ---
 
