@@ -40,8 +40,25 @@ export const QUERIES = Object.freeze({
     /** title, description */
     CREATE: "INSERT INTO category (title, description) VALUES (?, ?)",
     /** id */
-    READ: "SELECT * FROM category WHERE id = ?",
-    GET_ALL: "SELECT * FROM category",
+    READ: `
+      SELECT
+      c.*,
+      COUNT(p.id) AS posts_count
+      FROM category c
+      LEFT JOIN post_categories pc ON c.id = pc.category_id
+      LEFT JOIN post p ON pc.post_id = p.id AND p.deleted_at IS NULL
+      WHERE c.id = ?
+      GROUP BY c.id
+    `,
+    GET_ALL: `
+      SELECT
+      c.*,
+      COUNT(p.id) AS posts_count
+      FROM category c
+      LEFT JOIN post_categories pc ON c.id = pc.category_id
+      LEFT JOIN post p ON pc.post_id = p.id AND p.deleted_at IS NULL
+      GROUP BY c.id
+    `,
     /** title, description, id */
     UPDATE: "UPDATE category SET title = ?, description = ? WHERE id = ?",
     /** id */

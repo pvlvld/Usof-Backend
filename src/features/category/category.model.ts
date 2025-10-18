@@ -1,13 +1,14 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { QUERIES } from "../../shared/consts/queries.js";
 import Database from "../../shared/database/index.js";
-import type { CreateCategoryDto, UpdateCategoryDto } from "./category.dto.js";
 import type { IPostModel } from "../post/post.model.js";
+import type { CreateCategoryDto } from "./category.dto.js";
 
 type ICategory = {
   id: number;
   title: string;
   description: string | null;
+  posts_count: number;
   created_at: Date;
   updated_at: Date;
 };
@@ -81,7 +82,7 @@ export class CategoryModel {
       QUERIES.CATEGORY.GET_POST_CATEGORIES,
       [post_id]
     );
-    return rows as ICategory[];
+    return rows as Exclude<ICategory, "posts_count">[];
   }
 
   public async getPostsByCategoryId(category_id: number) {
