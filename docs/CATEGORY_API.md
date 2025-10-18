@@ -24,6 +24,7 @@ Returns a list of all available categories.
     "id": 1,
     "title": "Technology",
     "description": "Posts about technology, programming, and software development",
+    "posts_count": 69,
     "created_at": "2024-01-15T10:30:00.000Z",
     "updated_at": "2024-01-15T10:30:00.000Z",
     "posts_count": 25
@@ -32,6 +33,7 @@ Returns a list of all available categories.
     "id": 2,
     "title": "Programming",
     "description": "Programming tutorials, tips, and best practices",
+    "posts_count": 420,
     "created_at": "2024-01-15T10:35:00.000Z",
     "updated_at": "2024-01-15T10:35:00.000Z",
     "posts_count": 18
@@ -58,6 +60,7 @@ Returns detailed information about a specific category.
   "id": 1,
   "title": "Technology",
   "description": "Posts about technology, programming, and software development",
+  "posts_count": 80085,
   "created_at": "2024-01-15T10:30:00.000Z",
   "updated_at": "2024-01-15T10:30:00.000Z",
   "posts_count": 25
