@@ -22,10 +22,14 @@ type IPostWithCommentsCount = IPostModel & {
   comments_count: number;
 };
 
-type IPostFullDataModel = IPostModel & {
-  categories: { id: number; title: string }[];
+type IPostFullData = IPostWithCommentsCount & {
+  author: {
+    id: number;
+    login: string;
+  };
+  categories: { id: number; title: string; description: string | null }[];
 };
-
+// categories: { id: number; title: string }[];
 export class PostModel {
   private static instance: PostModel | null = null;
   private db: ReturnType<typeof Database.getPool>;
@@ -80,8 +84,8 @@ export class PostModel {
       const [rows] = await this.db.query<RowDataPacket[]>(query, params);
 
       return Array.isArray(rows)
-        ? (rows as IPostWithCommentsCount[])
-        : ([] as IPostWithCommentsCount[]);
+        ? (rows as IPostFullData[])
+        : ([] as IPostFullData[]);
     } catch (error) {
       console.error("Error getting paginated posts:", error);
       return [];

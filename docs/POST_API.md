@@ -51,8 +51,7 @@ Returns a paginated list of all posts with advanced filtering and sorting option
     ],
     "author": {
       "id": 123,
-      "login": "john_doe",
-      "avatar": "avatar.jpg"
+      "login": "john_doe"
     }
   }
 ]

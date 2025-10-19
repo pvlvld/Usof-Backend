@@ -187,6 +187,8 @@ export const QUERIES = Object.freeze({
     `,
     /**
      * Generates a paginated post query with dynamic filters for status, user, categories, sorting, and pagination.
+     * Oh God, please forgive me for this sin and have mercy on my soul.
+     * Bless this code to run without SQL injection vulnerabilities and to run at all.
      */
     GET_PAGINATED: (
       sort: string,
@@ -208,9 +210,9 @@ export const QUERIES = Object.freeze({
         whereClauses.push("p.user_id = ?");
       }
       if (categories && categories.length > 0) {
-        joinClause = "JOIN post_categories pc ON p.id = pc.post_id";
+        joinClause = "JOIN post_categories fpc ON p.id = fpc.post_id";
         whereClauses.push(
-          `pc.category_id IN (${categories.map(() => "?").join(",")})`
+          `fpc.category_id IN (${categories.map(() => "?").join(",")})`
         );
       }
       if (from_date) {
@@ -222,9 +224,24 @@ export const QUERIES = Object.freeze({
       const where = whereClauses.length
         ? `WHERE ${whereClauses.join(" AND ")}`
         : "";
-      const commentJoin =
-        "LEFT JOIN comment cm ON p.id = cm.post_id AND cm.deleted_at IS NULL";
-      return `SELECT p.*, COUNT(DISTINCT cm.id) AS comments_count FROM post p ${joinClause} ${commentJoin} ${where} GROUP BY p.id ORDER BY ${sort} ${order} LIMIT ${limit} OFFSET ${offset}`;
+
+      return `
+        SELECT
+          p.*,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.post_id = p.id AND cm.deleted_at IS NULL) AS comments_count,
+          (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', c.id, 'title', c.title, 'description', c.description))
+             FROM post_categories pc2
+             JOIN category c ON pc2.category_id = c.id
+             WHERE pc2.post_id = p.id
+          ) AS categories,
+          JSON_OBJECT('id', u.id, 'login', u.login, 'avatar', u.avatar) AS author
+        FROM post p
+        JOIN user u ON p.user_id = u.id
+        ${joinClause}
+        ${where}
+        ORDER BY ${sort} ${order}
+        LIMIT ${limit} OFFSET ${offset}
+      `.trim();
     },
     /** title, content, status, id */
     UPDATE: "UPDATE post SET title = ?, content = ?, status = ? WHERE id = ?",
