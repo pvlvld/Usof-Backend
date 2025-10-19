@@ -1,9 +1,8 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
-import Database from "../../shared/database/index.js";
-import type { CreatePostDTO, GetPostsDto, PostUpdateDTO } from "./post.dto.js";
-import { QUERIES } from "../../shared/consts/queries.js";
 import { UnsafeQueryError } from "../../shared/consts/errors.js";
-import type { UpdateCategoryDto } from "../category/category.dto.js";
+import { QUERIES } from "../../shared/consts/queries.js";
+import Database from "../../shared/database/index.js";
+import type { CreatePostDTO, GetPostsDto } from "./post.dto.js";
 
 type IPostStatus = "active" | "inactive";
 
@@ -17,6 +16,10 @@ export type IPostModel = {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
+};
+
+type IPostWithCommentsCount = IPostModel & {
+  comments_count: number;
 };
 
 type IPostFullDataModel = IPostModel & {
@@ -77,8 +80,8 @@ export class PostModel {
       const [rows] = await this.db.query<RowDataPacket[]>(query, params);
 
       return Array.isArray(rows)
-        ? (rows as IPostModel[])
-        : ([] as IPostModel[]);
+        ? (rows as IPostWithCommentsCount[])
+        : ([] as IPostWithCommentsCount[]);
     } catch (error) {
       console.error("Error getting paginated posts:", error);
       return [];

@@ -222,7 +222,9 @@ export const QUERIES = Object.freeze({
       const where = whereClauses.length
         ? `WHERE ${whereClauses.join(" AND ")}`
         : "";
-      return `SELECT p.* FROM post p ${joinClause} ${where} ORDER BY ${sort} ${order} LIMIT ${limit} OFFSET ${offset}`;
+      const commentJoin =
+        "LEFT JOIN comment cm ON p.id = cm.post_id AND cm.deleted_at IS NULL";
+      return `SELECT p.*, COUNT(DISTINCT cm.id) AS comments_count FROM post p ${joinClause} ${commentJoin} ${where} GROUP BY p.id ORDER BY ${sort} ${order} LIMIT ${limit} OFFSET ${offset}`;
     },
     /** title, content, status, id */
     UPDATE: "UPDATE post SET title = ?, content = ?, status = ? WHERE id = ?",

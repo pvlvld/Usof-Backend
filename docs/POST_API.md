@@ -37,6 +37,7 @@ Returns a paginated list of all posts with advanced filtering and sorting option
     "title": "Introduction to Node.js",
     "content": "Node.js is a powerful JavaScript runtime...",
     "rating": 25,
+    "comments_count": 69,
     "user_id": 123,
     "created_at": "2024-01-15T10:30:00.000Z",
     "updated_at": "2024-01-15T10:30:00.000Z",
