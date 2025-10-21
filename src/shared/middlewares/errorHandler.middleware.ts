@@ -12,7 +12,7 @@ export function errorHandler(
     if (err instanceof UnsafeQueryError) {
       authenticateMiddleware(req, res, () => {}, true);
       const userInfo = <Record<string, unknown>>(req.user ?? {});
-      userInfo["ip"] = req.ip;
+      userInfo["ip"] = req.ip || "127.0.0.1";
       userInfo["user-agent"] = req.headers["user-agent"];
 
       console.error(

@@ -48,7 +48,7 @@ class AuthController {
     }
 
     const userLoginInfo: IUserLoginInfo = {
-      ip: req.ip!,
+      ip: req.ip || "127.0.0.1",
       user_agent: req.headers["user-agent"] || ""
     };
 
@@ -245,7 +245,7 @@ class AuthController {
     }
 
     const userLoginInfo: IUserLoginInfo = {
-      ip: req.ip!,
+      ip: req.ip || "127.0.0.1",
       user_agent: req.headers["user-agent"] || ""
     };
 
