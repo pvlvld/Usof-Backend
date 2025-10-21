@@ -94,9 +94,10 @@ class AuthController {
     }
 
     try {
-      // Pass refreshToken from cookies if present
-      const refreshTokenFromClient = req.cookies?.refreshToken;
-      const result = await this.authService.login(dto, refreshTokenFromClient);
+      const result = await this.authService.login(dto, {
+        ip: req.ip || "127.0.0.1",
+        user_agent: req.headers["user-agent"] || ""
+      });
       if (result.accessToken) {
         res.cookie("accessToken", result.accessToken, {
           httpOnly: true,
@@ -122,7 +123,7 @@ class AuthController {
   }
 
   public async logout(req: Request, res: Response, next: NextFunction) {
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken: string | undefined = req.cookies?.refreshToken;
     try {
       if (refreshToken) {
         await this.authService.logout({ refreshToken });
@@ -239,7 +240,7 @@ class AuthController {
   }
 
   public async refreshToken(req: Request, res: Response, next: NextFunction) {
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken: string | undefined = req.cookies?.refreshToken;
     if (!refreshToken) {
       return res.status(401).json({ message: "Refresh token missing" });
     }
