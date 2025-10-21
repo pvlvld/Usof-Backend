@@ -8,6 +8,13 @@ import { collectionRouter } from "../features/collection/collection.router.js";
 
 const apiRouter = express.Router();
 
+if (process.env.NODE_ENV !== "production") {
+  apiRouter.use((req, res, next) => {
+    console.log(`[API] ${req.method} ${req.url}`);
+    next();
+  });
+}
+
 apiRouter.use("/auth", authRouter);
 apiRouter.use("/users", userRouter);
 apiRouter.use("/posts", postRouter);
