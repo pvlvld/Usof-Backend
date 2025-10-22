@@ -290,6 +290,7 @@ export const QUERIES = Object.freeze({
         JOIN user u ON p.user_id = u.id
         ${joinClause}
         ${where}
+        GROUP BY p.id
         ORDER BY ${orderBy} p.${sort} ${order}
         LIMIT ${limit} OFFSET ${offset}
       `.trim();
