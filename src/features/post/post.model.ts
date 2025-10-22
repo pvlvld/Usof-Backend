@@ -60,7 +60,7 @@ export class PostModel {
     const params: (string | number)[] = [
       dto.searchQuery,
       dto.searchQuery,
-      dto.status,
+      dto.status === "all" ? undefined : dto.status,
       dto.user > 0 ? dto.user : undefined,
       ...(categories.length > 0 ? categories : []),
       dto.limit,
