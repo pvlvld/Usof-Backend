@@ -173,7 +173,7 @@ export class PostModel {
       ]);
 
       return Array.isArray(rows) && rows.length > 0 && rows[0]
-        ? (rows[0] as IPostModel)
+        ? (rows[0] as IPostWithCommentsCount)
         : null;
     } catch (error) {
       console.error("Error getting post by ID:", error);

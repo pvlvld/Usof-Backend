@@ -178,10 +178,13 @@ export const QUERIES = Object.freeze({
     READ: `
       SELECT
         p.*,
-        JSON_ARRAYAGG(JSON_OBJECT('id', c.id, 'title', c.title)) AS categories
+        (SELECT COUNT(*) FROM comment cm WHERE cm.post_id = p.id AND cm.deleted_at IS NULL) AS comments_count,
+        JSON_ARRAYAGG(JSON_OBJECT('id', c.id, 'title', c.title)) AS categories,
+        JSON_OBJECT('id', u.id, 'login', u.login, 'avatar', u.avatar) AS author
       FROM post p
       LEFT JOIN post_categories pc ON p.id = pc.post_id
       LEFT JOIN category c ON pc.category_id = c.id
+      JOIN user u ON p.user_id = u.id
       WHERE p.id = ?
       GROUP BY p.id;
     `,
