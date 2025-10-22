@@ -38,6 +38,13 @@ userRouter.get(
   }
 );
 
+userRouter.get(
+  "/:user_id/comments",
+  (req: Request, res: Response, next: NextFunction) => {
+    userController.getUserComments(req, res, next);
+  }
+);
+
 // ADMINS ONLY
 userRouter.post(
   "/",

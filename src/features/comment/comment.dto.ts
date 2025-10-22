@@ -33,3 +33,22 @@ export class UpdateCommentDTO {
   @Length(1, 5000)
   content!: string;
 }
+
+export class GetUserCommentsDTO {
+  @Min(1)
+  @Type(() => Number)
+  @IsInt()
+  user_id!: number;
+
+  @Min(1)
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  limit: number = 10;
+
+  @Min(0)
+  @Type(() => Number)
+  @IsInt()
+  @IsOptional()
+  page: number = 1;
+}

@@ -16,12 +16,17 @@ import {
   ForbiddenError,
   UnauthorizedError
 } from "../../shared/consts/errors.js";
+import { CommentService } from "../comment/comment.service.js";
+import { CommentModel } from "../comment/comment.model.js";
+import { GetUserCommentsDTO } from "../comment/comment.dto.js";
 
 class UserController {
   private userService: UserService;
+  private commentService: CommentService;
 
   constructor() {
     this.userService = UserService.getInstance(UserModel, AuthService);
+    this.commentService = CommentService.getInstance(CommentModel);
   }
 
   public async getMe(req: Request, res: Response) {
@@ -254,6 +259,25 @@ class UserController {
         return res.status(404).json({ message: "User not found" });
       }
       return res.status(204).json({ message: "User deleted successfully" });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async getUserComments(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const dto = plainToInstance(GetUserCommentsDTO, req.params);
+    const errors = await validate(dto);
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
+    }
+
+    try {
+      const comments = await this.commentService.getUserComments(dto);
+      return res.status(200).json(comments);
     } catch (err) {
       next(err);
     }

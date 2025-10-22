@@ -1,6 +1,7 @@
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { QUERIES } from "../../shared/consts/queries.js";
 import Database from "../../shared/database/index.js";
+import type { GetUserCommentsDTO } from "./comment.dto.js";
 
 export type ICommentModel = {
   id: number;
@@ -73,11 +74,14 @@ export class CommentModel {
     }
   }
 
-  public async getCommentsByUserId(user_id: number) {
+  public async getCommentsByUserId(
+    user_id: number,
+    limit: number,
+    offset: number
+  ) {
     try {
       const [rows] = await this.db.query<RowDataPacket[]>(
-        QUERIES.COMMENT.READ_USER_COMMENTS,
-        [user_id]
+        QUERIES.COMMENT.READ_USER_COMMENTS(user_id, limit, offset)
       );
 
       this.replaceDeletedCommentContent(<ICommentModel[]>rows);

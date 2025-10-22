@@ -91,8 +91,9 @@ export const QUERIES = Object.freeze({
     READ: "SELECT * FROM comment WHERE id = ?",
     /** post_id */
     READ_POST_COMMENTS: "SELECT * FROM comment WHERE post_id = ?",
-    /** user_id */
-    READ_USER_COMMENTS: "SELECT * FROM comment WHERE user_id = ?",
+    /** user_id, limit, offset */
+    READ_USER_COMMENTS: (user_id: number, limit: number, offset: number) =>
+      `SELECT * FROM comment WHERE user_id = ${user_id} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`,
     /** parent_id */
     READ_PARENT_COMMENTS: "SELECT * FROM comment WHERE parent_id = ?",
     /** content, id */

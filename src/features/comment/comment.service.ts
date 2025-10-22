@@ -1,3 +1,4 @@
+import type { GetUserCommentsDTO } from "./comment.dto.js";
 import type { CommentModel } from "./comment.model.js";
 
 export class CommentService {
@@ -17,6 +18,15 @@ export class CommentService {
 
   public async getCommentById(id: number) {
     return this.commentModel.getCommentById(id);
+  }
+
+  public async getUserComments(dto: GetUserCommentsDTO) {
+    const offset = (dto.page - 1) * dto.limit;
+    return this.commentModel.getCommentsByUserId(
+      dto.user_id,
+      dto.limit,
+      offset
+    );
   }
 
   public async createComment(
