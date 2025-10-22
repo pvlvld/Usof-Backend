@@ -300,7 +300,31 @@ Soft deletes a user account.
 }
 ```
 
-### 10. Get current user info (me)
+### 10. Get user comments
+
+```
+GET /api/users/:user_id/comments
+```
+
+Returns users comments
+
+**Authentication:** Required (own profile or admin)
+
+**Path Parameters:**
+
+- `user_id`: User ID (integer, minimum: 1)
+- `page` (optional): Page number (default: 1, minimum: 1)
+- `limit` (optional): Items per page (default: 10, range: 1-100)
+
+**Response:**
+
+```json
+{
+  "message": "User deleted successfully"
+}
+```
+
+### 11. Get current user info (me)
 
 ```
 GET /api/users/me

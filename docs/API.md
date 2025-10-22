@@ -5,8 +5,8 @@ This document provides a comprehensive overview of the API endpoints and their i
 ## 📊 Implementation Status
 
 - **Required by the task**: 34/34 [x]
-- **Additional features**: 16/16 [x]
-- **Total endpoints**: 50/50 [x]
+- **Additional features**: 17/17 [x]
+- **Total endpoints**: 51/51 [x]
 
 ## 📚 Feature Documentation
 
@@ -71,19 +71,19 @@ Most endpoints require authentication via HTTP-only cookies containing JWT token
 
 ## 👤 User Management Endpoints
 
-| Method | Endpoint                     | Description                               | Status |
-| ------ | ---------------------------- | ----------------------------------------- | ------ |
-| GET    | `/api/users`                 | Get all users with pagination & filtering | [x]    |
-| GET    | `/api/users/:user_id`        | Get specific user data                    | [x]    |
-| POST   | `/api/users`                 | Create new user (admin only)              | [x]    |
-| PATCH  | `/api/users/avatar`          | Upload user avatar with processing        | [x]    |
-| PATCH  | `/api/users/:user_id`        | Update user data (owner/admin)            | [x]    |
-| DELETE | `/api/users/:user_id`        | Soft delete user                          | [x]    |
-| GET    | `/api/users/:user_id/avatar` | **Additional**: Get user avatar           | [x]    |
-| POST   | `/api/users/:user_id/ban`    | **Additional**: Ban user                  | [x]    |
-| POST   | `/api/users/:user_id/unban`  | **Additional**: Unban user                | [x]    |
-| GET    | `/api/users/me`              | **Additional**: Get current user          | [x]    |
-
+| Method | Endpoint                       | Description                               | Status |
+| ------ | ------------------------------ | ----------------------------------------- | ------ |
+| GET    | `/api/users`                   | Get all users with pagination & filtering | [x]    |
+| GET    | `/api/users/:user_id`          | Get specific user data                    | [x]    |
+| POST   | `/api/users`                   | Create new user (admin only)              | [x]    |
+| PATCH  | `/api/users/avatar`            | Upload user avatar with processing        | [x]    |
+| PATCH  | `/api/users/:user_id`          | Update user data (owner/admin)            | [x]    |
+| DELETE | `/api/users/:user_id`          | Soft delete user                          | [x]    |
+| GET    | `/api/users/:user_id/avatar`   | **Additional**: Get user avatar           | [x]    |
+| POST   | `/api/users/:user_id/ban`      | **Additional**: Ban user                  | [x]    |
+| POST   | `/api/users/:user_id/unban`    | **Additional**: Unban user                | [x]    |
+| GET    | `/api/users/me`                | **Additional**: Get current user          | [x]    |
+| GET    | `/api/users/:user_id/comments` | **Additional**: Get user comments         | [x]    |
 
 **Additional Features:**
 
