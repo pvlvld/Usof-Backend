@@ -63,8 +63,6 @@ export class PostModel {
       dto.status,
       dto.user > 0 ? dto.user : undefined,
       ...(categories.length > 0 ? categories : []),
-      dto.from_date ? dto.from_date : undefined,
-      dto.to_date ? dto.to_date : undefined,
       dto.limit,
       offset
     ].filter((p) => p !== undefined);
