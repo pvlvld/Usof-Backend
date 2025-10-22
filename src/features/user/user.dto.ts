@@ -117,6 +117,7 @@ class UserDTO implements IUserModel {
   banned_until!: Date | null;
   ban_reason!: string | null;
   deleted_at!: Date | null;
+  last_online!: Date | null;
 }
 
 export class UpdateUserDataDTO {
@@ -225,6 +226,7 @@ export class UserResponseDTO {
   banned_until!: Date | null;
   ban_reason!: string | null;
   deleted_at!: Date | null;
+  last_online!: Date | null;
 
   static fromUserModel(user: IUserModel): UserResponseDTO {
     return {
@@ -240,7 +242,8 @@ export class UserResponseDTO {
       updated_at: user.updated_at,
       banned_until: user.banned_until,
       ban_reason: user.ban_reason,
-      deleted_at: user.deleted_at
+      deleted_at: user.deleted_at,
+      last_online: user.last_online
     };
   }
 }

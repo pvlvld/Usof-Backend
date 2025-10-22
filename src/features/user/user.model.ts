@@ -33,6 +33,7 @@ export type IUserModel = {
   banned_until: Date | null;
   ban_reason: string | null;
   deleted_at: Date | null;
+  last_online: Date | null;
 };
 
 type IRegisterUser = {

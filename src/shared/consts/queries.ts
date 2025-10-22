@@ -7,7 +7,17 @@ export const QUERIES = Object.freeze({
     REGISTER:
       "INSERT INTO user (login, password_hash, password_salt, email) VALUES (?, ?, ?, ?)",
     /** id */
-    GET_BY_ID: "SELECT * FROM user WHERE id = ?",
+    GET_BY_ID: `
+      SELECT
+        u.*,
+        (
+          SELECT MAX(rt.created_at)
+          FROM refresh_token rt
+          WHERE rt.user_id = u.id
+        ) AS last_online
+      FROM user u
+      WHERE u.id = ?
+    `,
     /** order_by, order_direction (ASC | DESC), limit, offset */
     GET_PAGINATED: (
       order_by: string,
