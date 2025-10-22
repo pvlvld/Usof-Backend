@@ -93,7 +93,23 @@ export const QUERIES = Object.freeze({
     READ_POST_COMMENTS: "SELECT * FROM comment WHERE post_id = ?",
     /** user_id, limit, offset */
     READ_USER_COMMENTS: (user_id: number, limit: number, offset: number) =>
-      `SELECT * FROM comment WHERE user_id = ${user_id} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}`,
+      `SELECT
+         c.*,
+         (
+           SELECT COALESCE(SUM(
+             CASE
+               WHEN ld.is_like = 1 THEN 1
+               WHEN ld.is_like = 0 THEN -1
+               ELSE 0
+             END
+           ), 0)
+           FROM like_dislike ld
+           WHERE ld.comment_id = c.id
+         ) AS rating
+       FROM comment c
+       WHERE c.user_id = ${user_id}
+       ORDER BY c.created_at DESC
+       LIMIT ${limit} OFFSET ${offset}`,
     /** parent_id */
     READ_PARENT_COMMENTS: "SELECT * FROM comment WHERE parent_id = ?",
     /** content, id */
