@@ -250,12 +250,6 @@ class AuthController {
       user_agent: req.headers["user-agent"] || ""
     };
 
-    if (!userLoginInfo.ip || !userLoginInfo.user_agent) {
-      return res
-        .status(400)
-        .json({ message: "User login information is incomplete" });
-    }
-
     try {
       const result = await this.authService.refreshAccessToken(
         refreshToken,
