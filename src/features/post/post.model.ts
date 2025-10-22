@@ -29,7 +29,7 @@ type IPostFullData = IPostWithCommentsCount & {
   };
   categories: { id: number; title: string; description: string | null }[];
 };
-// categories: { id: number; title: string }[];
+
 export class PostModel {
   private static instance: PostModel | null = null;
   private db: ReturnType<typeof Database.getPool>;
@@ -54,9 +54,6 @@ export class PostModel {
         .filter((cat) => cat.length > 0);
     }
 
-    // console.log(dto.categories);
-    // console.log("Categories after parsing:", categories);
-
     const params: (string | number)[] = [
       dto.searchQuery,
       dto.searchQuery,
@@ -79,8 +76,6 @@ export class PostModel {
         dto.searchQuery
       );
 
-      // console.log("Generated Query:", query);
-
       if (query.includes("--") || query.includes(";")) {
         throw new UnsafeQueryError(query);
       }
@@ -90,8 +85,6 @@ export class PostModel {
       const posts = Array.isArray(res[0])
         ? (res[0] as IPostFullData[])
         : ([] as IPostFullData[]);
-
-      // console.log("Paginated Posts Result:", posts);
 
       return posts;
     } catch (error) {
