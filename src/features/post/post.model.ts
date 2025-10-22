@@ -62,9 +62,7 @@ export class PostModel {
       dto.searchQuery,
       dto.status === "all" ? undefined : dto.status,
       dto.user > 0 ? dto.user : undefined,
-      ...(categories.length > 0 ? categories : []),
-      dto.limit,
-      offset
+      ...(categories.length > 0 ? categories : [])
     ].filter((p) => p !== undefined);
 
     try {
