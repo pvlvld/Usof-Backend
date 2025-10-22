@@ -54,7 +54,12 @@ export class PostModel {
         .filter((cat) => cat.length > 0);
     }
 
+    // console.log(dto.categories);
+    // console.log("Categories after parsing:", categories);
+
     const params: (string | number)[] = [
+      dto.searchQuery,
+      dto.searchQuery,
       dto.status,
       dto.user > 0 ? dto.user : undefined,
       ...(categories.length > 0 ? categories : []),
@@ -74,18 +79,25 @@ export class PostModel {
         dto.user > 0 ? dto.user : undefined,
         categories.length > 0 ? categories : undefined,
         dto.from_date,
-        dto.to_date
+        dto.to_date,
+        dto.searchQuery
       );
+
+      // console.log("Generated Query:", query);
 
       if (query.includes("--") || query.includes(";")) {
         throw new UnsafeQueryError(query);
       }
 
-      const [rows] = await this.db.query<RowDataPacket[]>(query, params);
+      const res = await this.db.query<RowDataPacket[]>(query, params);
 
-      return Array.isArray(rows)
-        ? (rows as IPostFullData[])
+      const posts = Array.isArray(res[0])
+        ? (res[0] as IPostFullData[])
         : ([] as IPostFullData[]);
+
+      // console.log("Paginated Posts Result:", posts);
+
+      return posts;
     } catch (error) {
       console.error("Error getting paginated posts:", error);
       return [];

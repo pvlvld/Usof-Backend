@@ -202,35 +202,56 @@ export const QUERIES = Object.freeze({
       userId: number | undefined,
       categories: string[] | undefined,
       from_date?: string,
-      to_date?: string
+      to_date?: string,
+      searchQuery?: string
     ) => {
       let whereClauses = ["p.deleted_at IS NULL"];
+      let selectClauses = ["p.*"];
+      let searchScoreColumn = "";
+      let joinClause = "";
+
+      if (searchQuery) {
+        whereClauses.push(
+          "MATCH(p.title, p.content) AGAINST(? IN NATURAL LANGUAGE MODE)"
+        );
+
+        searchScoreColumn =
+          "MATCH(p.title, p.content) AGAINST(? IN NATURAL LANGUAGE MODE) AS search_score";
+        selectClauses.push(searchScoreColumn);
+      }
+
       if (status !== "all") {
         whereClauses.push("p.status = ?");
       }
-      let joinClause = "";
+
       if (userId && userId > 0) {
         whereClauses.push("p.user_id = ?");
       }
+
       if (categories && categories.length > 0) {
         joinClause = "JOIN post_categories fpc ON p.id = fpc.post_id";
         whereClauses.push(
           `fpc.category_id IN (${categories.map(() => "?").join(",")})`
         );
       }
+
       if (from_date) {
         whereClauses.push("p.created_at >= ?");
       }
+
       if (to_date) {
         whereClauses.push("p.created_at <= ?");
       }
+
       const where = whereClauses.length
         ? `WHERE ${whereClauses.join(" AND ")}`
         : "";
 
+      const orderBy = searchQuery ? "search_score DESC, " : "";
+
       return `
         SELECT
-          p.*,
+          ${selectClauses.join(", ")},
           (SELECT COUNT(*) FROM comment cm WHERE cm.post_id = p.id AND cm.deleted_at IS NULL) AS comments_count,
           (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', c.id, 'title', c.title, 'description', c.description))
              FROM post_categories pc2
@@ -242,7 +263,7 @@ export const QUERIES = Object.freeze({
         JOIN user u ON p.user_id = u.id
         ${joinClause}
         ${where}
-        ORDER BY ${sort} ${order}
+        ORDER BY ${orderBy} p.${sort} ${order}
         LIMIT ${limit} OFFSET ${offset}
       `.trim();
     },

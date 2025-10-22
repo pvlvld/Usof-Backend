@@ -78,6 +78,12 @@ export class GetPostsDto {
   @IsISO8601()
   @IsOptional()
   to_date?: string;
+
+  @MinLength(1)
+  @MaxLength(255)
+  @IsString()
+  @IsOptional()
+  searchQuery?: string;
 }
 export class CreatePostCommentDTO extends PostIdDTO {
   @MinLength(1)

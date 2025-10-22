@@ -27,6 +27,7 @@ Returns a paginated list of all posts with advanced filtering and sorting option
 - `user` (optional): Filter by user ID (default: 0 for all users)
 - `from_date` (optional): Filter posts from this date (ISO 8601 format)
 - `to_date` (optional): Filter posts until this date (ISO 8601 format)
+- `searchQuery` (optional): Filters / orders posts by search query (title & content)
 
 **Response:**
 
