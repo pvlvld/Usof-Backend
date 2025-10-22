@@ -50,6 +50,7 @@ CREATE TABLE post (
 CREATE INDEX idx_post_user_id ON post (user_id);
 CREATE INDEX idx_post_status ON post (status);
 CREATE INDEX idx_post_created_at ON post (created_at);
+CREATE FULLTEXT INDEX idx_post_fulltext ON post (title, content);
 
 
 CREATE TABLE category (
