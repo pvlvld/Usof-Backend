@@ -131,40 +131,44 @@ class AuthService {
     userLoginInfo: IUserLoginInfo,
     refreshTokenFromClient?: string
   ) {
-    let refreshToken = refreshTokenFromClient;
+    if (refreshTokenFromClient) {
+      let payload: IJwtPayloadAuth | null = null;
+      try {
+        payload = this.jwtService.verifyRefreshToken(
+          refreshTokenFromClient
+        ) as IJwtPayloadAuth | null;
+      } catch (e) {
+        throw new UnauthorizedError("Invalid refresh token");
+      }
 
-    if (refreshToken) {
-      const payload = this.jwtService.verifyRefreshToken(refreshToken);
-      if (payload && payload.sub && String(user.sub) === String(payload.sub)) {
-        const storedToken =
-          await this.refreshTokenModel.findRefreshToken(refreshToken);
-        if (!storedToken) {
-          throw new UnauthorizedError("Refresh token not found");
-        }
+      const storedToken = await this.refreshTokenModel.findRefreshToken(
+        refreshTokenFromClient
+      );
+      if (!storedToken) {
+        throw new UnauthorizedError("Refresh token not found");
+      }
 
-        if (storedToken.expires_at < new Date()) {
-          await this.refreshTokenModel.removeRefreshToken(refreshToken);
-          throw new UnauthorizedError("Refresh token expired");
-        }
+      await this.refreshTokenModel.removeRefreshToken(refreshTokenFromClient);
+
+      if (storedToken.expires_at < new Date()) {
+        throw new UnauthorizedError("Refresh token expired");
       }
     }
 
-    if (!refreshTokenFromClient) {
-      refreshToken = this.jwtService.signRefreshToken(user);
-      await this.refreshTokenModel.createRefreshToken(
-        +user.sub,
-        refreshToken,
-        userLoginInfo.ip,
-        userLoginInfo.user_agent,
-        new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30) // 30 days
-      );
-    }
+    const newRefreshToken = this.jwtService.signRefreshToken(user);
+    await this.refreshTokenModel.createRefreshToken(
+      +user.sub,
+      newRefreshToken,
+      userLoginInfo.ip,
+      userLoginInfo.user_agent,
+      new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) // 30 days
+    );
 
     const accessToken = this.jwtService.signAccessToken(user);
     return {
       user,
       accessToken,
-      refreshToken
+      refreshToken: newRefreshToken
     };
   }
 
