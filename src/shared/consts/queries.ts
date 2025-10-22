@@ -236,11 +236,11 @@ export const QUERIES = Object.freeze({
       }
 
       if (from_date) {
-        whereClauses.push("p.created_at >= ?");
+        whereClauses.push(`p.created_at >= '${from_date}'`);
       }
 
       if (to_date) {
-        whereClauses.push("p.created_at <= ?");
+        whereClauses.push(`p.created_at <= '${to_date}'`);
       }
 
       const where = whereClauses.length
