@@ -119,7 +119,7 @@ export class PostModel {
     } catch (error) {
       console.error("Error adding post categories:", error);
     }
-    return { post_id: result.insertId, ...dto };
+    return { id: result.insertId, ...dto };
   }
 
   public async updatePost(
