@@ -17,7 +17,8 @@ class Database {
       password: process.env.MYSQL_PASSWORD || "usofpassword",
       database: process.env.MYSQL_DATABASE || "usof",
       port: process.env.MYSQL_PORT ? Number(process.env.MYSQL_PORT) : 3306,
-      typeCast: true
+      typeCast: true,
+      timezone: "Z"
     });
 
     return this.pool;

@@ -13,7 +13,8 @@ async function initializeAdminJs() {
     host: process.env.MYSQL_HOST || "127.0.0.1",
     port: process.env.MYSQL_PORT ? +process.env.MYSQL_PORT : 3306,
     user: process.env.MYSQL_USER || "usof",
-    password: process.env.MYSQL_PASSWORD || "usofpassword"
+    password: process.env.MYSQL_PASSWORD || "usofpassword",
+    timezone: "Z"
   }).init();
 
   const admin = new AdminJS({
