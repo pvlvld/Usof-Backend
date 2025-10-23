@@ -8,6 +8,7 @@ import {
 } from "./shared/middlewares/auth.middleware.js";
 import { errorHandler } from "./shared/middlewares/errorHandler.middleware.js";
 import { corsMiddleware } from "./shared/middlewares/cors.middleware.js";
+import path from "node:path";
 
 export async function createApp() {
   const app = express();
@@ -31,6 +32,11 @@ export async function createApp() {
   });
 
   app.use("/api", apiRouter);
+
+  app.use(
+    "/api/uploads",
+    express.static(path.join(process.cwd(), "public/uploads"))
+  );
 
   app.use(errorHandler);
 
