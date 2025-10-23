@@ -31,6 +31,7 @@ postRouter.get(
 
 postRouter.post(
   "/:post_id/comments",
+  authenticateMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
     commentController.createComment(req, res, next);
   }
@@ -46,9 +47,13 @@ postRouter.get(
 postRouter.use("/:post_id/like", likeRouter);
 postRouter.use("/:post_id/dislike", likeRouter);
 
-postRouter.post("/", (req: Request, res: Response, next: NextFunction) => {
-  postController.createPost(req, res, next);
-});
+postRouter.post(
+  "/",
+  authenticateMiddleware,
+  (req: Request, res: Response, next: NextFunction) => {
+    postController.createPost(req, res, next);
+  }
+);
 
 // POST CREATOR ONLY
 postRouter.patch(
