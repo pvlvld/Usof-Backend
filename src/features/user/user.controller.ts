@@ -172,11 +172,10 @@ class UserController {
       });
     }
     req.body ??= {};
-    let isPermanent = false;
     let { banned_until, ban_reason } = req.body;
     ban_reason ??= "No reason provided";
 
-    if (banned_until && !Date.parse(banned_until)) {
+    if (banned_until && isNaN(Date.parse(banned_until))) {
       return res.status(400).json({
         errors: [
           {
@@ -193,7 +192,6 @@ class UserController {
     if (banned_until) {
       banned_until = new Date(banned_until);
     } else {
-      isPermanent = true;
       banned_until = new Date(0);
     }
 
