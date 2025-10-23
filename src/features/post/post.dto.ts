@@ -119,7 +119,7 @@ export class PostCommentIdDTO {
 }
 
 /** Post creator only */
-export class PostUpdateDTO extends PostIdDTO {
+export class PostUpdateDTO {
   @MinLength(1)
   @MaxLength(200)
   @IsString()
