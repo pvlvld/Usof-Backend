@@ -43,6 +43,7 @@ Returns a paginated list of all posts with advanced filtering and sorting option
     "created_at": "2024-01-15T10:30:00.000Z",
     "updated_at": "2024-01-15T10:30:00.000Z",
     "deleted_at": null,
+    "user_reaction": "like" | "dislike" | null,
     "categories": [
       {
         "id": 1,
@@ -82,6 +83,7 @@ Returns detailed information about a specific post.
   "created_at": "2024-01-15T10:30:00.000Z",
   "updated_at": "2024-01-15T10:30:00.000Z",
   "deleted_at": null,
+  "user_reaction": "like" | "dislike" | null,
   "categories": [
     {
       "id": 1,

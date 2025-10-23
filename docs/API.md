@@ -5,8 +5,8 @@ This document provides a comprehensive overview of the API endpoints and their i
 ## 📊 Implementation Status
 
 - **Required by the task**: 34/34 [x]
-- **Additional features**: 17/17 [x]
-- **Total endpoints**: 51/51 [x]
+- **Additional features**: 18/18 [x]
+- **Total endpoints**: 52/52 [x]
 
 ## 📚 Feature Documentation
 

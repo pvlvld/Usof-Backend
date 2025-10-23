@@ -10,9 +10,13 @@ import { commentController } from "../comment/comment.controller.js";
 
 const postRouter = express.Router();
 
-postRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
-  postController.getPostMany(req, res, next);
-});
+postRouter.get(
+  "/",
+  (req, res, next) => authenticateMiddleware(req, res, next, true),
+  (req: Request, res: Response, next: NextFunction) => {
+    postController.getPostMany(req, res, next);
+  }
+);
 
 postRouter.get(
   "/:post_id",

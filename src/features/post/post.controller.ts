@@ -77,7 +77,7 @@ class PostController {
     }
 
     try {
-      const posts = await this.postService.getPostMany(dto);
+      const posts = await this.postService.getPostMany(dto, req.user?.id || 0);
       return res.json(posts);
     } catch (error) {
       return next(error);
@@ -92,7 +92,7 @@ class PostController {
     }
 
     try {
-      const post = await this.postService.getPostById(dto);
+      const post = await this.postService.getPostById(dto, req.user?.id || 0);
 
       if (post.deleted_at && req.user?.role !== "admin") {
         return res.status(410).json({ message: "Post has been deleted" });

@@ -202,7 +202,9 @@ export const QUERIES = Object.freeze({
     /** user_id, title, content */
     CREATE: "INSERT INTO post (user_id, title, content) VALUES (?, ?, ?)",
     /** id */
-    READ: `
+    READ: (postId: number, viewerId: number = 0) => {
+      if (viewerId === 0) {
+        return `
       SELECT
         p.*,
         (SELECT COUNT(*) FROM comment cm WHERE cm.post_id = p.id AND cm.deleted_at IS NULL) AS comments_count,
@@ -212,9 +214,28 @@ export const QUERIES = Object.freeze({
       LEFT JOIN post_categories pc ON p.id = pc.post_id
       LEFT JOIN category c ON pc.category_id = c.id
       JOIN user u ON p.user_id = u.id
-      WHERE p.id = ?
+      WHERE p.id = ${postId}
       GROUP BY p.id;
-    `,
+    `;
+      } else {
+        return `
+      SELECT
+        p.*,
+        (SELECT COUNT(*) FROM comment cm WHERE cm.post_id = p.id AND cm.deleted_at IS NULL) AS comments_count,
+        JSON_ARRAYAGG(JSON_OBJECT('id', c.id, 'title', c.title)) AS categories,
+        JSON_OBJECT('id', u.id, 'login', u.login, 'avatar', u.avatar) AS author,
+        (SELECT CASE WHEN ld.is_like = 1 THEN 'like' WHEN ld.is_like = 0 THEN 'dislike' ELSE NULL END
+           FROM like_dislike ld
+           WHERE ld.post_id = p.id AND ld.user_id = ${viewerId}) AS user_reaction
+      FROM post p
+      LEFT JOIN post_categories pc ON p.id = pc.post_id
+      LEFT JOIN category c ON pc.category_id = c.id
+      JOIN user u ON p.user_id = u.id
+      WHERE p.id = ${postId}
+      GROUP BY p.id;
+    `;
+      }
+    },
     /**
      * Generates a paginated post query with dynamic filters for status, user, categories, sorting, and pagination.
      * Oh God, please forgive me for this sin and have mercy on my soul.
@@ -228,6 +249,7 @@ export const QUERIES = Object.freeze({
       status: "active" | "inactive" | "all",
       userId: number | undefined,
       categories: string[] | undefined,
+      viewerId: number,
       from_date?: string,
       to_date?: string,
       searchQuery?: string
@@ -245,6 +267,14 @@ export const QUERIES = Object.freeze({
         searchScoreColumn =
           "MATCH(p.title, p.content) AGAINST(? IN NATURAL LANGUAGE MODE) AS search_score";
         selectClauses.push(searchScoreColumn);
+      }
+
+      if (viewerId !== 0) {
+        selectClauses.push(
+          `(SELECT CASE WHEN ld.is_like = 1 THEN 'like' WHEN ld.is_like = 0 THEN 'dislike' ELSE NULL END
+             FROM like_dislike ld
+             WHERE ld.post_id = p.id AND ld.user_id = ${viewerId}) AS user_reaction`
+        );
       }
 
       if (status !== "all") {

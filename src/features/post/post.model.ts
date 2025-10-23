@@ -16,6 +16,7 @@ export type IPostModel = {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
+  user_reaction: "like" | "dislike" | null;
 };
 
 type IPostWithCommentsCount = IPostModel & {
@@ -44,7 +45,7 @@ export class PostModel {
     return this.instance;
   }
 
-  public async getPostMany(dto: GetPostsDto) {
+  public async getPostMany(dto: GetPostsDto, viewerId: number) {
     const offset = (dto.page - 1) * dto.limit;
     let categories: string[] = [];
     if (dto.categories !== "all") {
@@ -71,6 +72,7 @@ export class PostModel {
         dto.status,
         dto.user > 0 ? dto.user : undefined,
         categories.length > 0 ? categories : undefined,
+        viewerId,
         dto.from_date,
         dto.to_date,
         dto.searchQuery
@@ -167,11 +169,11 @@ export class PostModel {
     }
   }
 
-  public async getPostById(postId: number) {
+  public async getPostById(postId: number, viewerId: number) {
     try {
-      const [rows] = await this.db.query<RowDataPacket[]>(QUERIES.POST.READ, [
-        postId
-      ]);
+      const [rows] = await this.db.query<RowDataPacket[]>(
+        QUERIES.POST.READ(postId, viewerId)
+      );
 
       return Array.isArray(rows) && rows.length > 0 && rows[0]
         ? (rows[0] as IPostWithCommentsCount)

@@ -49,7 +49,7 @@ export class PostService {
     updateDto: PostUpdateDTO,
     user: Express.UserInfo
   ) {
-    const post = await this.postModel.getPostById(idDto.post_id);
+    const post = await this.postModel.getPostById(idDto.post_id, user.id);
     if (!post) {
       throw new NotFoundError("Post not found");
     }
@@ -62,12 +62,12 @@ export class PostService {
     return await this.postModel.updatePost(idDto.post_id, user.id, postData);
   }
 
-  public async getPostMany(dto: GetPostsDto) {
-    return await this.postModel.getPostMany(dto);
+  public async getPostMany(dto: GetPostsDto, viewerId: number) {
+    return await this.postModel.getPostMany(dto, viewerId);
   }
 
-  public async getPostById(dto: PostIdDTO) {
-    const post = await this.postModel.getPostById(dto.post_id);
+  public async getPostById(dto: PostIdDTO, viewerId: number) {
+    const post = await this.postModel.getPostById(dto.post_id, viewerId);
     if (!post) {
       throw new NotFoundError("Post not found");
     }
@@ -76,7 +76,7 @@ export class PostService {
   }
 
   public async deletePost(dto: PostIdDTO, user: Express.UserInfo) {
-    const post = await this.postModel.getPostById(dto.post_id);
+    const post = await this.postModel.getPostById(dto.post_id, 0);
 
     if (!post) {
       throw new NotFoundError("Post not found");
@@ -97,7 +97,7 @@ export class PostService {
   }
 
   public async getPostCategories(dto: PostIdDTO) {
-    const post = await this.postModel.getPostById(dto.post_id);
+    const post = await this.postModel.getPostById(dto.post_id, 0);
     if (!post) {
       throw new NotFoundError("Post not found");
     }
@@ -106,7 +106,7 @@ export class PostService {
   }
 
   public async getPostComments(dto: PostIdDTO) {
-    const post = await this.postModel.getPostById(dto.post_id);
+    const post = await this.postModel.getPostById(dto.post_id, 0);
     if (!post) {
       throw new NotFoundError("Post not found");
     }
