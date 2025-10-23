@@ -58,8 +58,10 @@ export class PostService {
     if (post.user_id !== user.id) {
       throw new ForbiddenError("You can only update your own posts");
     }
-    const postData = <CreatePostDTO>Object.assign({}, post, updateDto);
-    return await this.postModel.updatePost(idDto.post_id, user.id, postData);
+
+    const postData = <PostUpdateDTO>Object.assign({}, post, updateDto);
+    const res = await this.postModel.updatePost(idDto.post_id, postData);
+    return res;
   }
 
   public async getPostMany(dto: GetPostsDto, viewerId: number) {

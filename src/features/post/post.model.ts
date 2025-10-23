@@ -2,7 +2,7 @@ import type { ResultSetHeader, RowDataPacket } from "mysql2";
 import { UnsafeQueryError } from "../../shared/consts/errors.js";
 import { QUERIES } from "../../shared/consts/queries.js";
 import Database from "../../shared/database/index.js";
-import type { CreatePostDTO, GetPostsDto } from "./post.dto.js";
+import type { CreatePostDTO, GetPostsDto, PostUpdateDTO } from "./post.dto.js";
 
 type IPostStatus = "active" | "inactive";
 
@@ -124,19 +124,12 @@ export class PostModel {
     return { id: result.insertId, ...dto };
   }
 
-  public async updatePost(
-    postId: number,
-    userId: number,
-    dto: { title: string; content: string; categories: number[] | null }
-  ) {
+  public async updatePost(postId: number, dto: PostUpdateDTO) {
     try {
       const [result] = await this.db.query<ResultSetHeader>(
         QUERIES.POST.UPDATE,
-        [dto.title, dto.content, userId, postId]
+        [dto.title, dto.content, dto.status, postId]
       );
-      if (result.affectedRows === 0) {
-        return null;
-      }
 
       if (dto.categories) {
         await this.db.query(QUERIES.POST.REMOVE_ALL_CATEGORIES, [postId]);

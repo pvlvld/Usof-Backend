@@ -135,4 +135,9 @@ export class PostUpdateDTO {
   @IsInt({ each: true })
   @IsOptional()
   categories: number[] | null = null;
+
+  @IsIn(["active", "inactive"])
+  @IsString()
+  @IsOptional()
+  status: string | null = null;
 }
