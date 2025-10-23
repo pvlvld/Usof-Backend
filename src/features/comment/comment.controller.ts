@@ -55,12 +55,20 @@ class CommentController {
     try {
       const target_id = this.resolveTargetId(idDto);
 
-      return await this.commentService.createComment(
+      const comment = await this.commentService.createComment(
         target_id,
         req.user.id,
         contentDto.parent_id,
         contentDto.content
       );
+
+      if (!comment) {
+        return next(
+          new NotFoundError("Target post or parent comment not found")
+        );
+      } else {
+        return res.status(201).json(comment);
+      }
     } catch (error) {
       next(error);
     }
