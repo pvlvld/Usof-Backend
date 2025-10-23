@@ -52,14 +52,18 @@ class CommentController {
       return next(new UnauthorizedError());
     }
 
-    const target_id = this.resolveTargetId(idDto);
+    try {
+      const target_id = this.resolveTargetId(idDto);
 
-    return await this.commentService.createComment(
-      target_id,
-      req.user.id,
-      contentDto.parent_id,
-      contentDto.content
-    );
+      return await this.commentService.createComment(
+        target_id,
+        req.user.id,
+        contentDto.parent_id,
+        contentDto.content
+      );
+    } catch (error) {
+      next(error);
+    }
   }
 
   public async updateComment(req: Request, res: Response, next: NextFunction) {
@@ -75,20 +79,24 @@ class CommentController {
       return next(new UnauthorizedError());
     }
 
-    const target_id = this.resolveTargetId(idDto);
-    const comment = await this.commentService.getCommentById(target_id);
-    if (!comment) {
-      return next(new NotFoundError("Comment not found"));
-    }
+    try {
+      const target_id = this.resolveTargetId(idDto);
+      const comment = await this.commentService.getCommentById(target_id);
+      if (!comment) {
+        return next(new NotFoundError("Comment not found"));
+      }
 
-    if (comment.user_id !== req.user.id) {
-      return next(new ForbiddenError("You can only edit your own comments"));
-    }
+      if (comment.user_id !== req.user.id) {
+        return next(new ForbiddenError("You can only edit your own comments"));
+      }
 
-    return await this.commentService.updateComment(
-      target_id,
-      contentDto.content
-    );
+      return await this.commentService.updateComment(
+        target_id,
+        contentDto.content
+      );
+    } catch (error) {
+      next(error);
+    }
   }
 
   public async deleteComment(req: Request, res: Response, next: NextFunction) {
@@ -102,17 +110,23 @@ class CommentController {
       return next(new UnauthorizedError());
     }
 
-    const target_id = this.resolveTargetId(dto);
-    const comment = await this.commentService.getCommentById(target_id);
-    if (!comment) {
-      return next(new NotFoundError("Comment not found"));
-    }
+    try {
+      const target_id = this.resolveTargetId(dto);
+      const comment = await this.commentService.getCommentById(target_id);
+      if (!comment) {
+        return next(new NotFoundError("Comment not found"));
+      }
 
-    if (comment.user_id !== req.user.id) {
-      return next(new ForbiddenError("You can only delete your own comments"));
-    }
+      if (comment.user_id !== req.user.id) {
+        return next(
+          new ForbiddenError("You can only delete your own comments")
+        );
+      }
 
-    return await this.commentService.deleteComment(target_id);
+      return await this.commentService.deleteComment(target_id);
+    } catch (error) {
+      next(error);
+    }
   }
 
   private resolveTargetId(dto: CommentIdParamDTO): number {
