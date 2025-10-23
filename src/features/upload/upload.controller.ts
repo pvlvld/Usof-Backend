@@ -20,14 +20,12 @@ class UploadController {
         });
       }
 
-      // Get the relative path from the public directory
       const filePath = path.relative(
         path.join(process.cwd(), "public"),
         req.file.path
       );
 
-      // Return the URL path that can be used in img src
-      const imageUrl = `/uploads/${filePath.replace(/\\/g, "/")}`;
+      const imageUrl = `/${filePath.replace(/\\/g, "/")}`;
 
       return res.status(200).json({
         url: imageUrl,
