@@ -114,7 +114,7 @@ export const QUERIES = Object.freeze({
         return `
       SELECT
         c.*,
-        JSON_OBJECT('id', u.id, 'login', u.login) AS author,
+        u.login AS user_login,
         COALESCE(SUM(
           CASE
             WHEN ld.is_like = 1 THEN 1
@@ -133,7 +133,7 @@ export const QUERIES = Object.freeze({
         return `
       SELECT
         c.*,
-        JSON_OBJECT('id', u.id, 'login', u.login) AS author,
+        u.login AS user_login,
         COALESCE(SUM(
           CASE
             WHEN ld.is_like = 1 THEN 1
