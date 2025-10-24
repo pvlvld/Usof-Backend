@@ -12,7 +12,7 @@ class HaveIBeenPwnedService {
     return this.instance;
   }
 
-  public async checkPasswordPwned(password: string) {
+  public async checkPasswordPwned(password: string): Promise<number> {
     const sha1HashedPassword = this.sha1Hash(password);
     const prefix = sha1HashedPassword.slice(0, 5);
     const suffix = sha1HashedPassword.slice(5);
