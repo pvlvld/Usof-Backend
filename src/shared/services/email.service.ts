@@ -111,6 +111,25 @@ class EmailService {
     }
   }
 
+  public async sendPwnedPasswordAlert(email: string, count: number) {
+    if (!this.transporter) {
+      await EmailService.initialize();
+    }
+    const mailOptions: nodemailer.SendMailOptions = {
+      from: this.sender,
+      to: email,
+      subject: "Pwned Password Alert",
+      html: EMAIL_TEMPLATES.pwnedPasswordAlert(count)
+    };
+
+    try {
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerError("Failed to send pwned password alert");
+    }
+  }
+
   private getEmailResetLink(token: string) {
     return `https://example.com/auth/password-reset/${token}`;
   }
