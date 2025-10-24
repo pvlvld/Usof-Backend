@@ -21,6 +21,8 @@ import {
 } from "../../shared/services/jwt.service.js";
 import { UserModel } from "../user/user.model.js";
 import { BanValidationService } from "../../shared/services/banValidation.service.js";
+import { randomHex } from "../../shared/utils/randomHex.js";
+import { EmailService } from "../../shared/services/email.service.js";
 
 export type IUserLoginInfo = {
   ip: string;
@@ -43,6 +45,7 @@ class AuthService {
   private encryptionService: EncryptionService;
   private emailVerificationModel: EmailVerificationModel;
   private banValidationService: BanValidationService;
+  private emailService: EmailService;
 
   private constructor(
     auth: typeof RefreshTokenModel,
@@ -55,6 +58,7 @@ class AuthService {
     this.encryptionService = EncryptionService.getInstance();
     this.emailVerificationModel = emailVerification.getInstance();
     this.banValidationService = BanValidationService.getInstance(UserModel);
+    this.emailService = EmailService.getInstance();
   }
 
   public static getInstance(
@@ -113,6 +117,14 @@ class AuthService {
       userLoginInfo.user_agent,
       new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30) // 30 days
     );
+
+    const emailVerifyToken = randomHex(64);
+    await this.emailVerificationModel.create({
+      user_id: user.id,
+      token: emailVerifyToken
+    });
+
+    await this.emailService.sendEmailVerification(user.email, emailVerifyToken);
 
     return {
       user: {

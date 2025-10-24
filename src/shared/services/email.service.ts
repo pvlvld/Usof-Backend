@@ -34,19 +34,20 @@ class EmailService {
 
     const createTransporter = async () => {
       const oauth2Client = new OAuth2(
-        process.env.CLIENT_ID,
-        process.env.CLIENT_SECRET,
+        process.env.SMTP_CLIENT_ID,
+        process.env.SMTP_CLIENT_SECRET,
         "https://developers.google.com/oauthplayground"
       );
 
       oauth2Client.setCredentials({
-        refresh_token: process.env.REFRESH_TOKEN!
+        refresh_token: process.env.SMTP_REFRESH_TOKEN!
       });
 
       const accessToken = await new Promise((resolve, reject) => {
         oauth2Client.getAccessToken((err, token) => {
           if (err) {
-            reject("Failed to create access token :(");
+            console.log("Failed to create access token:", err);
+            reject("Failed to create access token");
           }
           resolve(token);
         });
@@ -64,6 +65,8 @@ class EmailService {
         }
       });
     };
+
+    await createTransporter();
 
     this.initialized = true;
   }
@@ -91,7 +94,6 @@ class EmailService {
     if (!this.transporter) {
       await EmailService.initialize();
     }
-
     const mailOptions: nodemailer.SendMailOptions = {
       from: this.sender,
       to: email,
@@ -104,6 +106,7 @@ class EmailService {
     try {
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
+      console.error(error);
       throw new InternalServerError("Failed to send email verification");
     }
   }
