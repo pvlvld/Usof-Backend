@@ -127,6 +127,7 @@ export const QUERIES = Object.freeze({
       LEFT JOIN like_dislike ld ON ld.comment_id = c.id
       WHERE c.post_id = ${post_id}
       GROUP BY c.id
+      ORDER BY rating DESC
     `;
       } else {
         return `
@@ -148,6 +149,7 @@ export const QUERIES = Object.freeze({
       LEFT JOIN like_dislike ld ON ld.comment_id = c.id
       WHERE c.post_id = ${post_id}
       GROUP BY c.id
+      ORDER BY rating DESC
     `;
       }
     },
