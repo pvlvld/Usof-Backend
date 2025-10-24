@@ -29,7 +29,7 @@ authRouter.post(
     authController.resetPassword(req, res, next)
 );
 authRouter.post(
-  "/verify-email",
+  "/verify-email/:confirm_token",
   (req: Request, res: Response, next: NextFunction) =>
     authController.verifyEmail(req, res, next)
 );
