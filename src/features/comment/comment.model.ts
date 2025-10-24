@@ -52,7 +52,7 @@ export class CommentModel {
         );
       }
 
-      return null;
+      return rows[0];
     } catch (error) {
       console.error("Error fetching comment by ID:", error);
       return null;
