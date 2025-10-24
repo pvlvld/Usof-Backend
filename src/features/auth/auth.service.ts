@@ -23,6 +23,7 @@ import { UserModel } from "../user/user.model.js";
 import { BanValidationService } from "../../shared/services/banValidation.service.js";
 import { randomHex } from "../../shared/utils/randomHex.js";
 import { EmailService } from "../../shared/services/email.service.js";
+import { HaveIBeenPwnedService } from "../../shared/services/haveIBeenPwnedService.js";
 
 export type IUserLoginInfo = {
   ip: string;
@@ -46,6 +47,7 @@ class AuthService {
   private emailVerificationModel: EmailVerificationModel;
   private banValidationService: BanValidationService;
   private emailService: EmailService;
+  private haveIBeenPwnedService: HaveIBeenPwnedService;
 
   private constructor(
     auth: typeof RefreshTokenModel,
@@ -59,6 +61,7 @@ class AuthService {
     this.emailVerificationModel = emailVerification.getInstance();
     this.banValidationService = BanValidationService.getInstance(UserModel);
     this.emailService = EmailService.getInstance();
+    this.haveIBeenPwnedService = HaveIBeenPwnedService.getInstance();
   }
 
   public static getInstance(
@@ -122,6 +125,17 @@ class AuthService {
       user_id: user.id,
       token: emailVerifyToken
     });
+
+    const pwnedCount = await this.haveIBeenPwnedService.checkPasswordPwned(
+      dto.password
+    );
+    if (pwnedCount > 0) {
+      this.emailService
+        .sendPwnedPasswordAlert(user.email, pwnedCount)
+        .catch((err) => {
+          console.error("Failed to send pwned password alert email:", err);
+        });
+    }
 
     await this.emailService.sendEmailVerification(user.email, emailVerifyToken);
 
