@@ -2,7 +2,7 @@ export default {
   apps: [
     {
       name: "Usof_Backend",
-      script: "dist/index.js",
+      script: "./dist/index.js",
       args: "--env-file=.env",
       env: {
         NODE_ENV: "production"
