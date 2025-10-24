@@ -227,6 +227,8 @@ export class UserResponseDTO {
   ban_reason!: string | null;
   deleted_at!: Date | null;
   last_online!: Date | null;
+  comments_count: number | undefined;
+  posts_count: number | undefined;
 
   static fromUserModel(user: IUserModel): UserResponseDTO {
     return {
@@ -243,7 +245,9 @@ export class UserResponseDTO {
       banned_until: user.banned_until,
       ban_reason: user.ban_reason,
       deleted_at: user.deleted_at,
-      last_online: user.last_online
+      last_online: user.last_online,
+      comments_count: user.comments_count || undefined,
+      posts_count: user.posts_count || undefined
     };
   }
 }
