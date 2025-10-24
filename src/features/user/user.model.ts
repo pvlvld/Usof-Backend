@@ -34,6 +34,9 @@ export type IUserModel = {
   ban_reason: string | null;
   deleted_at: Date | null;
   last_online: Date | null;
+
+  comments_count?: number;
+  posts_count?: number;
 };
 
 type IRegisterUser = {
