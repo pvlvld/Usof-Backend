@@ -6,6 +6,7 @@ import { commentRouter } from "../features/comment/comment.router.js";
 import { categoryRouter } from "../features/category/category.router.js";
 import { collectionRouter } from "../features/collection/collection.router.js";
 import { uploadRouter } from "../features/upload/upload.router.js";
+import { statsRouter } from "../features/stats/stats.router.js";
 
 const apiRouter = express.Router();
 
@@ -23,5 +24,6 @@ apiRouter.use("/categories", categoryRouter);
 apiRouter.use("/comments", commentRouter);
 apiRouter.use("/collections", collectionRouter);
 apiRouter.use("/uploads", uploadRouter);
+apiRouter.use("/stats", statsRouter);
 
 export { apiRouter };
