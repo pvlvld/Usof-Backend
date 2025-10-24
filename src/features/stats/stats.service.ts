@@ -2,8 +2,6 @@ import { InternalServerError } from "../../shared/consts/errors.js";
 
 export class StatsService {
   private static instance: StatsService;
-  private grafanaDashboardUrl =
-    "https://soniashnyk.pp.ua/monitor/d-solo/bf21h176d22v4c/usof?orgId=1&timezone=browser";
   private getChartUrl = {
     users: (dateRange: [Date, Date]) => {
       return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=1`;
@@ -36,7 +34,7 @@ export class StatsService {
   }
 
   private getBaseGrafanaChartURL(dateRange: [Date, Date]) {
-    return `${this.grafanaDashboardUrl}&from=${dateRange[0].getTime()}&to=${dateRange[1].getTime()}`;
+    return `${process.env.GRAFANA_DASHBOARD_URL}&from=${dateRange[0].getTime()}&to=${dateRange[1].getTime()}`;
   }
 
   private async fetchGrafanaPanel(url: string) {
