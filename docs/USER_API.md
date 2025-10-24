@@ -71,7 +71,9 @@ Returns detailed information about a specific user.
   "updated_at": "2024-01-15T10:30:00.000Z",
   "banned_until": null,
   "ban_reason": null,
-  "deleted_at": null
+  "deleted_at": null,
+  "comments_count": 7,
+  "posts_count": 11
 }
 ```
 

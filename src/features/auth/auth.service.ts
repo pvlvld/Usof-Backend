@@ -109,7 +109,6 @@ class AuthService {
       sub: String(user.id)
     });
 
-    // Fill refreshTokenData with actual user_id and token
     await this.refreshTokenModel.createRefreshToken(
       user.id,
       refreshToken,
