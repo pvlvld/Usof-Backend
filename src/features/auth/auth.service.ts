@@ -118,7 +118,7 @@ class AuthService {
       new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30) // 30 days
     );
 
-    const emailVerifyToken = randomHex(64);
+    const emailVerifyToken = randomHex(32);
     await this.emailVerificationModel.create({
       user_id: user.id,
       token: emailVerifyToken
