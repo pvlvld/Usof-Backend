@@ -70,7 +70,7 @@ class EmailService {
 
   public async sendPasswordResetEmail(email: string, token: string) {
     if (!this.transporter) {
-      throw new InternalServerError("Email service not initialized");
+      await EmailService.initialize();
     }
 
     const mailOptions: nodemailer.SendMailOptions = {
@@ -89,7 +89,7 @@ class EmailService {
 
   public async sendEmailVerification(email: string, token: string) {
     if (!this.transporter) {
-      throw new InternalServerError("Email service not initialized");
+      await EmailService.initialize();
     }
 
     const mailOptions: nodemailer.SendMailOptions = {
