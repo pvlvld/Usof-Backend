@@ -28,9 +28,9 @@ export class StatsService {
   }
 
   private get30dRange() {
-    const ranges = [new Date(), new Date()] as any;
-    ranges[0].setDate(ranges[0].getDate() - 30);
-    return ranges;
+    const range = [new Date(), new Date()] as any;
+    range[0].setDate(range[0].getDate() - 30);
+    return range;
   }
 
   private getBaseGrafanaChartURL(dateRange: [Date, Date]) {
