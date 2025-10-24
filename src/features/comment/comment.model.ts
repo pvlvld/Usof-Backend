@@ -13,6 +13,7 @@ export type ICommentModel = {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
+  user_reaction?: "like" | "dislike" | null;
 };
 
 export class CommentModel {
@@ -58,11 +59,10 @@ export class CommentModel {
     }
   }
 
-  public async getCommentsByPostId(post_id: number) {
+  public async getCommentsByPostId(post_id: number, viewerId: number = 0) {
     try {
       const [rows] = await this.db.query<RowDataPacket[]>(
-        QUERIES.COMMENT.READ_POST_COMMENTS,
-        [post_id]
+        QUERIES.COMMENT.READ_POST_COMMENTS(post_id, viewerId)
       );
 
       this.replaceDeletedCommentContent(<ICommentModel[]>rows);

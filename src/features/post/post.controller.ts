@@ -157,7 +157,10 @@ class PostController {
     }
 
     try {
-      const comments = await this.postService.getPostComments(dto);
+      const comments = await this.postService.getPostComments(
+        dto,
+        req.user?.id || 0
+      );
       return res.status(200).json(comments);
     } catch (error) {
       return next(error);

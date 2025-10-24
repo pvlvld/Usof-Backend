@@ -109,7 +109,48 @@ export const QUERIES = Object.freeze({
     /** comment_id */
     READ: "SELECT * FROM comment WHERE id = ?",
     /** post_id */
-    READ_POST_COMMENTS: "SELECT * FROM comment WHERE post_id = ?",
+    READ_POST_COMMENTS: (post_id: number, viewerId: number = 0) => {
+      if (viewerId === 0) {
+        return `
+      SELECT
+        c.*,
+        JSON_OBJECT('id', u.id, 'login', u.login) AS author,
+        COALESCE(SUM(
+          CASE
+            WHEN ld.is_like = 1 THEN 1
+            WHEN ld.is_like = 0 THEN -1
+            ELSE 0
+          END
+        ), 0) AS rating
+      FROM comment c
+      JOIN user u ON c.user_id = u.id
+      LEFT JOIN like_dislike ld ON ld.comment_id = c.id
+      WHERE c.post_id = ${post_id}
+      GROUP BY c.id
+    `;
+      } else {
+        return `
+      SELECT
+        c.*,
+        JSON_OBJECT('id', u.id, 'login', u.login) AS author,
+        COALESCE(SUM(
+          CASE
+            WHEN ld.is_like = 1 THEN 1
+            WHEN ld.is_like = 0 THEN -1
+            ELSE 0
+          END
+        ), 0) AS rating,
+        (SELECT CASE WHEN ld2.is_like = 1 THEN 'like' WHEN ld2.is_like = 0 THEN 'dislike' ELSE NULL END
+           FROM like_dislike ld2
+           WHERE ld2.comment_id = c.id AND ld2.user_id = ${viewerId}) AS user_reaction
+      FROM comment c
+      JOIN user u ON c.user_id = u.id
+      LEFT JOIN like_dislike ld ON ld.comment_id = c.id
+      WHERE c.post_id = ${post_id}
+      GROUP BY c.id
+    `;
+      }
+    },
     /** user_id, limit, offset */
     READ_USER_COMMENTS: (user_id: number, limit: number, offset: number) =>
       `SELECT

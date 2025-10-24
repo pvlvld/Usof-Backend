@@ -28,6 +28,7 @@ postRouter.get(
 
 postRouter.get(
   "/:post_id/comments",
+  (req, res, next) => authenticateMiddleware(req, res, next, true),
   (req: Request, res: Response, next: NextFunction) => {
     postController.getPostComments(req, res, next);
   }
