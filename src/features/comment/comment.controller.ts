@@ -125,7 +125,7 @@ class CommentController {
         return next(new NotFoundError("Comment not found"));
       }
 
-      if (comment.user_id !== req.user.id) {
+      if (comment.user_id !== req.user.id && req.user.role !== "admin") {
         return next(
           new ForbiddenError("You can only delete your own comments")
         );
