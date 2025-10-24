@@ -10,21 +10,21 @@ const statsRouter = express.Router();
 statsRouter.get(
   "/users",
   async (req: Request, res: Response, next: NextFunction) => {
-    res.send(await StatsService.getInstance().getUserStats());
+    res.send(await StatsService.getInstance().getStatsChart("users"));
   }
 );
 
 statsRouter.get(
   "/posts",
   async (req: Request, res: Response, next: NextFunction) => {
-    res.send(await StatsService.getInstance().getPostStats());
+    res.send(await StatsService.getInstance().getStatsChart("posts"));
   }
 );
 
 statsRouter.get(
   "/reactions",
   async (req: Request, res: Response, next: NextFunction) => {
-    res.send(await StatsService.getInstance().getReactionStats());
+    res.send(await StatsService.getInstance().getStatsChart("reactions"));
   }
 );
 

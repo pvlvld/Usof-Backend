@@ -23,21 +23,9 @@ export class StatsService {
     return this.instance;
   }
 
-  public async getUserStats() {
+  public async getStatsChart(type: "users" | "posts" | "reactions") {
     return await this.fetchGrafanaPanel(
-      this.getChartUrl.users(this.get30dRange())
-    );
-  }
-
-  public async getPostStats() {
-    return await this.fetchGrafanaPanel(
-      this.getChartUrl.posts(this.get30dRange())
-    );
-  }
-
-  public async getReactionStats() {
-    return await this.fetchGrafanaPanel(
-      this.getChartUrl.reactions(this.get30dRange())
+      this.getChartUrl[type](this.get30dRange())
     );
   }
 
