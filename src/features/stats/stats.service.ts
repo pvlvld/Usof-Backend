@@ -6,13 +6,13 @@ export class StatsService {
     "https://soniashnyk.pp.ua/monitor/d-solo/bf21h176d22v4c/usof?orgId=1&timezone=browser";
   private getChartUrl = {
     users: (dateRange: [Date, Date]) => {
-      return `${this.grafanaDashboardUrl}&from=${dateRange[0].getTime()}&to=${dateRange[1].getTime()}&panelId=1`;
+      return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=1`;
     },
     posts: (dateRange: [Date, Date]) => {
-      return `${this.grafanaDashboardUrl}&from=${dateRange[0].getTime()}&to=${dateRange[1].getTime()}&panelId=2`;
+      return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=2`;
     },
     reactions: (dateRange: [Date, Date]) => {
-      return `${this.grafanaDashboardUrl}&from=${dateRange[0].getTime()}&to=${dateRange[1].getTime()}&panelId=3`;
+      return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=3`;
     }
   };
 
@@ -33,6 +33,10 @@ export class StatsService {
     const ranges = [new Date(), new Date()] as any;
     ranges[0].setDate(ranges[0].getDate() - 30);
     return ranges;
+  }
+
+  private getBaseGrafanaChartURL(dateRange: [Date, Date]) {
+    return `${this.grafanaDashboardUrl}&from=${dateRange[0].getTime()}&to=${dateRange[1].getTime()}`;
   }
 
   private async fetchGrafanaPanel(url: string) {
