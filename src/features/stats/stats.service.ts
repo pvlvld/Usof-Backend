@@ -22,9 +22,12 @@ export class StatsService {
   }
 
   public async getStatsChart(type: "users" | "posts" | "reactions") {
-    return await this.fetchGrafanaPanel(
-      this.getChartUrl[type](this.get30dRange())
-    );
+    // return await this.fetchGrafanaPanel(
+    //   this.getChartUrl[type](this.get30dRange())
+    // );
+
+    // I cudn't make grafana iframes work propperly, i gave up
+    return this.getChartUrl[type](this.get30dRange());
   }
 
   private get30dRange() {
