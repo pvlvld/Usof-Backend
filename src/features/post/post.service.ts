@@ -87,6 +87,27 @@ export class PostService {
       throw new NotFoundError("Post not found");
     }
 
+    // Find first img tag with src to use as preview image
+    const imgTag = post.content.match(/<img[^>]+src="([^">]+)"/);
+    post.preview_image_url = imgTag && imgTag[1] ? imgTag[1] : null;
+
+    if (post.preview_image_url) {
+      // Convert relative URLs to absolute
+      if (
+        !post.preview_image_url.startsWith("http://") &&
+        !post.preview_image_url.startsWith("https://")
+      ) {
+        post.preview_image_url = process.env.PUBLIC_URL
+          ? `${process.env.PUBLIC_URL}${post.preview_image_url}`
+          : `https://usof.pp.ua${post.preview_image_url}`;
+      }
+    } else {
+      // Default preview image if none found
+      post.preview_image_url = process.env.PUBLIC_URL
+        ? `${process.env.PUBLIC_URL}/api/uploads/banner.webp`
+        : "https://usof.pp.ua/api/uploads/banner.webp";
+    }
+
     return post;
   }
 
