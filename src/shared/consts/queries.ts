@@ -169,7 +169,7 @@ export const QUERIES = Object.freeze({
            WHERE ld.comment_id = c.id
          ) AS rating
        FROM comment c
-       WHERE c.user_id = ${user_id}
+       WHERE c.user_id = ${user_id} AND c.deleted_at IS NULL
        ORDER BY c.created_at DESC
        LIMIT ${limit} OFFSET ${offset}`,
     /** parent_id */
