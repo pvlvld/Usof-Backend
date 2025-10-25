@@ -3,6 +3,7 @@ import type { CommentModel } from "../../features/comment/comment.model.js";
 import { randomInArray } from "../utils/randomInArray.js";
 import { marked } from "marked";
 import { SanitizePostOrCommentMiddlewareBuilder } from "../middlewares/sanitizePostOrComment.middleware.js";
+
 /** SLOPGEN */
 export class AiAnswerService {
   private static instance: AiAnswerService | null = null;
@@ -10,6 +11,7 @@ export class AiAnswerService {
   private aiUserId = 0;
   private aiClient: GoogleGenAI;
   private commentModel: CommentModel;
+  private maxOutputTokens = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS) || 500;
 
   private emptyAnswerTemplates = [
     "Seeesh, I ain't got no answer for that one.",
@@ -31,10 +33,6 @@ export class AiAnswerService {
     this.commentModel = commentModel.getInstance();
 
     this.aiUserId = Number(process.env.GEMINI_USER_ID) || 0;
-
-    // this.aiClient.models.list().then((models) => {
-    //   console.log("Available AI models:", models);
-    // });
   }
 
   public static getInstance(
@@ -52,7 +50,7 @@ export class AiAnswerService {
       model: "gemini-flash-lite-latest",
       contents: question,
       config: {
-        maxOutputTokens: 500
+        maxOutputTokens: this.maxOutputTokens
       }
     });
 
