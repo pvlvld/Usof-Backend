@@ -7,6 +7,7 @@ import { postController } from "./post.controller.js";
 import { authenticateMiddleware } from "../../shared/middlewares/auth.middleware.js";
 import { likeRouter } from "../like/like.router.js";
 import { commentController } from "../comment/comment.controller.js";
+import { sanitizePostOrComment } from "../../shared/middlewares/sanitizePostOrComment.middleware.js";
 
 const postRouter = express.Router();
 
@@ -37,6 +38,7 @@ postRouter.get(
 postRouter.post(
   "/:post_id/comments",
   authenticateMiddleware,
+  sanitizePostOrComment,
   (req: Request, res: Response, next: NextFunction) => {
     commentController.createComment(req, res, next);
   }
@@ -55,6 +57,7 @@ postRouter.use("/:post_id/dislike", likeRouter);
 postRouter.post(
   "/",
   authenticateMiddleware,
+  sanitizePostOrComment,
   (req: Request, res: Response, next: NextFunction) => {
     postController.createPost(req, res, next);
   }
@@ -64,6 +67,7 @@ postRouter.post(
 postRouter.patch(
   "/:post_id",
   authenticateMiddleware,
+  sanitizePostOrComment,
   (req: Request, res: Response, next: NextFunction) => {
     postController.updatePost(req, res, next);
   }
