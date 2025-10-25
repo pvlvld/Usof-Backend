@@ -24,7 +24,7 @@ In progress...
 - JavaScript / TypeScript
 - Node.js
 - Docker Compose
-- MySQL
+- MySQL & [MySQL2](https://www.npmjs.com/package/mysql2)
 - [class-transformer](https://github.com/typestack/class-transformer) & [class-validator](https://github.com/typestack/class-validator)
 - [Sharp](https://github.com/lovell/sharp)
 - [Multer](https://github.com/expressjs/multer#readme)
@@ -33,8 +33,9 @@ In progress...
 - [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 - [DOMPurify](https://github.com/cure53/DOMPurify)
 - [jsdom](https://github.com/jsdom/jsdom)
+- [Marked](https://www.npmjs.com/package/marked)
 - [Have I Been Pwned API](https://haveibeenpwned.com/)
-- [Gemini AI API](https://ai.google.dev/)
+- [Gemini AI API](https://ai.google.dev/) & [@google/genai](https://www.npmjs.com/package/@google/genai)
 
 ## Requirements
 
@@ -44,6 +45,7 @@ In progress...
 - MySQL
 - MVC architecture
 - No ORM
+- Handrolled JWT
 
 ## Key Features
 
