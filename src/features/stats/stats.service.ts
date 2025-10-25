@@ -4,10 +4,10 @@ export class StatsService {
   private static instance: StatsService;
   private getChartUrl = {
     users: (dateRange: [Date, Date]) => {
-      return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=1`;
+      return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=2`;
     },
     posts: (dateRange: [Date, Date]) => {
-      return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=2`;
+      return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=1`;
     },
     reactions: (dateRange: [Date, Date]) => {
       return `${this.getBaseGrafanaChartURL(dateRange)}&panelId=3`;
