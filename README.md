@@ -33,7 +33,8 @@ In progress...
 - [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 - [DOMPurify](https://github.com/cure53/DOMPurify)
 - [jsdom](https://github.com/jsdom/jsdom)
-- [Have I Been Pwned](https://haveibeenpwned.com/)
+- [Have I Been Pwned API](https://haveibeenpwned.com/)
+- [Gemini AI API](https://ai.google.dev/)
 
 ## Requirements
 
