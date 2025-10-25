@@ -3,14 +3,10 @@ import DOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
 
 class SanitizePostOrCommentMiddlewareBuilder {
-  private domPurify: typeof DOMPurify;
+  private static window = new JSDOM("").window;
+  private static domPurify = DOMPurify(this.window as any);
 
-  constructor() {
-    const window = new JSDOM("").window;
-    this.domPurify = DOMPurify(window as any);
-  }
-
-  getMiddleware() {
+  static getMiddleware() {
     return (req: Request, res: Response, next: NextFunction) => {
       if (req.body.content && typeof req.body.content === "string") {
         req.body.content = this.sanitizer(req.body.content);
@@ -19,7 +15,7 @@ class SanitizePostOrCommentMiddlewareBuilder {
     };
   }
 
-  sanitizer(content: string) {
+  public static sanitizer(content: string) {
     return this.domPurify.sanitize(content, {
       ALLOWED_TAGS: [
         "p",
@@ -67,8 +63,5 @@ class SanitizePostOrCommentMiddlewareBuilder {
   }
 }
 
-const sanitizePostOrCommentMiddlewareBuilder =
-  new SanitizePostOrCommentMiddlewareBuilder();
-
 export const sanitizePostOrComment =
-  sanitizePostOrCommentMiddlewareBuilder.getMiddleware();
+  SanitizePostOrCommentMiddlewareBuilder.getMiddleware();
