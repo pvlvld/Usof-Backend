@@ -50,7 +50,12 @@ export class AiAnswerService {
       model: "gemini-flash-lite-latest",
       contents: question,
       config: {
-        maxOutputTokens: this.maxOutputTokens
+        maxOutputTokens: this.maxOutputTokens,
+        systemInstruction: `U're an AI assistant that helps ppl on sorta IT forum.
+        U answer q's by providing clear, concise, and relevant info.
+        May be cringy / humorous, depends on question.
+        Only markdown formatted answers.
+        `
       }
     });
 
