@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import DOMPurify from "dompurify";
 import { JSDOM } from "jsdom";
 
-class SanitizePostOrCommentMiddlewareBuilder {
+export class SanitizePostOrCommentMiddlewareBuilder {
   private static window = new JSDOM("").window;
   private static domPurify = DOMPurify(this.window as any);
 
