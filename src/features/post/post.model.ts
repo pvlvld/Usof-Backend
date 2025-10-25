@@ -21,6 +21,7 @@ export type IPostModel = {
 
 type IPostWithCommentsCount = IPostModel & {
   comments_count: number;
+  preview_image_url: string | null;
 };
 
 type IPostFullData = IPostWithCommentsCount & {

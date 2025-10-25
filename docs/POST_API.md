@@ -97,7 +97,8 @@ Returns detailed information about a specific post.
     "avatar": "avatar.jpg"
   },
   "comments_count": 5,
-  "likes_count": 25
+  "likes_count": 25,
+  "preview_image_url": "https://image"
 }
 ```
 
