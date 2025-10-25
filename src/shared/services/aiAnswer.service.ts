@@ -1,8 +1,9 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, type FunctionDeclaration } from "@google/genai";
 import type { CommentModel } from "../../features/comment/comment.model.js";
 import { randomInArray } from "../utils/randomInArray.js";
 import { marked } from "marked";
 import { SanitizePostOrCommentMiddlewareBuilder } from "../middlewares/sanitizePostOrComment.middleware.js";
+import type { name } from "@adminjs/express";
 
 /** SLOPGEN */
 export class AiAnswerService {
@@ -12,6 +13,12 @@ export class AiAnswerService {
   private aiClient: GoogleGenAI;
   private commentModel: CommentModel;
   private maxOutputTokens = Number(process.env.GEMINI_MAX_OUTPUT_TOKENS) || 500;
+
+  private refuseAnswerAIFunction: FunctionDeclaration = {
+    name: "refuseAnswer",
+    description:
+      "Use this when you don't know the answer or think the question violates policies"
+  };
 
   private emptyAnswerTemplates = [
     "Seeesh, I ain't got no answer for that one.",
@@ -55,7 +62,12 @@ export class AiAnswerService {
         U answer q's by providing clear, concise, and relevant info.
         May be cringy / humorous, depends on question.
         Only markdown formatted answers.
-        `
+        `,
+        tools: [
+          {
+            functionDeclarations: [this.refuseAnswerAIFunction]
+          }
+        ]
       }
     });
 
@@ -66,7 +78,9 @@ export class AiAnswerService {
     const aiAnswers = await this.getAiAnswer(question);
     let answer = "";
     const isAiAnswered =
-      aiAnswers?.candidates && aiAnswers.candidates.length > 0;
+      aiAnswers?.candidates &&
+      aiAnswers.candidates.length > 0 &&
+      aiAnswers.functionCalls?.at(0)?.name !== this.refuseAnswerAIFunction.name;
 
     if (isAiAnswered) {
       answer = await marked
