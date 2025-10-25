@@ -15,7 +15,19 @@ class SanitizePostOrCommentMiddlewareBuilder {
       if (req.body.content && typeof req.body.content === "string") {
         req.body.content = this.domPurify.sanitize(req.body.content, {
           // TODO: adjust allowed tags and attributes
-          ALLOWED_TAGS: ["b", "i", "em", "strong", "a"],
+          ALLOWED_TAGS: [
+            "b",
+            "i",
+            "em",
+            "strong",
+            "a",
+            "img",
+            "p",
+            "ul",
+            "ol",
+            "li",
+            "br"
+          ],
           ALLOWED_ATTR: ["href", "target", "rel"]
         });
       }
