@@ -80,7 +80,7 @@ export class AiAnswerService {
     return await this.commentModel.createComment(
       postId,
       this.aiUserId,
-      postId,
+      null,
       answer
     );
   }
