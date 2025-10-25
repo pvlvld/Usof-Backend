@@ -84,8 +84,6 @@ export class CommentModel {
         QUERIES.COMMENT.READ_USER_COMMENTS(user_id, limit, offset)
       );
 
-      this.replaceDeletedCommentContent(<ICommentModel[]>rows);
-
       return rows;
     } catch (error) {
       console.error("Error fetching comments by user ID:", error);
