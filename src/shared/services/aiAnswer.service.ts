@@ -50,7 +50,10 @@ export class AiAnswerService {
   private async getAiAnswer(question: string) {
     const response = await this.aiClient.models.generateContent({
       model: "gemini-flash-lite-latest",
-      contents: question
+      contents: question,
+      config: {
+        maxOutputTokens: 500
+      }
     });
 
     return response;
