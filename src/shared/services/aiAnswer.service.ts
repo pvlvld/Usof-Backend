@@ -2,6 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import type { CommentModel } from "../../features/comment/comment.model.js";
 import { randomInArray } from "../utils/randomInArray.js";
 import { marked } from "marked";
+import { SanitizePostOrCommentMiddlewareBuilder } from "../middlewares/sanitizePostOrComment.middleware.js";
 /** SLOPGEN */
 export class AiAnswerService {
   private static instance: AiAnswerService | null = null;
@@ -70,6 +71,8 @@ export class AiAnswerService {
     if (!answer || answer.trim().length === 0) {
       answer = randomInArray(this.emptyAnswerTemplates) || "bruh";
     }
+
+    answer = SanitizePostOrCommentMiddlewareBuilder.sanitizer(answer);
 
     return await this.commentModel.createComment(
       postId,
