@@ -49,9 +49,14 @@ export class PostService {
     const post = await this.postModel.createPost(user_id, dto);
 
     if (post && post.id) {
-      this.aiAnswerService.postAiAnswer(post.id, dto.content).catch((err) => {
-        console.error(`Failed to post AI answer for post ID ${post.id}:`, err);
-      });
+      this.aiAnswerService
+        .postAiAnswer(post.id, `Title: ${dto.title} Post:${dto.content}`)
+        .catch((err) => {
+          console.error(
+            `Failed to post AI answer for post ID ${post.id}:`,
+            err
+          );
+        });
     }
 
     return post;
