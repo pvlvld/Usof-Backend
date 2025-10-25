@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/tinymce@8.1.2/tinymce.min.js"
+      referrerpolicy="origin"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      tinymce.init({
+        selector: "#mytextarea",
+        license_key: "gpl",
+        promotion: false,
+        toolbar:
+          "undo redo | bold italic codesample underline strikethrough | link image| alignleft aligncenter alignright alignjustify | bullist numlist",
+        menubar: "file edit view insert",
+        plugins: ["lists", "link", "autolink", "codesample", "image"],
+        list_max_depth: 2,
+        // images_file_types: "jpg,jpeg,webp,gif,png",
+        file_picker_types: "image media",
+        automatic_uploads: true,
+        file_picker_callback: (cb, value, meta) => {
+          const input = document.createElement("input");
+          input.setAttribute("type", "file");
+          input.setAttribute("accept", "image/*");
+
+          input.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              const id = "blobid" + new Date().getTime();
+              const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+              const base64 = reader.result.split(",")[1];
+              const blobInfo = blobCache.create(id, file, base64);
+              blobCache.add(blobInfo);
+
+              cb(blobInfo.blobUri());
+            });
+            reader.readAsDataURL(file);
+          });
+
+          input.click();
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <h1>TinyMCE Quick Start Guide</h1>
+    <form method="post" action="http://127.0.0.1:3000/api/test">
+      <textarea id="mytextarea" name="tinymce">Hello, World!</textarea>
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      document.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        tinymce.triggerSave();
+        this.submit();
+      });
+    </script>
+  </body>
+</html>

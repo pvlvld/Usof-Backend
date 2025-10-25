@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import type { CommentModel } from "../../features/comment/comment.model.js";
 import { randomInArray } from "../utils/randomInArray.js";
-
+import { marked } from "marked";
 /** SLOPGEN */
 export class AiAnswerService {
   private static instance: AiAnswerService | null = null;
@@ -29,7 +29,11 @@ export class AiAnswerService {
     });
     this.commentModel = commentModel.getInstance();
 
-    this.aiUserId = Number(process.env.AI_USER_ID) || 0;
+    this.aiUserId = Number(process.env.GEMINI_USER_ID) || 0;
+
+    // this.aiClient.models.list().then((models) => {
+    //   console.log("Available AI models:", models);
+    // });
   }
 
   public static getInstance(
@@ -38,12 +42,13 @@ export class AiAnswerService {
     if (!this.instance) {
       this.instance = new AiAnswerService(commentModel);
     }
+
     return this.instance;
   }
 
   private async getAiAnswer(question: string) {
     const response = await this.aiClient.models.generateContent({
-      model: "gemini",
+      model: "gemini-flash-lite-latest",
       contents: question
     });
 
@@ -53,16 +58,23 @@ export class AiAnswerService {
   public async postAiAnswer(postId: number, question: string) {
     const aiAnswers = await this.getAiAnswer(question);
     let answer = "";
-    if (!aiAnswers?.candidates || aiAnswers.candidates.length === 0) {
+    const isAiAnswered =
+      aiAnswers?.candidates && aiAnswers.candidates.length > 0;
+
+    if (isAiAnswered) {
+      answer = await marked
+        .parse(aiAnswers.text || "", { async: true })
+        .catch((e) => "");
+    }
+
+    if (!answer || answer.trim().length === 0) {
       answer = randomInArray(this.emptyAnswerTemplates) || "bruh";
-    } else {
-      answer = aiAnswers.text || "";
     }
 
     return await this.commentModel.createComment(
       postId,
       this.aiUserId,
-      null,
+      postId,
       answer
     );
   }
