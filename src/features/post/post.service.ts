@@ -3,6 +3,7 @@ import {
   GoneError,
   NotFoundError
 } from "../../shared/consts/errors.js";
+import type { AiAnswerService } from "../../shared/services/aiAnswer.service.js";
 import type { CategoryModel } from "../category/category.model.js";
 import type { CommentModel } from "../comment/comment.model.js";
 import type {
@@ -18,30 +19,42 @@ export class PostService {
   private postModel: PostModel;
   private categoryModel: CategoryModel;
   private commentModel: CommentModel;
+  private aiAnswerService: AiAnswerService;
 
   private constructor(
     post: typeof PostModel,
     category: typeof CategoryModel,
-    comment: typeof CommentModel
+    comment: typeof CommentModel,
+    aiAnswerService: typeof AiAnswerService
   ) {
     this.postModel = post.getInstance();
     this.categoryModel = category.getInstance();
     this.commentModel = comment.getInstance();
+    this.aiAnswerService = aiAnswerService.getInstance(comment);
   }
 
   public static getInstance(
     post: typeof PostModel,
     category: typeof CategoryModel,
-    comment: typeof CommentModel
+    comment: typeof CommentModel,
+    aiAnswerService: typeof AiAnswerService
   ) {
     if (!this.instance) {
-      this.instance = new PostService(post, category, comment);
+      this.instance = new PostService(post, category, comment, aiAnswerService);
     }
     return this.instance;
   }
 
   public async createPost(dto: CreatePostDTO, user_id: number) {
-    return await this.postModel.createPost(user_id, dto);
+    const post = await this.postModel.createPost(user_id, dto);
+
+    if (post && post.id) {
+      this.aiAnswerService.postAiAnswer(post.id, dto.content).catch((err) => {
+        console.error(`Failed to post AI answer for post ID ${post.id}:`, err);
+      });
+    }
+
+    return post;
   }
 
   public async updatePost(

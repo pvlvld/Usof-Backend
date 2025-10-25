@@ -2,6 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 import type { CommentModel } from "../../features/comment/comment.model.js";
 import { randomInArray } from "../utils/randomInArray.js";
 
+/** SLOPGEN */
 export class AiAnswerService {
   private static instance: AiAnswerService | null = null;
   private token = process.env.GEMINI_API_KEY || "";

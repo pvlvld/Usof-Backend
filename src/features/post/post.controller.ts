@@ -12,6 +12,7 @@ import { validate } from "class-validator";
 import { CategoryModel } from "../category/category.model.js";
 import { CommentModel } from "../comment/comment.model.js";
 import { UnauthorizedError } from "../../shared/consts/errors.js";
+import { AiAnswerService } from "../../shared/services/aiAnswer.service.js";
 
 class PostController {
   private postService: PostService;
@@ -19,7 +20,8 @@ class PostController {
     this.postService = PostService.getInstance(
       PostModel,
       CategoryModel,
-      CommentModel
+      CommentModel,
+      AiAnswerService
     );
   }
 
