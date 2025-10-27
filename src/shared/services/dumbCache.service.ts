@@ -3,8 +3,8 @@
 class DumbCacheService {
   private cache: Map<string, { data: Buffer; timestamp: number }> = new Map();
 
-  constructor() {
-    setInterval(() => this.cleanup(), 1000 * 60); // 1m
+  constructor(cleanupIntervalMs: number = 1000 * 60 * 5) {
+    setInterval(() => this.cleanup(), cleanupIntervalMs);
   }
 
   private cleanup() {
