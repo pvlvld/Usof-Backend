@@ -143,6 +143,12 @@ class ImageUploadBuilder {
 const uploadAvatarMiddleware = new ImageUploadBuilder({
   imageDir: path.join(process.cwd(), "public", "uploads", "avatars"),
   imageFilePrefix: "avatar_",
+  imageOptions: {
+    width: 128,
+    fileFormat: "webp",
+    quality: 75
+  },
+
   getFilenameCb: (req) => `avatar_${req.user?.id}`
 }).build();
 
