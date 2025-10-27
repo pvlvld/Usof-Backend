@@ -4,6 +4,7 @@ import {
   NotFoundError
 } from "../../shared/consts/errors.js";
 import type { AiAnswerService } from "../../shared/services/aiAnswer.service.js";
+import { DumbCacheService } from "../../shared/services/dumbCache.service.js";
 import type { CategoryModel } from "../category/category.model.js";
 import type { CommentModel } from "../comment/comment.model.js";
 import type {
@@ -20,6 +21,7 @@ export class PostService {
   private categoryModel: CategoryModel;
   private commentModel: CommentModel;
   private aiAnswerService: AiAnswerService;
+  private dumbCacheService = new DumbCacheService();
 
   private constructor(
     post: typeof PostModel,
@@ -59,6 +61,8 @@ export class PostService {
         });
     }
 
+    this.dumbCacheService.flush();
+
     return post;
   }
 
@@ -79,11 +83,27 @@ export class PostService {
 
     const postData = <PostUpdateDTO>Object.assign({}, post, updateDto);
     const res = await this.postModel.updatePost(idDto.post_id, postData);
+
+    this.dumbCacheService.flush();
+
     return res;
   }
 
   public async getPostMany(dto: GetPostsDto, viewerId: number) {
-    return await this.postModel.getPostMany(dto, viewerId);
+    const cacheKey = `posts:${JSON.stringify(dto)}}`;
+    if (this.dumbCacheService.has(cacheKey)) {
+      return JSON.parse(
+        this.dumbCacheService.get(cacheKey)?.toString() || "[]"
+      );
+    }
+
+    const posts = await this.postModel.getPostMany(dto, viewerId);
+    this.dumbCacheService.set(
+      cacheKey,
+      Buffer.from(JSON.stringify(posts)),
+      1000 * 60 * 5 // 5m
+    );
+    return posts;
   }
 
   public async getPostById(dto: PostIdDTO, viewerId: number) {
@@ -133,6 +153,8 @@ export class PostService {
     if (!result) {
       throw new NotFoundError("Post not found");
     }
+
+    this.dumbCacheService.flush();
 
     return result;
   }
