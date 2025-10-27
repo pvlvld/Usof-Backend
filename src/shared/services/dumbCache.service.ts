@@ -3,6 +3,19 @@
 class DumbCacheService {
   private cache: Map<string, { data: Buffer; timestamp: number }> = new Map();
 
+  constructor() {
+    setInterval(() => this.cleanup(), 1000 * 60); // 1m
+  }
+
+  private cleanup() {
+    const now = Date.now();
+    for (const [key, { timestamp }] of this.cache) {
+      if (timestamp < now) {
+        this.cache.delete(key);
+      }
+    }
+  }
+
   public has(key: string): boolean {
     const cached = this.cache.get(key);
     if (!cached) return false;
