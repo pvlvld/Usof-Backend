@@ -131,11 +131,11 @@ class EmailService {
   }
 
   private getEmailResetLink(token: string) {
-    return `https://example.com/auth/password-reset/${token}`;
+    return `https://usof.pp.ua/auth/password-reset/${token}`;
   }
 
   private getEmailVerificationLink(token: string) {
-    return `https://example.com/auth/verify-email/${token}`;
+    return `https://usof.pp.ua/auth/verify-email/${token}`;
   }
 }
 
