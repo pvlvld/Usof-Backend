@@ -20,6 +20,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { RefreshTokenModel } from "../auth/refreshToken/refreshToken.model.js";
 import { EmailVerificationModel } from "../auth/emailVerification/emailVerifications.model.js";
+import { DumbCacheService } from "../../shared/services/dumbCache.service.js";
 
 class UserService {
   private static instance: UserService | null = null;
@@ -29,6 +30,7 @@ class UserService {
   private avatarDir = path.join(process.cwd(), "public", "uploads", "avatars");
   private defaultAvatarPath = path.join(this.avatarDir, "default_avatar.webp");
   private defaultAvatarBuffer: Buffer | null = null;
+  private dumbCacheService = new DumbCacheService();
 
   private constructor(user: typeof UserModel, authService: typeof AuthService) {
     this.userModel = user.getInstance();
@@ -58,10 +60,22 @@ class UserService {
   }
 
   public async getUserById(dto: GetUserByIdDTO) {
+    const cacheKey = `user:${dto.user_id}`;
+    if (this.dumbCacheService.has(cacheKey)) {
+      return JSON.parse(
+        this.dumbCacheService.get(cacheKey)?.toString() || "{}"
+      );
+    }
+
     const user = await this.userModel.getUserById(dto);
     if (!user) {
       throw new NotFoundError("User not found");
     }
+    this.dumbCacheService.set(
+      cacheKey,
+      Buffer.from(JSON.stringify(user)),
+      1000 * 60 * 5
+    ); // 5m
     return user;
   }
 
@@ -111,6 +125,14 @@ class UserService {
 
     if (!newUser) {
       throw new InternalServerError("Failed to update user");
+    }
+
+    if (this.dumbCacheService.has(`user:${dto.user_id}`)) {
+      this.dumbCacheService.set(
+        `user:${dto.user_id}`,
+        Buffer.from(JSON.stringify(newUser)),
+        1000 * 60 * 5
+      ); // 5m
     }
 
     return newUser;
