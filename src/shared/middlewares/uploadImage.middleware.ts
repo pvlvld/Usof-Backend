@@ -144,7 +144,7 @@ const uploadAvatarMiddleware = new ImageUploadBuilder({
   imageDir: path.join(process.cwd(), "public", "uploads", "avatars"),
   imageFilePrefix: "avatar_",
   imageOptions: {
-    width: 128,
+    width: 32,
     fileFormat: "webp",
     quality: 75
   },
