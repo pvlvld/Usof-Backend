@@ -280,6 +280,10 @@ class UserController {
       next(err);
     }
   }
+
+  public async setAvatar(userId: number) {
+    this.userService.setUserAvatar(userId);
+  }
 }
 
 export const userController = new UserController();

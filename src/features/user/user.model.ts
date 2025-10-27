@@ -269,4 +269,17 @@ export class UserModel {
       throw new InternalServerError("Database error occurred");
     }
   }
+
+  public async setUserAvatar(userId: number) {
+    try {
+      const [res] = await this.db.query<ResultSetHeader>(
+        QUERIES.USER.SET_AVATAR,
+        [userId]
+      );
+      return res;
+    } catch (error) {
+      console.error("Error setting user avatar:", error);
+      throw new InternalServerError("Database error occurred");
+    }
+  }
 }

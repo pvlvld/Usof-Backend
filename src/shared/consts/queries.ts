@@ -53,7 +53,9 @@ export const QUERIES = Object.freeze({
     UNBAN:
       "UPDATE user SET banned_until = NULL, ban_reason = NULL WHERE id = ?",
     /** id */
-    VERIFY_EMAIL: "UPDATE user SET email_verified = TRUE WHERE id = ?"
+    VERIFY_EMAIL: "UPDATE user SET email_verified = TRUE WHERE id = ?",
+    /** id */
+    SET_AVATAR: "UPDATE user SET avatar = 'custom' WHERE id = ?"
   },
   CATEGORY: {
     /** title, description */
