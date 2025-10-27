@@ -23,7 +23,7 @@ import { UserModel } from "../user/user.model.js";
 import { BanValidationService } from "../../shared/services/banValidation.service.js";
 import { randomHex } from "../../shared/utils/randomHex.js";
 import { EmailService } from "../../shared/services/email.service.js";
-import { HaveIBeenPwnedService } from "../../shared/services/haveIBeenPwnedService.js";
+import { HaveIBeenPwnedService } from "../../shared/services/haveIBeenPwned.service.js";
 
 export type IUserLoginInfo = {
   ip: string;
