@@ -153,6 +153,7 @@ class UserController {
 
     const avatarBuffer = await this.userService.getUserAvatar(+user_id);
     if (avatarBuffer) {
+      res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 1 day
       res.type("image/webp").send(avatarBuffer);
     } else {
       res.status(404).json({ message: "Avatar not found" });
