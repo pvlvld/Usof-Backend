@@ -9,6 +9,7 @@ import {
   requireAdminMiddleware
 } from "../../shared/middlewares/auth.middleware.js";
 import { uploadAvatarMiddleware } from "../../shared/middlewares/uploadImage.middleware.js";
+import { UserService } from "./user.service.js";
 
 const userRouter = express.Router();
 
@@ -60,6 +61,10 @@ userRouter.patch(
   authenticateMiddleware,
   uploadAvatarMiddleware.single("avatar"),
   (req: Request, res: Response) => {
+    if (req.user) {
+      userController.setAvatar(req.user.id);
+    }
+
     res
       .status(200)
       .json({ message: "Avatar uploaded successfully", file: req.file });

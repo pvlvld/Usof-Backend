@@ -191,6 +191,10 @@ class UserService {
       return this.defaultAvatarPath;
     }
   }
+
+  public async setUserAvatar(userId: number) {
+    this.userModel.setUserAvatar(userId);
+  }
 }
 
 export { UserService };
