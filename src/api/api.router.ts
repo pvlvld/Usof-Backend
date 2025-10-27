@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== "production") {
       const [seconds, nanoseconds] = process.hrtime(startTime);
       const duration = seconds * 1000 + nanoseconds / 1000000;
       console.log(
-        `[API] ${req.method} (${duration.toFixed(3)}ms) ${req.url} - ${res.statusCode}`
+        `[API] ${res.statusCode} ${req.method} (${duration.toFixed(3)}ms) ${req.url}`
       );
     });
 
