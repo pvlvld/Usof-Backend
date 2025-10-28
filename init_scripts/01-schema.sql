@@ -6,6 +6,7 @@ CREATE TABLE user (
     full_name VARCHAR(100),
     email VARCHAR(100) NOT NULL UNIQUE,
     email_verified BOOLEAN DEFAULT FALSE,
+    -- TODO: cache avatars with headers & reply on the updated_at field to invalidate
     avatar VARCHAR(255),
     rating INT DEFAULT 0,
     role ENUM('user', 'donator', 'moderator', 'admin') DEFAULT 'user',
