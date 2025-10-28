@@ -66,3 +66,6 @@ tsconfig.tsbuildinfo
 /mysql_data
 public/
 .adminjs
+
+*.py
+*.txt
